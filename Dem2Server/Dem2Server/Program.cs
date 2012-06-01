@@ -5,7 +5,6 @@ using System.Text;
 using Fleck;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Raven.Client.Debug;
 using Raven.Client.Document;
 using Raven.Client;
 

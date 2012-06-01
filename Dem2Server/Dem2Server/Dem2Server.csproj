@@ -113,7 +113,6 @@
   <ItemGroup>
     <Compile Include="FacebookAccount.cs" />
     <Compile Include="IServerClientEntity.cs" />
-    <Compile Include="ISubscribable.cs" />
     <Compile Include="Name.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
