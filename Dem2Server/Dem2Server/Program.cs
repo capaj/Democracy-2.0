@@ -5,6 +5,9 @@ using System.Text;
 using Fleck;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Raven.Client.Debug;
+using Raven.Client.Document;
+using Raven.Client;
 
 namespace Dem2Server
 {
@@ -15,7 +18,7 @@ namespace Dem2Server
             FleckLog.Level = LogLevel.Debug;
             var allSockets = new List<IWebSocketConnection>();
             var server = new WebSocketServer("ws://localhost:8181");
-
+            DocumentStore docDB = new DocumentStore { Url = "http://localhost:8080" };
 
             //JavaScriptSerializer JSONSerializer = new JavaScriptSerializer();
             server.Start(socket =>

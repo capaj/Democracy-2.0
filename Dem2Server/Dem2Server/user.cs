@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Raven.Database;
 
-namespace Dem2Server
+namespace Dem2Model
 {
-    class user
+    class User: ServerClientEntity
     {
-        public string Name { get; set; }
-        public int age { get; set; }
+        public Name CivicName { get; set; }
+        public DateTime BirthTime { get; private set; }
+        public FacebookAccount FBAccount { get; set; }
     }
 }

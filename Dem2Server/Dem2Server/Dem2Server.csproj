@@ -111,10 +111,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FacebookAccount.cs" />
+    <Compile Include="IServerClientEntity.cs" />
     <Compile Include="ISubscribable.cs" />
+    <Compile Include="Name.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServerClientEntity.cs" />
     <Compile Include="user.cs" />
+    <Compile Include="VotableItem.cs" />
+    <Compile Include="Votes.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
