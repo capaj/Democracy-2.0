@@ -6,13 +6,37 @@ using System.Text;
 using Dem2Model;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Fleck;   
+using Fleck;
+using Raven.Client.Document;
+using Raven.Client;
 
 namespace Dem2Server
 {
     public class Dem2Hub         //where everything coexists
     {
+        private DocumentStore docDB;
+
         public ConcurrentBag<User> allUsers { get; set; }
+        public ConcurrentBag<VotableItem> allVotableItems { get; set; }
+
+        public Dem2Hub(DocumentStore docDB)     //someone provided us with the DB to load data from
+        {
+            using (var session = docDB.OpenSession())
+            {
+                foreach (var user in session.Query<User>().ToList())
+                {
+                    allUsers.Add(user);
+                }
+                foreach (var votableItem in session.Query<VotableItem>().ToList())
+                {
+                    allVotableItems.Add(votableItem);
+                } 
+               
+                // var entity = session.Load<Company>(companyId);
+             
+            }
+            this.docDB = docDB;
+        }
         
         public void ResolveMessage (string message, IWebSocketConnection socket)
         {

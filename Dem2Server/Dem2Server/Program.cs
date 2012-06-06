@@ -16,9 +16,9 @@ namespace Dem2Server
         {
             FleckLog.Level = LogLevel.Debug;
             var allSockets = new List<IWebSocketConnection>();
-            var Dem2 = new Dem2Hub();
-            var WSserver = new WebSocketServer("ws://localhost:8181");
             DocumentStore docDB = new DocumentStore { Url = "http://localhost:8080" };
+            var Dem2 = new Dem2Hub(docDB);
+            var WSserver = new WebSocketServer("ws://localhost:8181");
 
             //JavaScriptSerializer JSONSerializer = new JavaScriptSerializer();
             WSserver.Start(socket =>
