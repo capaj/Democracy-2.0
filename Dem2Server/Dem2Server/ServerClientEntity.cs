@@ -4,12 +4,11 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 
-namespace Dem2Model
+namespace Dem2Server
 {
     class ServerClientEntity
     {
         private string _Id;
-
         public string Id
         {
             get { return _Id; }
@@ -29,5 +28,27 @@ namespace Dem2Model
         {
             return subscribedUserIDs.Remove(userID);
         }
+
+        private string _OwnerId;
+	    public string OwnerId
+	    {
+		    get { return _OwnerId;}
+		    protected set { _OwnerId = value;}
+	    }
+
+        #region contructors
+        public ServerClientEntity()
+        {
+
+        }
+
+        public ServerClientEntity(string author)
+        {
+            OwnerId = author;
+        }
+        #endregion
+
+
+	
     }
 }

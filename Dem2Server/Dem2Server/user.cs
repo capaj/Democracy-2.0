@@ -2,13 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Dem2Server;
+using Fleck;
+using Newtonsoft.Json;
 
 namespace Dem2Model
 {
     class User: ServerClientEntity
     {
-        public Name CivicName { get; set; }
-        public DateTime BirthTime { get; private set; }
+        public string nick { get; set; }
+        public string hashedPwrd { get; set; }
+        public Name civicName { get; set; }
+        public DateTime birthTime { get; private set; }
         public FacebookAccount FBAccount { get; set; }
+        public IWebSocketConnection connection { get; set; }
+        
+        
+        [JsonIgnore]
+        public ClientViewModel VM { get; set; }
     }
 }

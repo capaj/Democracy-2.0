@@ -16,16 +16,18 @@ namespace Dem2Server
         {
             FleckLog.Level = LogLevel.Debug;
             var allSockets = new List<IWebSocketConnection>();
-            var server = new WebSocketServer("ws://localhost:8181");
+            var Dem2 = new Dem2Hub();
+            var WSserver = new WebSocketServer("ws://localhost:8181");
             DocumentStore docDB = new DocumentStore { Url = "http://localhost:8080" };
 
             //JavaScriptSerializer JSONSerializer = new JavaScriptSerializer();
-            server.Start(socket =>
+            WSserver.Start(socket =>
             {
                 socket.OnOpen = () =>
                 {
                     Console.WriteLine("Opened connection from IP: {0}", socket.ConnectionInfo.ClientIpAddress);
                     allSockets.Add(socket);
+                    //socket.Send(jsonStr);
                 };
                 socket.OnClose = () =>
                 {
@@ -34,16 +36,9 @@ namespace Dem2Server
                 };
                 socket.OnMessage = message =>
                 {
-                    Console.WriteLine(message);
-                    dynamic receivedObj = JObject.Parse(message);
-
-                    string updateToBroadcast = JsonConvert.SerializeObject(receivedObj);
-                    List<IWebSocketConnection> socketsToBroadcast = allSockets.Where(x => x.ConnectionInfo.Id != socket.ConnectionInfo.Id).ToList();    //we don't want to broadcast to the originator of the message
-
-                    socketsToBroadcast.ForEach(s => s.Send(updateToBroadcast));
-                    
-                    //allSockets.ToList().ForEach(s => s.Send("Echo from " + socket.ConnectionInfo.ClientIpAddress + ": " + message));  
-                    
+                    //Console.WriteLine("Message from IP: {0}, {1}", socket.ConnectionInfo.ClientIpAddress, message);
+                    Dem2.ResolveMessage(message, socket);
+                   
                 };
             });
 

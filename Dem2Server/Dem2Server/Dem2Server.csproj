@@ -69,15 +69,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClientViewModel.cs" />
     <Compile Include="FacebookAccount.cs" />
-    <Compile Include="IServerClientEntity.cs" />
+    <Compile Include="Dem2Hub.cs" />
     <Compile Include="Name.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServerClientEntity.cs" />
-    <Compile Include="user.cs" />
+    <Compile Include="User.cs" />
     <Compile Include="VotableItem.cs" />
-    <Compile Include="Votes.cs" />
+    <Compile Include="Vote.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
