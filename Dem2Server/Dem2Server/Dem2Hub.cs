@@ -1,0 +1,58 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Concurrent;
+using System.Linq;
+using System.Text;
+using Dem2Model;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Fleck;   
+
+namespace Dem2Server
+{
+    public class Dem2Hub         //where everything coexists
+    {
+        public ConcurrentBag<User> allUsers { get; set; }
+        
+        public void ResolveMessage (string message, IWebSocketConnection socket)
+        {
+            dynamic receivedObj = JObject.Parse(message);
+            switch ((string)receivedObj.msgType)
+            {
+                case "createUser":
+                    Console.WriteLine("Create user request");
+
+                    break;
+                case "login":
+                    Console.WriteLine("Login request");
+                    User heWhoWantsToLogin = JsonConvert.DeserializeObject<User>(message);
+                    
+                    var ourUser = allUsers.First(x => x.nick == heWhoWantsToLogin.nick && x.hashedPwrd == heWhoWantsToLogin.hashedPwrd);     //simple authentication
+                    if (ourUser != null)
+                    {   //login successful
+                       
+                        ourUser.connection = socket;
+                        Console.WriteLine("Login granted, sending the model");
+                        //ClientViewModel ConnectedUserVM = 
+                        socket.Send(JsonConvert.SerializeObject(ourUser.VM));
+                    }
+                    else
+                    {    //we don't know that user
+                        Console.WriteLine("Login failed");
+                    }
+                    break;
+                case "logout":
+                    Console.WriteLine("logout request");
+                    User heWhoWantsToLogout = JsonConvert.DeserializeObject<User>(message);
+                    break;
+                case "loadView": Console.WriteLine("load request");
+                    break;
+                case "saveView": Console.WriteLine("save request");
+
+                    break;
+                default: Console.WriteLine("Unrecognized msgType");
+                    break;
+            }
+        }
+    }
+}
