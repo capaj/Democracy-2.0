@@ -9,9 +9,6 @@ namespace Dem2Server
 {
     interface IVotingLeader
     {
-        [JsonIgnore]
-        public User who { get; set; }
-
         public delegate void VoteCastHandler();
 
         public event VoteCastHandler VoteCast;

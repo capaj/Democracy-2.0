@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace Dem2Model
 {
-    class User: ServerClientEntity
+    class User : ServerClientEntity, IVotingLeader
     {
         public string nick { get; set; }
         public string hashedPwrd { get; set; }
