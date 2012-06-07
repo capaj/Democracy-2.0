@@ -11,7 +11,7 @@ using Dem2Model;
 
 namespace Dem2Server
 {
-    class ClientViewModel : ServerClientEntity
+    public class ClientViewModel : ServerClientEntity
     {
 
     }

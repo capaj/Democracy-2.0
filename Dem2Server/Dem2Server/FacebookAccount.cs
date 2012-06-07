@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Dem2Model
 {
-    class FacebookAccount
+    public class FacebookAccount
     {
         public Uri AccAdress { get; private set; }
     }

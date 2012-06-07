@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace Dem2Model
 {
-    class User : ServerClientEntity, IVotingLeader
+    public class User : ServerClientEntity, IVotingLeader
     {
         public string nick { get; set; }
         public string hashedPwrd { get; set; }
@@ -16,13 +16,14 @@ namespace Dem2Model
         public DateTime birthTime { get; private set; }
         public FacebookAccount FBAccount { get; set; }
         public IWebSocketConnection connection { get; set; }
-        public SortedList<Int16,IVotingLeader> votingLeaders { get; set; }
+        public SortedList<Int16, IVotingLeader> votingLeaders { get; set; }
 
         public bool CastVote(VotableItem onWhat,Vote vote)
         {
             if (onWhat.State == VotableItemStates.Ongoing)
             {
                 onWhat.CastedVotes.Add(vote);
+                VoteCast(this, null);
                 return true;
 
             }
@@ -34,5 +35,7 @@ namespace Dem2Model
 
         [JsonIgnore]
         public ClientViewModel VM { get; set; }
+
+        public event EventHandler VoteCast;
     }
 }

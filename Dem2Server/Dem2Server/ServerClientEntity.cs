@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Dem2Server
 {
-    class ServerClientEntity
+    public class ServerClientEntity
     {
         private string _Id;
         public string Id

@@ -7,11 +7,11 @@ using Dem2Server;
 
 namespace Dem2Model
 {
-    enum VotableItemStates
+    public enum VotableItemStates
     {
         NotStarted, Ongoing, EndedDenied, EndedAccepted
     }
-    class VotableItem:ServerClientEntity
+    public class VotableItem:ServerClientEntity
     {
         
         public VotableItemStates State

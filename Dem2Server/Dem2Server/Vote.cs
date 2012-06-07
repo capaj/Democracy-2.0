@@ -6,7 +6,7 @@ using Dem2Server;
 
 namespace Dem2Model
 {
-    class Vote:ServerClientEntity
+    public class Vote:ServerClientEntity
     {
         private string _casterUserID; //Vote caster is in special private variable(it may be someone else than Owner)
         public string CasterUserID  //OwnerID from parent contains owner of the vote,

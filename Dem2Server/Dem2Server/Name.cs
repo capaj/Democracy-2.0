@@ -7,7 +7,7 @@ using Dem2Server;
 
 namespace Dem2Model
 {
-    class Name:ServerClientEntity
+    public class Name:ServerClientEntity
     {
         private string _firstName;
 
