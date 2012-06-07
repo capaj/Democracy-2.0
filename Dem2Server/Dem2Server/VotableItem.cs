@@ -9,7 +9,7 @@ namespace Dem2Model
 {
     enum VotableItemStates
     {
-        NotStarted, Ongoing, EndedAccepted, EndedDenied
+        NotStarted, Ongoing, EndedDenied, EndedAccepted
     }
     class VotableItem:ServerClientEntity
     {
@@ -49,24 +49,16 @@ namespace Dem2Model
 
         public int PositiveVotesCount { get { return CastedVotes.Where(vote => vote.Agrees == true).Count(); } }
         public int NegativeVotesCount { get { return CastedVotes.Where(vote => vote.Agrees == false).Count(); } }
-        
+
+        public VotableItem()        //need to set up schedulers here
+        {
+            
+        }
+
         public bool CurrentResolve
         {
             get { return PositiveVotesCount > NegativeVotesCount ; }
 
-        }
-
-        public VotableItem CastVote(Vote vote) 
-        {
-            if (State == VotableItemStates.Ongoing)
-            {
-                CastedVotes.Add(vote);
-            }
-            else
-            {
-
-            }
-            return this;
         }
         
     }

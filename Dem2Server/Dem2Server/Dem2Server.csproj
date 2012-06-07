@@ -72,6 +72,7 @@
     <Compile Include="ClientViewModel.cs" />
     <Compile Include="FacebookAccount.cs" />
     <Compile Include="Dem2Hub.cs" />
+    <Compile Include="IVotingLeader.cs" />
     <Compile Include="Name.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
