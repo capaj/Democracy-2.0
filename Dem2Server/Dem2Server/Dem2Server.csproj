@@ -76,8 +76,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClientViewModel.cs" />
+    <Compile Include="Comment.cs" />
+    <Compile Include="DiscussionThread.cs" />
     <Compile Include="FacebookAccount.cs" />
     <Compile Include="Dem2Hub.cs" />
+    <Compile Include="ISimpleWebVote.cs" />
     <Compile Include="IVotingLeader.cs" />
     <Compile Include="Name.cs" />
     <Compile Include="Party.cs" />

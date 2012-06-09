@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using Dem2Model;
 
 namespace Dem2Server
 {
-    public class ServerClientEntity
+    public abstract class ServerClientEntity
     {
         private string _Id;
         public string Id
@@ -14,7 +15,7 @@ namespace Dem2Server
             get { return _Id; }
             set { _Id = value; }
         }
-        
+
         public bool Send() { return true; }
 
         public ObservableCollection<string> subscribedUserIDs { get; set; }
@@ -26,7 +27,7 @@ namespace Dem2Server
 
         public bool Unsubscribe(string userID)
         {
-            return subscribedUserIDs.Remove(userID);
+            return subscribedUserIDs.Remove(userID);        //returns false if the item is not found
         }
 
         private string _OwnerId;
@@ -37,14 +38,14 @@ namespace Dem2Server
 	    }
 
         #region contructors
-        public ServerClientEntity()
+        protected ServerClientEntity()
         {
 
         }
 
-        public ServerClientEntity(string author)
+        public ServerClientEntity(User creator)
         {
-            OwnerId = author;
+            _OwnerId = creator.Id;
         }
         #endregion
 

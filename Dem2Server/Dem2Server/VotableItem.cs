@@ -11,7 +11,7 @@ namespace Dem2Model
     {
         NotStarted, Ongoing, EndedDenied, EndedAccepted
     }
-    public class VotableItem:ServerClientEntity
+    public class VotableItem:ServerClientEntity     //"votable in parliament democracy"
     {
         
         public VotableItemStates State
@@ -20,7 +20,7 @@ namespace Dem2Model
                 DateTime now = DateTime.Now;
                 if (Ends<now)
                 {
-                    if (CurrentResolve == true)
+                    if (GetCurrentResolve == true)
                     {
                         return VotableItemStates.EndedAccepted;
                     }
@@ -43,19 +43,35 @@ namespace Dem2Model
             }
         }
         
-        public DateTime Starts { get; set; }
-        public DateTime Ends { get; set; }
-        public ConcurrentBag<Vote> CastedVotes { get; set; }  // or ConcurrentBag?
+        private DateTime Starts { get; set; }
+        private DateTime Ends { get; set; }
+        private ConcurrentBag<Vote> CastedVotes { get; set; }  // or ConcurrentBag?
 
         public int PositiveVotesCount { get { return CastedVotes.Where(vote => vote.Agrees == true).Count(); } }
         public int NegativeVotesCount { get { return CastedVotes.Where(vote => vote.Agrees == false).Count(); } }
+
+        public bool RegisterVote(Vote vote) 
+        {
+            {
+                if (this.State == VotableItemStates.Ongoing)
+                {
+                    this.CastedVotes.Add(vote);
+                    return true;
+
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
 
         public VotableItem()        //need to set up schedulers here
         {
             
         }
 
-        public bool CurrentResolve
+        public bool GetCurrentResolve
         {
             get { return PositiveVotesCount > NegativeVotesCount ; }
 

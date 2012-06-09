@@ -25,5 +25,7 @@ namespace Dem2Model
             Agrees = stance;
             castedTime = DateTime.Now;
         }
+
+
     }
 }

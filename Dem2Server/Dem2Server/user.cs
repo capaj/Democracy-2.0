@@ -16,26 +16,45 @@ namespace Dem2Model
         public DateTime birthTime { get; private set; }
         public FacebookAccount FBAccount { get; set; }
         public IWebSocketConnection connection { get; set; }
-        public SortedList<Int16, IVotingLeader> votingLeaders { get; set; }
+        public HashSet<IVotingLeader> votingLeadersTable { get; set; }
 
-        public bool CastVote(VotableItem onWhat,Vote vote)
+        
+
+        public bool CastVoteFromLeader(IVotingLeader leader, VotableItem onWhat, Vote vote)
         {
-            if (onWhat.State == VotableItemStates.Ongoing)
+            bool voteRegistered = onWhat.RegisterVote(vote);
+            if (voteRegistered)
             {
-                onWhat.CastedVotes.Add(vote);
-                VoteCast(this, null);
-                return true;
-
+                VoteCast(this, onWhat, vote);
             }
-            else
+            return voteRegistered;
+        }
+
+
+
+        public void SubscribeToVotingLeadersVoteCasts()
+        {
+            foreach (var votingLeader in votingLeadersTable)
             {
-                return false;
+                votingLeader.VoteCast += new VotingLeader.VoteCastHandler(CastVoteFromLeader(votingLeader, ));
             }
         }
 
         [JsonIgnore]
         public ClientViewModel VM { get; set; }
 
-        public event EventHandler VoteCast;
+
+
+        public event VotingLeader.VoteCastHandler VoteCast;
+
+        public bool CastVote(VotableItem onWhat, Vote vote)
+        {
+            bool voteRegistered = onWhat.RegisterVote(vote);
+            if (voteRegistered)
+	        {
+                VoteCast(this, onWhat, vote);
+	        }
+            return voteRegistered;
+        }
     }
 }
