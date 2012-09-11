@@ -10,7 +10,7 @@ namespace Dem2Server
     public abstract class ServerClientEntity
     {
         private string _Id;
-        public string Id
+        public string Id    // Raven DB sets this property
         {
             get { return _Id; }
             set { _Id = value; }
@@ -18,16 +18,16 @@ namespace Dem2Server
 
         public bool Send() { return true; }
 
-        public ObservableCollection<string> subscribedUserIDs { get; set; }
+        public ObservableCollection<User> subscribedUsers { get; set; }
 
-        public void Subscribe(string userID)
+        public void Subscribe(User theUser)
         {
-            subscribedUserIDs.Add(userID);
+            subscribedUsers.Add(theUser);
         }
 
-        public bool Unsubscribe(string userID)
+        public bool Unsubscribe(User theUser)
         {
-            return subscribedUserIDs.Remove(userID);        //returns false if the item is not found
+            return subscribedUsers.Remove(theUser);        //returns false if the item is not found
         }
 
         private string _OwnerId;

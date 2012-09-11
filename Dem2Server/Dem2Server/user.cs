@@ -43,8 +43,6 @@ namespace Dem2Model
         [JsonIgnore]
         public ClientViewModel VM { get; set; }
 
-
-
         public event VotingLeader.VoteCastHandler VoteCast;
 
         public bool CastVote(VotableItem onWhat, Vote vote)
