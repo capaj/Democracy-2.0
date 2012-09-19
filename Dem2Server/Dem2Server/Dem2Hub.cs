@@ -12,14 +12,15 @@ using Raven.Client;
 
 namespace Dem2Server
 {
-    public class Dem2Hub         //where everything coexists
+    public static class Dem2Hub         //where everything coexists-inmemory copy of the DB
     {
-        private DocumentStore docDB;
+        private static DocumentStore docDB;
 
-        public ConcurrentBag<User> allUsers { get; set; }
-        public ConcurrentBag<VotableItem> allVotableItems { get; set; }
+        public static ConcurrentBag<User> allUsers { get; set; }
+        public static ConcurrentBag<VotableItem> allVotableItems { get; set; }
+        public static ConcurrentBag<Vote> allVotes { get; set; }
 
-        public Dem2Hub(DocumentStore docDB)     //someone provided us with the DB to load data from
+        public static void Initialize(DocumentStore documentDB)     //someone provided us with the DB to load data from
         {
             using (var session = docDB.OpenSession())
             {
@@ -35,10 +36,10 @@ namespace Dem2Server
                 // var entity = session.Load<Company>(companyId);
              
             }
-            this.docDB = docDB;
+            documentDB = docDB;
         }
         
-        public void ResolveMessage (string message, IWebSocketConnection socket)
+        public static void ResolveMessage (string message, IWebSocketConnection socket)
         {
             dynamic receivedObj = JObject.Parse(message);
             switch ((string)receivedObj.msgType)

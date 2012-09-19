@@ -45,7 +45,11 @@ namespace Dem2Model
         
         private DateTime Starts { get; set; }
         private DateTime Ends { get; set; }
-        private ConcurrentBag<Vote> CastedVotes { get; set; }  // or ConcurrentBag?
+        private List<Vote> CastedVotes { 
+            get {
+                return Dem2Hub.allVotes.ToList().FindAll(x => x.subjectID == this.Id);
+            } 
+        }  // or ConcurrentBag?
 
         public int PositiveVotesCount { get { return CastedVotes.Where(vote => vote.Agrees == true).Count(); } }
         public int NegativeVotesCount { get { return CastedVotes.Where(vote => vote.Agrees == false).Count(); } }

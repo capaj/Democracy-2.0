@@ -36,7 +36,7 @@ namespace Dem2Model
         {
             foreach (var votingLeader in votingLeadersTable)
             {
-                votingLeader.VoteCast += new VotingLeader.VoteCastHandler(CastVoteFromLeader(votingLeader, ));
+                //votingLeader.VoteCast += new VotingLeader.VoteCastHandler(CastVoteFromLeader(votingLeader, ));
             }
         }
 

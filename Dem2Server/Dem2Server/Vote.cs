@@ -8,6 +8,8 @@ namespace Dem2Model
 {
     public class Vote:ServerClientEntity
     {
+        public string subjectID { get; private set; }
+        
         private string _casterUserID; //Vote caster is in special private variable(it may be someone else than Owner)
         public string CasterUserID  //OwnerID from parent contains owner of the vote,
         {

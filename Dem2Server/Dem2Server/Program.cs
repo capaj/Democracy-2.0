@@ -16,8 +16,9 @@ namespace Dem2Server
         {
             FleckLog.Level = LogLevel.Debug;
             var allSockets = new List<IWebSocketConnection>();
-            DocumentStore docDB = new DocumentStore { Url = "http://localhost:8080" };
-            var Dem2 = new Dem2Hub(docDB);
+            //DocumentStore docDB = new DocumentStore { Url = "http://localhost:8080" };        //when on the same machine where Raven runs
+            DocumentStore docDB = new DocumentStore { Url = "http://dem2.cz:8080" };            //when on any other
+            Dem2Hub.Initialize(docDB);
             var WSserver = new WebSocketServer("ws://localhost:8181");
 
             //JavaScriptSerializer JSONSerializer = new JavaScriptSerializer();
@@ -37,7 +38,7 @@ namespace Dem2Server
                 socket.OnMessage = message =>
                 {
                     //Console.WriteLine("Message from IP: {0}, {1}", socket.ConnectionInfo.ClientIpAddress, message);
-                    Dem2.ResolveMessage(message, socket);
+                    Dem2Hub.ResolveMessage(message, socket);
                    
                 };
             });
@@ -46,10 +47,6 @@ namespace Dem2Server
             var input = Console.ReadLine();
             while (input != "exit")
             {
-                //foreach (var socket in allSockets.ToList())
-                //{
-                //    socket.Send(input);
-                //}
                 input = Console.ReadLine();
             }
         }

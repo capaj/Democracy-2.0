@@ -16,9 +16,10 @@ namespace Dem2Server
             set { _Id = value; }
         }
 
-        public bool Send() { return true; }
+        public uint version { get; set; }    // should get incremented everytime the Entity is updated/changed, on creation it is 1
 
-        public ObservableCollection<User> subscribedUsers { get; set; }
+        public Collection<User> subscribedUsers { get; set; } // all the users that should get a newer version of the entity when entity is updated
+        public bool Send() { return true; }
 
         public void Subscribe(User theUser)
         {
