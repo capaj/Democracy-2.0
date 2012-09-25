@@ -22,7 +22,7 @@ namespace pspScraper
             var webGet = new HtmlWeb();
             Encoding encoding = Encoding.Default;   // this makes sense because you mostly will want to scrape pages, which are in your own language
             webGet.OverrideEncoding = encoding;
-            //1839-56456
+            //1839-56473
             var voting = new pspVoting(@"http://www.psp.cz/sqw/hlasy.sqw?g=55431", webGet);
             docDB.Initialize();
 

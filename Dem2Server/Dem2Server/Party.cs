@@ -13,7 +13,7 @@ namespace Dem2Server
         
         public event VotingLeader.VoteCastHandler VoteCast;
        
-        public bool CastVote(Dem2Model.VotableItem onWhat, Dem2Model.Vote vote)
+        public bool CastVote(Dem2Model.Voting onWhat, Dem2Model.Vote vote)
         {
             bool voteRegistered = onWhat.RegisterVote(vote);
             if (voteRegistered)

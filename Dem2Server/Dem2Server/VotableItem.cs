@@ -7,14 +7,14 @@ using Dem2Server;
 
 namespace Dem2Model
 {
-    public enum VotableItemStates
+    public enum VotingStates
     {
         NotStarted, Ongoing, EndedDenied, EndedAccepted
     }
-    public class VotableItem:ServerClientEntity     //"votable in parliament democracy"
+    public class Voting:ServerClientEntity     //"votable in parliament democracy"
     {
         
-        public VotableItemStates State
+        public VotingStates State
         {
             get {
                 DateTime now = DateTime.Now;
@@ -22,22 +22,22 @@ namespace Dem2Model
                 {
                     if (GetCurrentResolve == true)
                     {
-                        return VotableItemStates.EndedAccepted;
+                        return VotingStates.EndedAccepted;
                     }
                     else
                     {
-                        return VotableItemStates.EndedDenied;
+                        return VotingStates.EndedDenied;
                     }
                 }
                 else
                 {
                     if (Starts<now)
                     {
-                        return VotableItemStates.Ongoing;
+                        return VotingStates.Ongoing;
                     }
                     else
 	                {
-                        return VotableItemStates.NotStarted;
+                        return VotingStates.NotStarted;
 	                }
                 }
             }
@@ -57,7 +57,7 @@ namespace Dem2Model
         public bool RegisterVote(Vote vote) 
         {
             {
-                if (this.State == VotableItemStates.Ongoing)
+                if (this.State == VotingStates.Ongoing)
                 {
                     this.CastedVotes.Add(vote);
                     return true;
@@ -70,7 +70,7 @@ namespace Dem2Model
             }
         }
 
-        public VotableItem()        //need to set up schedulers here
+        public Voting()        //need to set up schedulers here
         {
             
         }

@@ -12,12 +12,12 @@ namespace Dem2Server
         
         event VotingLeader.VoteCastHandler VoteCast;
 
-        bool CastVote(VotableItem onWhat, Vote vote);
+        bool CastVote(Voting onWhat, Vote vote);
         
     }
 
     public abstract class VotingLeader
     {
-        public delegate bool VoteCastHandler(IVotingLeader instigator, VotableItem onWhat, Vote vote);
+        public delegate bool VoteCastHandler(IVotingLeader instigator, Voting onWhat, Vote vote);
     }
 }

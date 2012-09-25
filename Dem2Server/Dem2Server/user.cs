@@ -20,7 +20,7 @@ namespace Dem2Model
 
         
 
-        public bool CastVoteFromLeader(IVotingLeader leader, VotableItem onWhat, Vote vote)
+        public bool CastVoteFromLeader(IVotingLeader leader, Voting onWhat, Vote vote)
         {
             bool voteRegistered = onWhat.RegisterVote(vote);
             if (voteRegistered)
@@ -45,7 +45,7 @@ namespace Dem2Model
 
         public event VotingLeader.VoteCastHandler VoteCast;
 
-        public bool CastVote(VotableItem onWhat, Vote vote)
+        public bool CastVote(Voting onWhat, Vote vote)
         {
             bool voteRegistered = onWhat.RegisterVote(vote);
             if (voteRegistered)
