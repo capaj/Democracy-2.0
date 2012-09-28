@@ -2,84 +2,35 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Collections.Concurrent;
-using Dem2Server;
+using System.Threading.Tasks;
+using Dem2Model;
 
-namespace Dem2Model
+namespace Dem2Server
 {
-    public enum VotingStates
+    abstract class VotableItem:ServerClientEntity
     {
-        NotStarted, Ongoing, EndedDenied, EndedAccepted
-    }
-    public class Voting:ServerClientEntity     //"votable in parliament democracy"
-    {
-        
-        public VotingStates State
+        protected List<Vote> CastedVotes
         {
-            get {
-                DateTime now = DateTime.Now;
-                if (Ends<now)
-                {
-                    if (GetCurrentResolve == true)
-                    {
-                        return VotingStates.EndedAccepted;
-                    }
-                    else
-                    {
-                        return VotingStates.EndedDenied;
-                    }
-                }
-                else
-                {
-                    if (Starts<now)
-                    {
-                        return VotingStates.Ongoing;
-                    }
-                    else
-	                {
-                        return VotingStates.NotStarted;
-	                }
-                }
-            }
-        }
-        
-        private DateTime Starts { get; set; }
-        private DateTime Ends { get; set; }
-        private List<Vote> CastedVotes { 
-            get {
+            get
+            {
                 return Dem2Hub.allVotes.ToList().FindAll(x => x.subjectID == this.Id);
-            } 
+            }
         }  // or ConcurrentBag?
 
         public int PositiveVotesCount { get { return CastedVotes.Where(vote => vote.Agrees == true).Count(); } }
         public int NegativeVotesCount { get { return CastedVotes.Where(vote => vote.Agrees == false).Count(); } }
 
-        public bool RegisterVote(Vote vote) 
+        public abstract bool RegisterVote(Vote vote)
         {
             {
-                if (this.State == VotingStates.Ongoing)
-                {
-                    this.CastedVotes.Add(vote);
-                    return true;
-
-                }
-                else
-                {
-                    return false;
-                }
+                return Dem2Hub.allVotes.Add(vote);
             }
-        }
-
-        public Voting()        //need to set up schedulers here
-        {
-            
         }
 
         public bool GetCurrentResolve
         {
-            get { return PositiveVotesCount > NegativeVotesCount ; }
+            get { return PositiveVotesCount > NegativeVotesCount; }
 
         }
-        
     }
 }

@@ -9,11 +9,10 @@ namespace Dem2Server
 {
     public abstract class ServerClientEntity
     {
-        private string _Id;
-        public string Id    // Raven DB sets this property
+        public string Id    // Raven DB sets this property, it is set upon creation and it CANNOT be changed ever, under any circumstances
         {
-            get { return _Id; }
-            set { _Id = value; }
+            get;
+            private set;
         }
 
         public uint version { get; set; }    // should get incremented everytime the Entity is updated/changed, on creation it is 1

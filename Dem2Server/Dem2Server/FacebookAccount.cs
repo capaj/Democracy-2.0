@@ -8,5 +8,6 @@ namespace Dem2Model
     public class FacebookAccount
     {
         public Uri AccAdress { get; private set; }
+        public string FacebookUserID { get; private set; }
     }
 }

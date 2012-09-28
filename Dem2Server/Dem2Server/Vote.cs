@@ -8,7 +8,7 @@ namespace Dem2Model
 {
     public class Vote:ServerClientEntity
     {
-        public string subjectID { get; private set; }
+        public string subjectID { get; private set; }   //can be anything which implements IVotable -a voting, a comment or another user
         
         private string _casterUserID; //Vote caster is in special private variable(it may be someone else than Owner)
         public string CasterUserID  //OwnerID from parent contains owner of the vote,

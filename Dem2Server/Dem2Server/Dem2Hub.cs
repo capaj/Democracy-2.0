@@ -16,28 +16,29 @@ namespace Dem2Server
     {
         private static DocumentStore docDB;
 
-        public static ConcurrentBag<User> allUsers { get; set; }
-        public static ConcurrentBag<Voting> allVotableItems { get; set; }
-        public static ConcurrentBag<Vote> allVotes { get; set; }
+        public static HashSet<User> allUsers { get; set; }
+        public static HashSet<Voting> allVotings { get; set; }        // parliamentary votings for now
+        public static HashSet<Vote> allVotes { get; set; }
+        public static HashSet<VotableItem> allCommentVotes { get; set; }
         //public static ConcurrentBag<Vote> allVotes { get; set; }
 
         public static void Initialize(DocumentStore documentDB)     //someone provided us with the DB to load data from
         {
+            docDB = documentDB;
             using (var session = docDB.OpenSession())
             {
                 foreach (var user in session.Query<User>().ToList())
                 {
                     allUsers.Add(user);
                 }
-                foreach (var votableItem in session.Query<Voting>().ToList())
+                foreach (var voting in session.Query<Voting>().ToList())
                 {
-                    allVotableItems.Add(votableItem);
+                    allVotings.Add(voting);
                 } 
                
                 // var entity = session.Load<Company>(companyId);
              
             }
-            documentDB = docDB;
         }
         
         public static void ResolveMessage (string message, IWebSocketConnection socket)
