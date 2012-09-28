@@ -14,7 +14,7 @@ namespace Dem2Server
 {
     public static class Dem2Hub         //where everything coexists-inmemory copy of the DB
     {
-        private static DocumentStore docDB;
+        public static DocumentStore docDB;
 
         public static HashSet<User> allUsers { get; set; }
         public static HashSet<Voting> allVotings { get; set; }        // parliamentary votings for now

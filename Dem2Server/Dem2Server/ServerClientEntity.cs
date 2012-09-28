@@ -49,7 +49,41 @@ namespace Dem2Server
         }
         #endregion
 
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
 
+        public override bool Equals(System.Object obj)
+        {
+            // If parameter is null return false.
+            if (obj == null)
+            {
+                return false;
+            }
+
+            // If parameter cannot be cast to Point return false.
+            ServerClientEntity second = obj as ServerClientEntity;
+            if ((System.Object)second == null)
+            {
+                return false;
+            }
+
+            // Return true if the fields match:
+            return Id == second.Id;
+        }
+
+        public bool Equals(ServerClientEntity second)
+        {
+            // If parameter is null return false:
+            if ((object)second == null)
+            {
+                return false;
+            }
+
+            // Return true if the fields match:
+            return Id == second.Id;
+        }
 	
     }
 }
