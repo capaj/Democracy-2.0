@@ -10,13 +10,14 @@ namespace Dem2Model
 {
     public class User : ServerClientEntity, IVotingLeader
     {
-        public string nick { get; set; }
+        public string nick { get; set; }    // by default Nick will be created out of a user's name, user can change it whenever he likes as much as he likes, but it must be unique
         public string hashedPwrd { get; set; }
         public Name civicName { get; set; }
         public DateTime birthTime { get; private set; }
         public FacebookAccount FBAccount { get; set; }
         public IWebSocketConnection connection { get; set; }
         public HashSet<IVotingLeader> votingLeadersTable { get; set; }
+        public DateTime lastOnline { get; set; }
 
         
 
