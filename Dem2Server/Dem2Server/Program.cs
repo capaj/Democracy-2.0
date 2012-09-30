@@ -28,10 +28,15 @@ namespace Dem2Server
                 {
                     Console.WriteLine("Opened connection from IP: {0}", socket.ConnectionInfo.ClientIpAddress);
                     allSockets.Add(socket);
-                    //socket.Send(jsonStr);
+                    socket.ConnectionInfo.Cookies["authentication"] = "anonymous";
+                    
                 };
                 socket.OnClose = () =>
                 {
+                    //if (socket.ConnectionInfo.Cookies["authentication"] == "awaitingFBResponse")
+                    //{
+                        
+                    //}
                     Console.WriteLine("Closed connection from IP: {0}", socket.ConnectionInfo.ClientIpAddress);
                     allSockets.Remove(socket);
                 };

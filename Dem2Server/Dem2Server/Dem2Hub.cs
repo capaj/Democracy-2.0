@@ -9,6 +9,7 @@ using Newtonsoft.Json.Linq;
 using Fleck;
 using Raven.Client.Document;
 using Raven.Client;
+using System.Net;
 
 namespace Dem2Server
 {
@@ -52,16 +53,26 @@ namespace Dem2Server
                     break;
                 case "login":
                     Console.WriteLine("Login request");
+                    
                     User heWhoWantsToLogin = JsonConvert.DeserializeObject<User>(message);
                     
-                    var ourUser = allUsers.First(x => x.nick == heWhoWantsToLogin.nick && x.hashedPwrd == heWhoWantsToLogin.hashedPwrd);     //simple authentication
+                    var ourUser = allUsers.First(x => x.nick == heWhoWantsToLogin.nick);     //simple authentication
                     if (ourUser != null)
                     {   //login successful
-                       
+                        socket.ConnectionInfo.Cookies["authentication"] = "awaitingFBResponse";
                         ourUser.connection = socket;
-                        Console.WriteLine("Login granted, sending the model");
-                        //ClientViewModel ConnectedUserVM = 
-                        socket.Send(JsonConvert.SerializeObject(ourUser.VM));
+                        
+                        
+                        using (WebClient asyncWebRequest = new WebClient())
+                        {
+
+                            asyncWebRequest.DownloadDataCompleted += ourUser.ProcessAccesTokenCheckResponse;
+
+                            Uri urlToRequest = new Uri("https://graph.facebook.com/me?access_token=" + ourUser.FBAccount.accessToken);
+                            asyncWebRequest.DownloadDataAsync(urlToRequest);
+
+                        }
+                        
                     }
                     else
                     {    //we don't know that user
