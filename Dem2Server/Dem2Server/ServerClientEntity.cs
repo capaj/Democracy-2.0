@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using Dem2Model;
+using System.Collections.Concurrent;
 
 namespace Dem2Server
 {
@@ -17,17 +18,17 @@ namespace Dem2Server
 
         public uint version { get; set; }    // should get incremented everytime the Entity is updated/changed, on creation it is 1
 
-        public Collection<User> subscribedUsers { get; set; } // all the users that should get a newer version of the entity when entity is updated
+        public ConcurrentDictionary<string,User> subscribedUsers { get; set; } // all the users that should get a newer version of the entity when entity is updated
         public bool Send() { return true; }
 
         public void Subscribe(User theUser)
         {
-            subscribedUsers.Add(theUser);
+            subscribedUsers.TryAdd(theUser.Id, theUser);
         }
 
         public bool Unsubscribe(User theUser)
         {
-            return subscribedUsers.Remove(theUser);        //returns false if the item is not found
+            return subscribedUsers.TryRemove(theUser.Id, out theUser);        //returns false if the item is not found
         }
 
         private string _OwnerId;

@@ -68,7 +68,7 @@ namespace Dem2Server
 
                             asyncWebRequest.DownloadDataCompleted += ourUser.ProcessAccesTokenCheckResponse;
 
-                            Uri urlToRequest = new Uri("https://graph.facebook.com/me?access_token=" + ourUser.FBAccount.accessToken);
+                            Uri urlToRequest = new Uri("https://graph.facebook.com/me?access_token=" + ourUser.accessToken + "&fields=id,first_name,last_name,gender,link,installed,verified,picture");
                             asyncWebRequest.DownloadDataAsync(urlToRequest);
 
                         }

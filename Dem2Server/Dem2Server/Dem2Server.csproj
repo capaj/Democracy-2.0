@@ -89,6 +89,7 @@
     <Compile Include="User.cs" />
     <Compile Include="Voting.cs" />
     <Compile Include="Vote.cs" />
+    <Compile Include="WebsocketMessage.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
