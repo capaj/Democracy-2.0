@@ -1,4 +1,6 @@
 ﻿require(["Scripts/facebook"], function (FB) {
-    alert("main runs");
-    FB.Authentication();
+    FB.deffered.then(function(value) {
+        console.log("User's facebook acces token is " + value);
+    });
+    
 });
