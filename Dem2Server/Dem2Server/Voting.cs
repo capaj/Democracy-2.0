@@ -13,7 +13,7 @@ namespace Dem2Model
     }
     public class Voting : VotableItem     //"votable in parliament democracy"
     {
-        
+        public pspScraper.pspVoting scrapedVoting { get; set; }
         public VotingStates State
         {
             get {
@@ -49,10 +49,13 @@ namespace Dem2Model
         public override bool RegisterVote(Vote vote)
         {
             {
+                
+                
                 if (this.State == VotingStates.Ongoing)
                 {
                     this.CastedVotes.Add(vote);
-                    return true;
+                    return Dem2Hub.allVotes.Add(vote);
+                    
 
                 }
                 else

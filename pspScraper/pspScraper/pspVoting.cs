@@ -9,9 +9,9 @@ using Newtonsoft.Json;
 
 namespace pspScraper
 {
-    class pspVoting
+    public class pspVoting
     {
-        public string Id { get; set; }
+        public string Id { get; private set; }
         public string url { get; private set; }
         public UInt32 meetingNumber { get; private set; }
         public UInt32 votingNumber { get; private set; }
@@ -64,7 +64,7 @@ namespace pspScraper
                             var name = ScraperStringHelper.RemoveHTMLmarkup(parliamentMemberLinkNode.InnerText);
                             var link = "http://www.psp.cz/sqw/" + parliamentMemberLinkNode.Attributes["href"].Value;
 
-                            var vote = new individualVote() { parliamentMemberName = name, parliamentMemberURL = link };
+                            var vote = new individualVote() { member = new parliamentMember { name = name, pspUrl = link } };
                             switch (LINode.FirstChild.Attributes["class"].Value)
                             {
                                 case "flag yes": vote.how = individualVotingTypes.Agrees;
@@ -82,6 +82,18 @@ namespace pspScraper
                         }
 
                     }
+                    using (var session = pspScraper.Program.docDB.OpenSession())
+                    {
+                        foreach (var vote in pspVotes)
+                        {
+                            var pspMember = session.Query<parliamentMember>().FirstOrDefault(x => x.pspUrl == vote.member.pspUrl);
+                            
+                        }
+                      
+                        //session.Store(voting);
+                      
+                        session.SaveChanges();
+                    }
                     Console.WriteLine("Added {0} votes", pspVotes.Count);
                 }
                 else
@@ -98,7 +110,7 @@ namespace pspScraper
 
         public void AddIndividualVote(individualVote aVote) {
             pspVotes.Add(aVote);
-            Console.WriteLine("Added a vote from {0}, who {1}", aVote.parliamentMemberName, aVote.how.ToString());
+            Console.WriteLine("Added a vote from {0}, who {1}", aVote.member.name, aVote.how.ToString());
         }
 
         public bool isLINodeaVote(HtmlAgilityPack.HtmlNode LiNode) {        //helps to determine if the li node on input is a vote or not
@@ -134,14 +146,18 @@ namespace pspScraper
         }
     }
 
-    class individualVote
+    public class individualVote
     {
         public individualVotingTypes how { get; set; }
-        public string parliamentMemberName { get; set; }
-        public string parliamentMemberURL { get; set; }
+        public parliamentMember member { get; set; }
+
+        public individualVote()
+        {
+
+        }
     }
 
-    enum individualVotingTypes
+    public enum individualVotingTypes
     {
         Agrees, Disagrees, Refrained, NotPresent, NotPresentExcused 
     }

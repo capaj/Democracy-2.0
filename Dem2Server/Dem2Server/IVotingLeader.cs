@@ -10,7 +10,6 @@ namespace Dem2Server
 
     public interface IVotingLeader
     {
-        public uint rank { get; set; }      // the bigger the rank, the smaller the importance
         event VotingLeader.VoteCastHandler VoteCast;
 
         bool CastVote(Voting onWhat, Vote vote);

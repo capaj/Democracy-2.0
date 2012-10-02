@@ -13,10 +13,10 @@ namespace Dem2Model
         public string nick { get; set; }    // by default Nick will be created out of a user's name, user can change it whenever he likes as much as he likes, but it must be unique
         public string accessToken { get; set; }  
         public Name civicName { get; set; }
-        public DateTime birthTime { get; private set; }
+        public DateTime birth { get; private set; }
         public FacebookAccount FBAccount { get; set; }
         public IWebSocketConnection connection { get; set; }
-        public HashSet<IVotingLeader> votingLeadersTable { get; set; }
+        public LinkedList<IVotingLeader> votingLeadersTable { get; set; }
         public DateTime lastOnline { get; set; }
 
         
@@ -82,6 +82,37 @@ namespace Dem2Model
 
 
             Console.ReadLine();
+        }
+
+        public override bool Equals(System.Object obj)
+        {
+            // If parameter is null return false.
+            if (obj == null)
+            {
+                return false;
+            }
+
+            // If parameter cannot be cast to Point return false.
+            User second = obj as User;
+            if ((System.Object)second == null)
+            {
+                return false;
+            }
+
+            // Return true if the fields match:
+            return Id == second.Id || FBAccount.Equals(second.FBAccount);
+        }
+
+        public bool Equals(User second)
+        {
+            // If parameter is null return false:
+            if ((object)second == null)
+            {
+                return false;
+            }
+
+            // Return true if the fields match:
+            return Id == second.Id || FBAccount.Equals(second.FBAccount);
         }
     }
 }

@@ -9,6 +9,9 @@ namespace Dem2Server
     class Comment:ServerClientEntity
     {
         [JsonIgnore]
+        private ServerClientEntity _parent;
+
+        [JsonIgnore]
         public ServerClientEntity parent 
         { 
             get { 
@@ -17,7 +20,7 @@ namespace Dem2Server
 		            return session.Load<ServerClientEntity>(parentId);
 	            } 
             }
-            set; 
+            set { _parent = value; } 
         }     // comment is ALWAYS a response to some entity-whether it is a voting, other comment, anything else
         
         public string parentId { get; private set; }

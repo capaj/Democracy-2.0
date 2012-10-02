@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dem2Server", "Dem2Server\Dem2Server.csproj", "{E486DB6E-97E4-4C34-BFEF-E3DD566144EA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pspScraper", "..\pspScraper\pspScraper\pspScraper.csproj", "{8AB99324-8729-4F79-85D0-88A155E039D4}"
+EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Dem2Client", "..\Dem2Client\", "{5D3004C3-359B-450A-BF20-8CFA04C88C23}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
@@ -19,47 +21,9 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Dem2Client", "..\Dem2Client
 		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\Dem2Client\"
 		Release.AspNetCompiler.Updateable = "true"
 		Release.AspNetCompiler.VirtualPath = "/Dem2Client"
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5"
-		VWDPort = "54415"
-	EndProjectSection
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Debug.AspNetCompiler.FixedNames = "false"
-		Debug.AspNetCompiler.ForceOverwrite = "true"
-		Debug.AspNetCompiler.PhysicalPath = "..\Dem2Client\"
-		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\Dem2Client\"
-		Debug.AspNetCompiler.Updateable = "true"
-		Debug.AspNetCompiler.VirtualPath = "/Dem2Client"
-		Release.AspNetCompiler.Debug = "False"
-		Release.AspNetCompiler.FixedNames = "false"
-		Release.AspNetCompiler.ForceOverwrite = "true"
-		Release.AspNetCompiler.PhysicalPath = "..\Dem2Client\"
-		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\Dem2Client\"
-		Release.AspNetCompiler.Updateable = "true"
-		Release.AspNetCompiler.VirtualPath = "/Dem2Client"
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
 		VWDPort = "54415"
 	EndProjectSection
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Debug.AspNetCompiler.FixedNames = "false"
-		Debug.AspNetCompiler.ForceOverwrite = "true"
-		Debug.AspNetCompiler.PhysicalPath = "..\Dem2Client\"
-		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\Dem2Client\"
-		Debug.AspNetCompiler.Updateable = "true"
-		Debug.AspNetCompiler.VirtualPath = "/Dem2Client"
-		Release.AspNetCompiler.Debug = "False"
-		Release.AspNetCompiler.FixedNames = "false"
-		Release.AspNetCompiler.ForceOverwrite = "true"
-		Release.AspNetCompiler.PhysicalPath = "..\Dem2Client\"
-		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\Dem2Client\"
-		Release.AspNetCompiler.Updateable = "true"
-		Release.AspNetCompiler.VirtualPath = "/Dem2Client"
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
-		VWDPort = "54415"
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pspScraper", "..\pspScraper\pspScraper\pspScraper.csproj", "{8AB99324-8729-4F79-85D0-88A155E039D4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

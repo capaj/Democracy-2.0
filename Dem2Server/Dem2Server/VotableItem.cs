@@ -7,7 +7,7 @@ using Dem2Model;
 
 namespace Dem2Server
 {
-    abstract class VotableItem:ServerClientEntity
+    abstract public class VotableItem:ServerClientEntity
     {
         protected List<Vote> CastedVotes
         {
@@ -20,12 +20,8 @@ namespace Dem2Server
         public int PositiveVotesCount { get { return CastedVotes.Where(vote => vote.Agrees == true).Count(); } }
         public int NegativeVotesCount { get { return CastedVotes.Where(vote => vote.Agrees == false).Count(); } }
 
-        public abstract bool RegisterVote(Vote vote)
-        {
-            {
-                return Dem2Hub.allVotes.Add(vote);
-            }
-        }
+        public abstract bool RegisterVote(Vote vote);
+  
 
         public bool GetCurrentResolve
         {
