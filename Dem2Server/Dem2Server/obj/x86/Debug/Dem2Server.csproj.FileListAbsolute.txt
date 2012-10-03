@@ -52,3 +52,6 @@ C:\Users\Capaj\Documents\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\Ht
 C:\Users\Capaj\Documents\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\pspScraper.pdb
 C:\Users\Capaj\Documents\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\HtmlAgilityPack.pdb
 C:\Users\Capaj\Documents\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\HtmlAgilityPack.xml
+D:\My documents\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\Dem2Server.exe.config
+D:\My documents\GitHub\Democracy-2.0\Dem2Server\Dem2Server\obj\x86\Debug\Dem2Server.exe
+D:\My documents\GitHub\Democracy-2.0\Dem2Server\Dem2Server\obj\x86\Debug\Dem2Server.pdb
