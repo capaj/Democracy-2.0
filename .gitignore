@@ -102,6 +102,7 @@ publish
 sql
 TestResults
 *.Cache
+*.cache
 ClientBin
 stylecop.*
 ~$*
