@@ -26,6 +26,7 @@ namespace Dem2Server
         public static void Initialize(DocumentStore documentDB)     //someone provided us with the DB to load data from
         {
             docDB = documentDB;
+            docDB.Initialize();
             using (var session = docDB.OpenSession())
             {
                 foreach (var user in session.Query<User>().ToList())
