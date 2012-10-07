@@ -71,6 +71,14 @@ namespace Dem2Model
                     this.connection.ConnectionInfo.Cookies["authentication"] = "authenticated";
                     Console.WriteLine("Login granted, sending the model");
                     this.connection.Send(JsonConvert.SerializeObject(this.VM));
+                    if (Dem2Hub.allUsers.Add(this))
+	                {
+                        //this is a new user, create a new model and send it to him
+                    }
+                    else
+                    {
+                        //this is returning user, send him his model he had last  time
+                    }
                     
                     Console.WriteLine(downloadedData);
                 }

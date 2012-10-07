@@ -1,25 +1,26 @@
-﻿require(["Scripts/facebook"], function (FB) {
-    FB.deffered.then(function(value) {
+require([
+    "Scripts/facebook"
+], function (FB) {
+    FB.deffered.then(function (value) {
         console.log("User's facebook acces token is " + value);
     });
-
-    var WSworker = new Worker('wsworker.js');   //worker handling server comunication
+    var WSworker = new Worker('/Scripts/wsworker.js');
     WSworker.onmessage = function (event) {
-        switch (event.data.type) {
-            case "debug":
+        switch(event.data.type) {
+            case "debug": {
                 console.log("Msg from wsworker> " + event.data.message);
                 break;
-            default:
-                console.assert("Msg from wsworker> " + event.data.message);
-                //other types of data
+
+            }
+            default: {
+                console.error("Msg from wsworker> " + event.data.message);
+
+            }
         }
     };
-
-    try {
+    try  {
         var json = JSON.parse(this.responseText);
+    } catch (e) {
+        alert('WS worker not started!');
     }
-    catch (e) {
-        alert('invalid json');
-    }
-    
 });

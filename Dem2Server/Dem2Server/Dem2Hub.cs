@@ -55,21 +55,20 @@ namespace Dem2Server
                 case "login":
                     Console.WriteLine("Login request");
                     
-                    User heWhoWantsToLogin = JsonConvert.DeserializeObject<User>(message);
-                    
-                    var ourUser = allUsers.First(x => x.nick == heWhoWantsToLogin.nick);     //simple authentication
-                    if (ourUser != null)
+                    User heWhoWantsToLogin = JsonConvert.DeserializeObject<User>(receivedObj.theUser);
+
+                    if (heWhoWantsToLogin != null)
                     {   //login successful
                         socket.ConnectionInfo.Cookies["authentication"] = "awaitingFBResponse";
-                        ourUser.connection = socket;
+                        heWhoWantsToLogin.connection = socket;
                         
                         
                         using (WebClient asyncWebRequest = new WebClient())
                         {
 
-                            asyncWebRequest.DownloadDataCompleted += ourUser.ProcessAccesTokenCheckResponse;
+                            asyncWebRequest.DownloadDataCompleted += heWhoWantsToLogin.ProcessAccesTokenCheckResponse;
 
-                            Uri urlToRequest = new Uri("https://graph.facebook.com/me?access_token=" + ourUser.accessToken + "&fields=id,first_name,last_name,gender,link,installed,verified,picture");
+                            Uri urlToRequest = new Uri("https://graph.facebook.com/me?access_token=" + heWhoWantsToLogin.accessToken + "&fields=id,first_name,last_name,gender,link,installed,verified,picture");
                             asyncWebRequest.DownloadDataAsync(urlToRequest);
 
                         }
