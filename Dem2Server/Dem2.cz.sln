@@ -5,7 +5,25 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dem2Server", "Dem2Server\De
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pspScraper", "..\pspScraper\pspScraper\pspScraper.csproj", "{8AB99324-8729-4F79-85D0-88A155E039D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dem2Client", "..\Dem2Client\Dem2Client.csproj", "{C1498AF2-A162-488F-AB00-31612A280DBC}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Dem2Client", "..\Dem2Client\", "{5D3004C3-359B-450A-BF20-8CFA04C88C23}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		Debug.AspNetCompiler.VirtualPath = "/Dem2Client"
+		Debug.AspNetCompiler.PhysicalPath = "..\Dem2Client\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\Dem2Client\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/Dem2Client"
+		Release.AspNetCompiler.PhysicalPath = "..\Dem2Client\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\Dem2Client\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "54415"
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,16 +55,16 @@ Global
 		{8AB99324-8729-4F79-85D0-88A155E039D4}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{8AB99324-8729-4F79-85D0-88A155E039D4}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{8AB99324-8729-4F79-85D0-88A155E039D4}.Release|x86.ActiveCfg = Release|Any CPU
-		{C1498AF2-A162-488F-AB00-31612A280DBC}.Debug|Any CPU.ActiveCfg = Release|Any CPU
-		{C1498AF2-A162-488F-AB00-31612A280DBC}.Debug|Any CPU.Build.0 = Release|Any CPU
-		{C1498AF2-A162-488F-AB00-31612A280DBC}.Debug|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{C1498AF2-A162-488F-AB00-31612A280DBC}.Debug|Mixed Platforms.Build.0 = Release|Any CPU
-		{C1498AF2-A162-488F-AB00-31612A280DBC}.Debug|x86.ActiveCfg = Release|Any CPU
-		{C1498AF2-A162-488F-AB00-31612A280DBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C1498AF2-A162-488F-AB00-31612A280DBC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C1498AF2-A162-488F-AB00-31612A280DBC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{C1498AF2-A162-488F-AB00-31612A280DBC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{C1498AF2-A162-488F-AB00-31612A280DBC}.Release|x86.ActiveCfg = Release|Any CPU
+		{5D3004C3-359B-450A-BF20-8CFA04C88C23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D3004C3-359B-450A-BF20-8CFA04C88C23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D3004C3-359B-450A-BF20-8CFA04C88C23}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{5D3004C3-359B-450A-BF20-8CFA04C88C23}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{5D3004C3-359B-450A-BF20-8CFA04C88C23}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5D3004C3-359B-450A-BF20-8CFA04C88C23}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D3004C3-359B-450A-BF20-8CFA04C88C23}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{5D3004C3-359B-450A-BF20-8CFA04C88C23}.Release|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{5D3004C3-359B-450A-BF20-8CFA04C88C23}.Release|Mixed Platforms.Build.0 = Debug|Any CPU
+		{5D3004C3-359B-450A-BF20-8CFA04C88C23}.Release|x86.ActiveCfg = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
