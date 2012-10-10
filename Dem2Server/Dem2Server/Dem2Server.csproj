@@ -80,6 +80,7 @@
     <Compile Include="DiscussionThread.cs" />
     <Compile Include="FacebookAccount.cs" />
     <Compile Include="Dem2Hub.cs" />
+    <Compile Include="serverStatistics.cs" />
     <Compile Include="VotableItem.cs" />
     <Compile Include="IVotingLeader.cs" />
     <Compile Include="Name.cs" />

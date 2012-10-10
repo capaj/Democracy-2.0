@@ -20,7 +20,7 @@ namespace Dem2Server
         public static HashSet<User> allUsers { get; set; }
         public static HashSet<Voting> allVotings { get; set; }        // parliamentary votings for now
         public static HashSet<Vote> allVotes { get; set; }
-        public static HashSet<VotableItem> allCommentVotes { get; set; }
+        public static HashSet<Comment> allComments { get; set; }
         //public static ConcurrentBag<Vote> allVotes { get; set; }
 
         public static void Initialize(DocumentStore documentDB)     //someone provided us with the DB to load data from
@@ -91,6 +91,16 @@ namespace Dem2Server
                 default: Console.WriteLine("Unrecognized msgType");
                     break;
             }
+        }
+
+        public static serverStatistics GetStatistics() {
+            return new serverStatistics { 
+                userCount = (UInt32)allUsers.Count, 
+                voteCount = (UInt64)allVotes.Count,
+                positiveVoteCount = (UInt64)allVotes.Where(x => x.Agrees == true).Count(),
+                votingCount = (UInt32)allVotings.Count,
+                commentCount = (UInt64)allComments.Count
+            };
         }
     }
 }
