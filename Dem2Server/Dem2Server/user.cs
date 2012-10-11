@@ -18,7 +18,7 @@ namespace Dem2Model
         public IWebSocketConnection connection { get; set; }
         public LinkedList<IVotingLeader> votingLeadersTable { get; set; }
         public DateTime lastOnline { get; set; }
-
+        public Uri URL { get; set; }
         
 
         public bool CastVoteFromLeader(IVotingLeader leader, Voting onWhat, Vote vote)
@@ -67,21 +67,25 @@ namespace Dem2Model
                 if (e.Result != null && e.Result.Length > 0)
                 {
                     string downloadedData = Encoding.UTF8.GetString(e.Result);
+                    this.FBAccount = JsonConvert.DeserializeObject<FacebookAccount>(downloadedData);
 
                     this.connection.ConnectionInfo.Cookies["authentication"] = "authenticated";
                     Console.WriteLine("Login granted, sending the model");
                     
                     if (Dem2Hub.allUsers.Add(this))
 	                {
-                        
+                        Console.WriteLine("Created a new user with FB id: {0}", this.FBAccount.id );
                         //this is a new user, create a new model and send it to him
+                        this.connection.Send(JsonConvert.SerializeObject(this));
                     }
                     else
                     {
+                        Dem2Hub.allUsers.First<User>(x => x == this).connection = this.connection;
+                        this.connection = null;
                         //this is returning user, send him his model he had last  time
                     }
-                    this.connection.Send(JsonConvert.SerializeObject(this));
-                    Console.WriteLine(downloadedData);
+                    
+                    //Console.WriteLine(downloadedData);
                 }
                 else
                 {

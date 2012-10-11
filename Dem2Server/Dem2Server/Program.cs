@@ -33,10 +33,18 @@ namespace Dem2Server
                 };
                 socket.OnClose = () =>
                 {
-                    //if (socket.ConnectionInfo.Cookies["authentication"] == "awaitingFBResponse")
-                    //{
-                        
-                    //}
+                    switch (socket.ConnectionInfo.Cookies["authentication"])
+                    {
+                        case "awaitingFBResponse":
+                                
+                            break;
+                        case "authenticated":
+                            Dem2Hub.allUsers.First(x => x.connection == socket).lastOnline = DateTime.Now;
+                            break;
+                        default:
+                            break;
+                    }
+
                     Console.WriteLine("Closed connection from IP: {0}", socket.ConnectionInfo.ClientIpAddress);
                     allSockets.Remove(socket);
                 };

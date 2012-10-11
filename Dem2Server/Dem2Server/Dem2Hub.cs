@@ -45,17 +45,13 @@ namespace Dem2Server
         
         public static void ResolveMessage (string message, IWebSocketConnection socket)
         {
-            dynamic receivedObj = JObject.Parse(message);
-            switch ((string)receivedObj.msgType)
+            JObject receivedObj = JObject.Parse(message);
+            switch ((string)receivedObj["msgType"])
             {
-                case "createUser":
-                    Console.WriteLine("Create user request");
-
-                    break;
                 case "login":
                     Console.WriteLine("Login request");
                     
-                    User heWhoWantsToLogin = JsonConvert.DeserializeObject<User>(receivedObj.theUser);
+                    User heWhoWantsToLogin = JsonConvert.DeserializeObject<User>((string)receivedObj["theUser"]);
 
                     if (heWhoWantsToLogin != null)
                     {   //login successful

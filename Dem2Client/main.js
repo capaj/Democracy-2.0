@@ -11,7 +11,7 @@
                 break;
             default:
                 try {
-                    var json = JSON.parse();
+                    var json = JSON.parse(event.data);
                 }
                 catch (e) {
                     alert('invalid json');

@@ -8,7 +8,8 @@ var workerMessage = (function () {
     return workerMessage;
 })();
 
-var host = "ws://dem2.cz:8181";
+//var host = "ws://dem2.cz:8181";
+var host = "ws://localhost:8181";     //for testing
 
 try {
     socket = new WebSocket(host);
@@ -27,12 +28,14 @@ try {
 }
 self.onmessage = function (event) {
     var data = event.data;
-    switch (data.messageType) {
+    switch (data.msgType) {
         case 'R': {
             send(JSON.stringify(data));
 
         }
+        //case "login"    
         default:
+            send(JSON.stringify(data));
     }
     
 };
@@ -41,6 +44,6 @@ function send(msgToServer) {
     try {
         socket.send(msgToServer);
     } catch (exception) {
-        self.postMessage("Error when sending to server.");
+        self.postMessage(new workerMessage("debug", "Error when sending to server the message: " + msgToServer));
     }
 }
