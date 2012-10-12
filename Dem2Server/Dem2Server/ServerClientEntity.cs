@@ -52,7 +52,7 @@ namespace Dem2Server
 
         public override int GetHashCode()
         {
-            return Id.GetHashCode();
+                return Id.GetHashCode();
         }
 
         public override bool Equals(System.Object obj)

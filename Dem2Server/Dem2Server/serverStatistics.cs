@@ -14,5 +14,7 @@ namespace Dem2Server
         public UInt64 negativeVoteCount { get; set; }
         public UInt32 votingCount { get; set; }
         public UInt64 commentCount { get; set; }
+
+        public UInt32 onlineUserCount { get; set; }
     }
 }

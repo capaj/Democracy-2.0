@@ -25,6 +25,10 @@ namespace Dem2Server
 
         public static void Initialize(DocumentStore documentDB)     //someone provided us with the DB to load data from
         {
+            allUsers = new HashSet<User>();
+            allVotings = new HashSet<Voting>();
+            allVotes = new HashSet<Vote>();
+            allComments = new HashSet<Comment>();
             docDB = documentDB;
             docDB.Initialize();
             using (var session = docDB.OpenSession())
@@ -46,28 +50,32 @@ namespace Dem2Server
         public static void ResolveMessage (string message, IWebSocketConnection socket)
         {
             JObject receivedObj = JObject.Parse(message);
+           
             switch ((string)receivedObj["msgType"])
             {
                 case "login":
                     Console.WriteLine("Login request");
                     
-                    User heWhoWantsToLogin = JsonConvert.DeserializeObject<User>((string)receivedObj["theUser"]);
-
+                    User heWhoWantsToLogin = receivedObj["theUser"].ToObject<User>();
+                    
                     if (heWhoWantsToLogin != null)
                     {   //login successful
-                        socket.ConnectionInfo.Cookies["authentication"] = "awaitingFBResponse";
                         heWhoWantsToLogin.connection = socket;
-                        
-                        
-                        using (WebClient asyncWebRequest = new WebClient())
+
+                        if (heWhoWantsToLogin.accessToken != null)
                         {
+                            using (WebClient asyncWebRequest = new WebClient())
+                            {
 
-                            asyncWebRequest.DownloadDataCompleted += heWhoWantsToLogin.ProcessAccesTokenCheckResponse;
+                                asyncWebRequest.DownloadDataCompleted += heWhoWantsToLogin.ProcessAccesTokenCheckResponse;
+                                socket.ConnectionInfo.Cookies["authentication"] = "awaitingFBResponse";
 
-                            Uri urlToRequest = new Uri("https://graph.facebook.com/me?access_token=" + heWhoWantsToLogin.accessToken + "&fields=id,first_name,last_name,gender,link,installed,verified,picture");
-                            asyncWebRequest.DownloadDataAsync(urlToRequest);
+                                Uri urlToRequest = new Uri("https://graph.facebook.com/me?access_token=" + heWhoWantsToLogin.accessToken + "&fields=id,first_name,last_name,gender,link,installed,verified,picture");
+                                asyncWebRequest.DownloadDataAsync(urlToRequest);
 
+                            }
                         }
+                      
                         
                     }
                     else
@@ -95,7 +103,8 @@ namespace Dem2Server
                 voteCount = (UInt64)allVotes.Count,
                 positiveVoteCount = (UInt64)allVotes.Where(x => x.Agrees == true).Count(),
                 votingCount = (UInt32)allVotings.Count,
-                commentCount = (UInt64)allComments.Count
+                commentCount = (UInt64)allComments.Count,
+                onlineUserCount = (UInt32)allUsers.Where(x=> x.connection != null).Count()
             };
         }
     }

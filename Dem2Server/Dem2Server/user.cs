@@ -15,11 +15,15 @@ namespace Dem2Model
         public Name civicName { get; set; }
         public DateTime birth { get; private set; }
         public FacebookAccount FBAccount { get; set; }
+        [JsonIgnore]
         public IWebSocketConnection connection { get; set; }
         public LinkedList<IVotingLeader> votingLeadersTable { get; set; }
-        public DateTime lastOnline { get; set; }
+        public DateTime lastDisconnected { get; set; }
         public Uri URL { get; set; }
-        
+
+        public void Send(dynamic package) { //shorter version than to having to type it every time
+            this.connection.Send(JsonConvert.SerializeObject(package));
+        }
 
         public bool CastVoteFromLeader(IVotingLeader leader, Voting onWhat, Vote vote)
         {
@@ -76,11 +80,11 @@ namespace Dem2Model
 	                {
                         Console.WriteLine("Created a new user with FB id: {0}", this.FBAccount.id );
                         //this is a new user, create a new model and send it to him
-                        this.connection.Send(JsonConvert.SerializeObject(this));
+                        this.Send(this);
                     }
                     else
                     {
-                        Dem2Hub.allUsers.First<User>(x => x == this).connection = this.connection;
+                        Dem2Hub.allUsers.First<User>(x => x.Equals(this)).connection = this.connection;
                         this.connection = null;
                         //this is returning user, send him his model he had last  time
                     }
@@ -113,7 +117,7 @@ namespace Dem2Model
             }
 
             // Return true if the fields match:
-            return Id == second.Id || FBAccount.Equals(second.FBAccount);
+            return FBAccount.Equals(second.FBAccount) || Id == second.Id;
         }
 
         public bool Equals(User second)
@@ -125,7 +129,19 @@ namespace Dem2Model
             }
 
             // Return true if the fields match:
-            return Id == second.Id || FBAccount.Equals(second.FBAccount);
+            return FBAccount.Equals(second.FBAccount) || Id == second.Id;
+        }
+
+        public override int GetHashCode()
+        {
+            if (Id != null)
+            {
+                return Id.GetHashCode();
+            }
+            else
+            {
+                return FBAccount.GetHashCode();
+            }
         }
     }
 }

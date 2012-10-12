@@ -39,7 +39,7 @@ namespace Dem2Server
                                 
                             break;
                         case "authenticated":
-                            Dem2Hub.allUsers.First(x => x.connection == socket).lastOnline = DateTime.Now;
+                            Dem2Hub.allUsers.First(x => x.connection == socket).lastDisconnected = DateTime.Now;
                             break;
                         default:
                             break;
