@@ -61,9 +61,9 @@ namespace Dem2Server
                     if (heWhoWantsToLogin != null)
                     {   //login successful
                         heWhoWantsToLogin.connection = socket;
-
                         if (heWhoWantsToLogin.accessToken != null)
                         {
+#if IS_RUNNING_ON_SERVER
                             using (WebClient asyncWebRequest = new WebClient())
                             {
 
@@ -74,8 +74,14 @@ namespace Dem2Server
                                 asyncWebRequest.DownloadDataAsync(urlToRequest);
 
                             }
+#else
+                            if (heWhoWantsToLogin.accessToken == "TESTING_TOKEN_1")
+                            {
+                                heWhoWantsToLogin.LogInUser("{\"id\":\"1533221860\",\"first_name\":\"Ji\\u0159\\u00ed\",\"last_name\":\"\\u0160p\\u00e1c\",\"gender\":\"male\",\"link\":\"http:\\/\\/www.facebook.com\\/Capaj\",\"installed\":true,\"verified\":true,\"picture\":{\"data\":{\"url\":\"https:\\/\\/fbcdn-profile-a.akamaihd.net\\/hprofile-ak-prn1\\/27439_1533221860_985_q.jpg\",\"is_silhouette\":false}}}");
+                            }
                         }
-                      
+
+#endif
                         
                     }
                     else
