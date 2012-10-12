@@ -8,8 +8,8 @@ var workerMessage = (function () {
     return workerMessage;
 })();
 
-//var host = "ws://dem2.cz:8181";
-var host = "ws://localhost:8181";     //for testing
+var host = "ws://dem2.cz:8181";
+//var host = "ws://localhost:8181";     //for testing
 
 try {
     socket = new WebSocket(host);

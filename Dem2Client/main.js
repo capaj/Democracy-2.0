@@ -16,7 +16,7 @@
                 catch (e) {
                     alert('invalid json');
                 }
-                console.assert("Msg from wsworker> " + event.data.message);
+                console.assert("Msg from wsworker> " + event.data);
                 //other types of data
         }
     };
@@ -27,7 +27,7 @@
         WSworker.postMessage(
         {
             msgType: "login", theUser:
-              { accesToken: FBAccesToken }
+              { accessToken: FBAccesToken }
         }
         );
     });
