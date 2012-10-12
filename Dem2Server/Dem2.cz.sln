@@ -22,24 +22,6 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Dem2Client", "..\Dem2Client
 		Release.AspNetCompiler.Updateable = "true"
 		Release.AspNetCompiler.VirtualPath = "/Dem2Client"
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
-		VWDPort = "15961"
-	EndProjectSection
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Debug.AspNetCompiler.FixedNames = "false"
-		Debug.AspNetCompiler.ForceOverwrite = "true"
-		Debug.AspNetCompiler.PhysicalPath = "..\Dem2Client\"
-		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\Dem2Client\"
-		Debug.AspNetCompiler.Updateable = "true"
-		Debug.AspNetCompiler.VirtualPath = "/Dem2Client"
-		Release.AspNetCompiler.Debug = "False"
-		Release.AspNetCompiler.FixedNames = "false"
-		Release.AspNetCompiler.ForceOverwrite = "true"
-		Release.AspNetCompiler.PhysicalPath = "..\Dem2Client\"
-		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\Dem2Client\"
-		Release.AspNetCompiler.Updateable = "true"
-		Release.AspNetCompiler.VirtualPath = "/Dem2Client"
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
 		VWDPort = "54415"
 	EndProjectSection
 EndProject

@@ -1,4 +1,5 @@
-﻿using System;
+﻿#define IS_RUNNING_ON_SERVER
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,18 +9,27 @@ using Newtonsoft.Json.Linq;
 using Raven.Client.Document;
 using Raven.Client;
 
+
 namespace Dem2Server
 {
     class Program
     {
         static void Main(string[] args)
         {
-            FleckLog.Level = LogLevel.Debug;
+            
             var allSockets = new List<IWebSocketConnection>();
-            //DocumentStore docDB = new DocumentStore { Url = "http://localhost:8080" };        //when on the same machine where Raven runs
+#if IS_RUNNING_ON_SERVER
+            FleckLog.Level = LogLevel.Error;
+            DocumentStore docDB = new DocumentStore { Url = "http://localhost:8080" };        //when on the same machine where Raven runs     
+            var WSserver = new WebSocketServer("http://dem2.cz:8181");
+#else
+            FleckLog.Level = LogLevel.Debug;
             DocumentStore docDB = new DocumentStore { Url = "http://dem2.cz:8080" };            //when on any other
+            var WSserver = new WebSocketServer("ws://localhost:8181");           
+#endif
             Dem2Hub.Initialize(docDB);
-            var WSserver = new WebSocketServer("ws://localhost:8181");
+
+
 
             //JavaScriptSerializer JSONSerializer = new JavaScriptSerializer();
             WSserver.Start(socket =>

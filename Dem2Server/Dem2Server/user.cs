@@ -71,34 +71,38 @@ namespace Dem2Model
                 if (e.Result != null && e.Result.Length > 0)
                 {
                     string downloadedData = Encoding.UTF8.GetString(e.Result);
-                    this.FBAccount = JsonConvert.DeserializeObject<FacebookAccount>(downloadedData);
-
-                    this.connection.ConnectionInfo.Cookies["authentication"] = "authenticated";
-                    Console.WriteLine("Login granted, sending the model");
-                    
-                    if (Dem2Hub.allUsers.Add(this))
-	                {
-                        Console.WriteLine("Created a new user with FB id: {0}", this.FBAccount.id );
-                        //this is a new user, create a new model and send it to him
-                        this.Send(this);
-                    }
-                    else
-                    {
-                        Dem2Hub.allUsers.First<User>(x => x.Equals(this)).connection = this.connection;
-                        this.connection = null;
-                        //this is returning user, send him his model he had last  time
-                    }
-                    
-                    //Console.WriteLine(downloadedData);
+                    LogInUser(downloadedData);                   
                 }
                 else
                 {
                     Console.WriteLine("No data was downloaded.");
                 }
             }
+            
+        }
 
+        //returns false when user is returning, true when he is new
+        public bool LogInUser(string FBgraphJSON) {
+            this.FBAccount = JsonConvert.DeserializeObject<FacebookAccount>(FBgraphJSON);
 
-            Console.ReadLine();
+            this.connection.ConnectionInfo.Cookies["authentication"] = "authenticated";
+            Console.WriteLine("Login granted, sending the model");
+            var isNew = Dem2Hub.allUsers.Add(this);
+            if (isNew)
+            {
+                Console.WriteLine("Created a new user with FB id: {0}", this.FBAccount.id);
+                //this is a new user, create a new model and send it to him
+                this.Send(this);
+            }
+            else
+            {
+                Dem2Hub.allUsers.First<User>(x => x.Equals(this)).connection = this.connection;
+                this.connection = null;
+                //this is returning user, send him his model he had last  time
+            }
+
+            //Console.WriteLine(downloadedData);
+            return isNew;
         }
 
         public override bool Equals(System.Object obj)

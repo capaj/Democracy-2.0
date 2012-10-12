@@ -108,3 +108,7 @@ C:\Users\Administrator\Documents\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\
 C:\Users\Administrator\Documents\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\Raven.Client.MvcIntegration.pdb
 C:\Users\Administrator\Documents\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\HtmlAgilityPack.xml
 C:\Users\Administrator\Documents\GitHub\Democracy-2.0\Dem2Server\Dem2Server\obj\x86\Debug\Dem2Server.csprojResolveAssemblyReference.cache
+C:\Users\jspac\Documents\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\pspScraper.exe
+C:\Users\jspac\Documents\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\HtmlAgilityPack.dll
+C:\Users\jspac\Documents\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\pspScraper.pdb
+C:\Users\jspac\Documents\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\HtmlAgilityPack.xml

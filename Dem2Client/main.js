@@ -1,4 +1,8 @@
-﻿require(["Scripts/facebook"], function (FB) {
+﻿
+IS_RUNNING_ON_SERVER = true;    //use true when deploying on the live server
+IS_RUNNING_ON_SERVER = false;   // use false value for local testing
+
+require(["Scripts/facebook"], function (FB) {
  
     var WSworker = new Worker('Scripts/wsworker.js');   //worker handling server comunication
     WSworker.onmessage = function (event) {
