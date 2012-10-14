@@ -22,6 +22,27 @@
     
 </head>
 <body>
+    <div class="modal hide" id="notChromeWarning">
+        <div class="modal-header">
+            <div class="alert alert-block alert-error fade in">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h3>Vypadá to, že nepoužíváte Google chrome. </h3>
+            </div>
+        </div>
+        <div class="modal-body">
+            <p>Tato webová aplikace je psaná pouze a výhradně pro Google chrome. Důvody jsou technologcké-aplikace běží kompletně přes Websocktety a implementace v Chromu je nejlepší.</p>
+            <p>Nezakazujeme vám používat jakýkoliv jiný prohlížeč, nicméně nehodláme momentálně podporovat žádný jiný prohlížeč. Jinými slovy-pokud budete mít problém, tak se jim budeme zabývat pouze pokud vám nastanou v Google chrome.</p>
+            <p>
+                <a href="http://www.google.com/intl/cs/chrome/browser/">
+                    <img src="http://www.google.com/intl/cs/chrome/assets/common/images/chrome_logo_2x.png" alt="Chrome logo" /> je k dispozici ke stažení zde.
+                </a> 
+            </p>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="btn" data-dismiss="modal">Close</a>
+        </div>
+    </div>
+    
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="navbar-inner">
             <div class="container-fluid">
@@ -40,7 +61,7 @@
                             <div id="auth-loggedin" style="display:none">
                             
                                 <a href="#" id="auth-logoutlink">Facebook login: <span id="auth-displayname"></span> - odhlásit se</a>
-                          </div>
+                            </div>
                         </div>
                     </div>
                     <ul class="nav">
@@ -54,6 +75,7 @@
     </div>
     <div id="FBResponse"></div>
     <div id="fb-root"></div>
+    
     <section id="main" class="container-fluid">   
         <div class="well">
         <p><img src="Content/images/dem2_logo.png" /></p>
