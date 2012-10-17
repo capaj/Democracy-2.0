@@ -1,6 +1,6 @@
 ﻿
-IS_RUNNING_ON_SERVER = true;    //use true when deploying on the live server
-//IS_RUNNING_ON_SERVER = false;   // use false value for local testing
+//IS_RUNNING_ON_SERVER = true;    //use true when deploying on the live server
+IS_RUNNING_ON_SERVER = false;   // use false value for local testing
 
 navigator.sayswho = (function () {      // thanks to kennebec on stackoverflow.com
     var N = navigator.appName, ua = navigator.userAgent, tem;
@@ -16,34 +16,49 @@ require(["Scripts/facebook"], function (FB) {
     }
 
     var WSworker = new Worker('Scripts/wsworker.js');   //worker handling server comunication
-    WSworker.onmessage = function (event) {
-        switch (event.data.type) {
-            case "debug":
-                console.log("Msg from wsworker> " + event.data.message);
-                break;
-            case "connectionInfo":
-                console.log("connection status> " + event.data.message);
-                break;
-            default:
-                try {
-                    var json = JSON.parse(event.data);
-                }
-                catch (e) {
-                    alert('invalid json');
-                }
-                console.assert("Msg from wsworker> " + event.data);
-                //other types of data
-        }
-    };
 
     FB.deffered.then(function (FBAccesToken) {
+        WSworker.onmessage = function (event) {
+            switch (event.data.type) {
+                case "debug":
+                    console.log("Msg from wsworker> " + event.data.message);
+                    break;
+                case "connectionInfo":
+                    console.log("connection status> " + event.data.message);
+                    if (event.data.readyState === 1) {
+                        WSworker.postMessage(
+                            {
+                                msgType: "login", theUser:
+                                  { accessToken: FBAccesToken }
+                            }
+                        );
+                    }
+                    break;
+                default: //other types of data
+                    try {
+                        var json = JSON.parse(event.data);
+                    }
+                    catch (e) {
+                        alert('invalid json');
+                    }
+                    console.assert("Msg from wsworker> " + event.data);
+
+            }
+        };
         console.log("User's facebook acces token is " + FBAccesToken);
 
-        WSworker.postMessage(
-        {
-            msgType: "login", theUser:
-              { accessToken: FBAccesToken }
+        if (IS_RUNNING_ON_SERVER == false) {
+           
+            WSworker.postMessage(
+                {
+                    msgType: "hostAdress", host: "ws://localhost:8181"
+                }
+            );
         }
+        WSworker.postMessage(
+            {
+                msgType: "command", cmdType: "connect"
+            }
         );
     });
 });

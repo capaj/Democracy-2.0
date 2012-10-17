@@ -17,13 +17,14 @@ namespace Dem2Server
         {
             
             var allSockets = new List<IWebSocketConnection>();
+            DocumentStore docDB = new DocumentStore { Url = "http://localhost:8080" };        //when on the same machine where Raven runs     
+            //DocumentStore docDB = new DocumentStore { Url = "http://dem2.cz:8080" };            //when on any other
+
 #if IS_RUNNING_ON_SERVER
             FleckLog.Level = LogLevel.Error;
-            DocumentStore docDB = new DocumentStore { Url = "http://localhost:8080" };        //when on the same machine where Raven runs     
             var WSserver = new WebSocketServer("http://dem2.cz:8181");
 #else
             FleckLog.Level = LogLevel.Debug;
-            DocumentStore docDB = new DocumentStore { Url = "http://dem2.cz:8080" };            //when on any other
             var WSserver = new WebSocketServer("ws://localhost:8181");           
 #endif
             Dem2Hub.Initialize(docDB);

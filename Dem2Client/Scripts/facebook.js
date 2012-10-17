@@ -52,7 +52,7 @@
             });
         }
     } else {
-        setTimeout(function () { dfd.resolve("TESTING_TOKEN_1"); }, 100)    // we are running it locally
+        setTimeout(function () { dfd.resolve("TESTING_TOKEN_1"); }, 100)    // we are running it locally, so we use this fake token
     }
     return {
         deffered: dfd.promise()

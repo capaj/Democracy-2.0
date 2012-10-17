@@ -1,43 +1,53 @@
 ﻿var socket;
+var host = "ws://dem2.cz:8181";
 var workerMessage = (function () {
-    function workerMessage(type, message, readyState) {
+    function workerMessage(type, message, _socket) {
         this.type = type;
         this.message = message;
-        this.readyState = readyState;
+        this.readyState = 0
+        if (_socket) {
+            this.readyState = _socket.readyState;
+        }
     }
     return workerMessage;
 })();
 
-if (IS_RUNNING_ON_SERVER) {
-    var host = "ws://dem2.cz:8181";
-} else {
-    var host = "ws://localhost:8181";     //for testing we are connecting to local websocket server
+
+var connectToWSServer = function() {
+    try {
+        socket = new WebSocket(host);
+        socket.onopen = function () {
+            self.postMessage(new workerMessage("connectionInfo", "Connected to " + host, socket));
+        };
+        socket.onmessage = function (WSevent) {
+            var msgfromServer = JSON.parse(WSevent.data);
+            self.postMessage(WSevent.data);
+        };
+        socket.onclose = function () {
+            self.postMessage(new workerMessage("connectionInfo", "Connection to " + host + " closed", socket));
+        };
+    } catch (exception) {
+        self.postMessage(new workerMessage("connectionInfo", "Error when connecting to " + host, socket));
+    }
 }
 
-
-try {
-    socket = new WebSocket(host);
-    socket.onopen = function () {
-        self.postMessage(new workerMessage("connectionInfo", "Connected to " + host, socket.readyState));
-    };
-    socket.onmessage = function (WSevent) {
-        var msgfromServer = JSON.parse(WSevent.data);
-        self.postMessage(WSevent.data);
-    };
-    socket.onclose = function () {
-        self.postMessage(new workerMessage("connectionInfo", "Connection to " + host + " closed", socket.readyState));
-    };
-} catch (exception) {
-    self.postMessage(new workerMessage("connectionInfo", "Error when connecting to " + host, socket.readyState));
-}
 self.onmessage = function (event) {
     var data = event.data;
     switch (data.msgType) {
-        case 'R': {
+        case 'R':
             send(JSON.stringify(data));
+            break;
+        case "hostAdress":
+            host = data.host;     //for testing we are connecting to local websocket server
+            break;
+        case "command":
+            switch (data.cmdType) {
+                case "connect": {
+                    connectToWSServer();
 
-        }
-        //case "login"    
+                }
+            }
+            break;
         default:
             send(JSON.stringify(data));
     }
