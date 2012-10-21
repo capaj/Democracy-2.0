@@ -63,17 +63,13 @@ namespace pspScraper
             try
             {
                 var mainContent = html.DocumentNode.SelectSingleNode("//div[@id = 'main-content']");        // getting the div with content
-                var tableRows = mainContent.SelectNodes("//tr");
-                var links = mainContent.SelectNodes("//a[@href]");
+                var tableRows = mainContent.SelectNodes(".//tr");
+                //var links = mainContent.SelectNodes(".//a[@href]");
                 //foreach (var link in links)
                 foreach (var row in tableRows)
                 {
-                    var years = ScraperStringHelper.GetNumbersFromString(row.FirstChild.InnerText);
-                    var yearFrom = years[0];
-                    if (years.Count == 2)
-                    {
-                        var yearTo = years[1];
-                    }
+                    var term = new pspTerm(row, webGet);
+                    listOfTerms.Add(term);
                     
                 }
                 Console.WriteLine("sd");
