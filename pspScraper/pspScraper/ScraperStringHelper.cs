@@ -21,15 +21,22 @@ namespace pspScraper
         static public SortedDictionary<UInt16, UInt32> GetNumbersFromString(string str) {
             var numbersInString = new SortedDictionary<UInt16, UInt32>();
             var numberStr = "";
-            
+            var startIndexOfTheNumber = -1;
+
             for (UInt16 i = 0; i < str.Length; i++)
             {
                 if (Char.IsDigit(str[i]))
                 {
+                    if (startIndexOfTheNumber == -1)
+                    {
+                        startIndexOfTheNumber = i;
+                    }
+                    
                     numberStr = numberStr + str[i];
                     if (Char.IsDigit(str[i+1]) == false)    // we will convert and add a new number to resulting array only if the next character is not a digit
                     {
-                        numbersInString.Add(i, Convert.ToUInt32(numberStr));
+                        numbersInString.Add((UInt16)startIndexOfTheNumber, Convert.ToUInt32(numberStr));
+                        startIndexOfTheNumber = -1;
                         numberStr = "";
                     }
                 }

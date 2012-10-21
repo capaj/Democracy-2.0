@@ -12,12 +12,13 @@ namespace pspScraper
     public class pspVoting
     {
         public string Id { get; private set; }
-        public string url { get; private set; }
+        public Uri scrapedURL { get; private set; }
         public UInt32 meetingNumber { get; private set; }
         public UInt32 votingNumber { get; private set; }
         public DateTime when { get; private set; }
         public string subject { get; private set; }
         public List<individualVote> pspVotes { get; private set; }
+        public string stenoprotokolURL { get; set; }            //
         
         [JsonIgnore]
         public bool resolution { 
@@ -29,10 +30,11 @@ namespace pspScraper
 
         public pspVoting(string URL, HtmlWeb webLoader)
         {
-            url = URL;
             var document = webLoader.Load(URL);
             try
             {
+                scrapedURL = webLoader.ResponseUri;
+
                 var h1 = document.DocumentNode.SelectNodes("//h1");
                 var lis = document.DocumentNode.SelectNodes("//li");
                 //var links = document.DocumentNode.SelectNodes("//a[@href]");

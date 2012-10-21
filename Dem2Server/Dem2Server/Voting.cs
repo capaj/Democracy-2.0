@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Collections.Concurrent;
 using Dem2Server;
+using Newtonsoft.Json;
 
 namespace Dem2Model
 {
@@ -13,7 +14,20 @@ namespace Dem2Model
     }
     public class Voting : VotableItem     //"votable in parliament democracy"
     {
+        [JsonIgnore]
         public pspScraper.pspVoting scrapedVoting { get; set; }
+        public string subject { get; private set; }
+        public Uri PSPVotingLink { 
+            get {
+                return scrapedVoting.scrapedURL;
+            }   
+        }
+        public string PSPStenoprotokolLink { 
+            get {
+            return scrapedVoting.stenoprotokolURL;
+            } 
+        }
+        
         public VotingStates State
         {
             get {
