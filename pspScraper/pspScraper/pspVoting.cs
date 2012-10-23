@@ -28,8 +28,9 @@ namespace pspScraper
             }
         }
 
-        public pspVoting(string URL, HtmlWeb webLoader)
+        public pspVoting(string URL)
         {
+            var webLoader = Scraper.WebGetFactory();
             var document = webLoader.Load(URL);
             try
             {
@@ -84,7 +85,7 @@ namespace pspScraper
                         }
 
                     }
-                    using (var session = pspScraper.Program.docDB.OpenSession())
+                    using (var session = pspScraper.Scraper.docDB.OpenSession())
                     {
                         foreach (var vote in pspVotes)
                         {

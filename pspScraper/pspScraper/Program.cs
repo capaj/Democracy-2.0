@@ -11,26 +11,29 @@ using Raven.Client.Document;
 
 namespace pspScraper
 {
-    class Program
+    public class Scraper
     {
         public static DocumentStore docDB;
+        public static string pspHost = "http://www.psp.cz";
         public static string documentRoot = "http://www.psp.cz/eknih/index.htm";
         public static Encoding encoding = Encoding.Default;   // this makes sense because you mostly will want to scrape pages, which are in your own language
 
         static void Main(string[] args)
         {
-            GetAllTerms();
+
+            var aTerm = new pspTerm("http://www.psp.cz/eknih/2010ps/index.htm");
+            aTerm.ScrapeTermJunction();
+            //GetAllTerms();
             //DocumentStore docDB = new DocumentStore { Url = "http://localhost:8080" };        //when on the same machine where Raven runs
             docDB = new DocumentStore { Url = "http://dem2.cz:8080" };            //when on any other
             var parliamentMembers = new List<parliamentMember>();
             
-            var webGet = new HtmlWeb();
-            webGet.OverrideEncoding = encoding;
+           
             //1839-56473
 
 
             var allMembers = new HashSet<parliamentMember>();
-            var voting = new pspVoting(@"http://www.psp.cz/sqw/hlasy.sqw?g=55431", webGet);
+            var voting = new pspVoting(@"http://www.psp.cz/sqw/hlasy.sqw?g=55431");
             docDB.Initialize();
 
             using (var session = docDB.OpenSession())
@@ -81,6 +84,25 @@ namespace pspScraper
             }
 
             return listOfTerms;
+        }
+
+        public static HtmlWeb WebGetFactory(){
+            var webGet = new HtmlWeb();
+            webGet.OverrideEncoding = encoding;
+            return webGet;
+        }
+
+        public static HtmlNode GetMainContentDivOnURL(string URL) {
+            var html = WebGetFactory().Load(URL);
+            try
+            {
+                return html.DocumentNode.SelectSingleNode("//div[@id = 'main-content']");
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
         }
     }
 }
