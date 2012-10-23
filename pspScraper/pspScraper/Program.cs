@@ -20,9 +20,9 @@ namespace pspScraper
 
         static void Main(string[] args)
         {
-
-            var aTerm = new pspTerm("http://www.psp.cz/eknih/2010ps/index.htm");
-            aTerm.ScrapeTermJunction();
+            //var aMeetingProtocol = new pspMeetingProtocol("http://www.psp.cz/eknih/2010ps/stenprot/047schuz/index.htm");
+            //var aTerm = new pspTerm("http://www.psp.cz/eknih/2010ps/index.htm");
+            
             //GetAllTerms();
             //DocumentStore docDB = new DocumentStore { Url = "http://localhost:8080" };        //when on the same machine where Raven runs
             docDB = new DocumentStore { Url = "http://dem2.cz:8080" };            //when on any other

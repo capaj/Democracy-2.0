@@ -10,20 +10,59 @@ namespace pspScraper
     public class pspProtocolPage
     {
         public uint pageNumber { get; set; }
-        public Uri URL
+        public Uri scrapedURL { get; set; }
+        public Dictionary<int, string> pspPrints { get; set; }        //links like http://www.psp.cz/sqw/historie.sqw?T=742
+        public Dictionary<int, string> pspVotings { get; set; }       // links like http://www.psp.cz/sqw/hlasy.sqw?G=56404
+        public Dictionary<int, string> pspProfiles { get; set; }      //links like this http://www.psp.cz/sqw/detail.sqw?id=252
+
+        public pspProtocolPage(string URL):this()
         {
-            get
+            var webGet = Scraper.WebGetFactory();
+            
+            var html = webGet.Load(URL);
+            scrapedURL = webGet.ResponseUri;
+            if (html.DocumentNode.InnerText != "")
             {
-                return new Uri(Scraper.pspHost + "");
+                var mainContent = html.DocumentNode.SelectSingleNode("//div[@id = 'main-content']");
+                var links = mainContent.SelectNodes(".//a[@href]");
+                var i = 0;
+                foreach (var link in links)
+                {
+                    var linkHref = link.GetAttributeValue("href", "");  //http://www.psp.cz/sqw/hlasy.sqw?G=56651
+                    if (linkHref.Contains("detail.sqw"))            //http://www.psp.cz/sqw/detail.sqw?id=401
+                    {
+                        pspProfiles.Add(i, linkHref);
+                    }
+                    else
+                    {
+                        if (linkHref.Contains("hlasy.sqw"))
+                        {
+                            pspVotings.Add(i, linkHref);
+                        }
+                        else if (linkHref.Contains("historie.sqw"))         //http://www.psp.cz/sqw/historie.sqw?T=823&O=6
+                        {
+                            pspPrints.Add(i, linkHref);
+                        }
+                    }
+                    i++;
+                }
+                if (pspPrints.Count == 0 && pspProfiles.Count == 0 && pspVotings.Count == 0)
+                {
+                    Console.WriteLine("This should not happen");
+                }
+            }
+            else
+            {
+                throw new HtmlWebException("Requested URL "+ URL + " seems to not yieald any response");
             }
         }
-        public Dictionary<uint, Uri> pspPrints { get; set; }        //links like http://www.psp.cz/sqw/historie.sqw?T=742
-        public Dictionary<uint, Uri> pspVotings { get; set; }       // links like http://www.psp.cz/sqw/hlasy.sqw?G=56404
-        public Dictionary<uint, Uri> pspProfiles { get; set; }      //links like this http://www.psp.cz/sqw/detail.sqw?id=252
 
-        public pspProtocolPage(HtmlDocument html)
+        public pspProtocolPage()
         {
-            var main = html.DocumentNode.SelectSingleNode("//div[@id = 'main-content']");
+            pspPrints = new Dictionary<int, string>();
+            pspVotings = new Dictionary<int, string>();
+            pspProfiles = new Dictionary<int, string>();
+
         }
     }
 }

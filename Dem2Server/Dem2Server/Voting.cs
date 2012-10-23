@@ -16,7 +16,11 @@ namespace Dem2Model
     {
         [JsonIgnore]
         public pspScraper.pspVoting scrapedVoting { get; set; }
-        public string subject { get; private set; }
+        public string subject {
+            get {
+                return scrapedVoting.subject;
+            }
+        }
         public Uri PSPVotingLink { 
             get {
                 return scrapedVoting.scrapedURL;
@@ -63,8 +67,7 @@ namespace Dem2Model
         public override bool RegisterVote(Vote vote)
         {
             {
-                
-                
+
                 if (this.State == VotingStates.Ongoing)
                 {
                     this.CastedVotes.Add(vote);

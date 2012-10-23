@@ -20,30 +20,32 @@ namespace pspScraper
             var baseUrlLimiter = URLroot.LastIndexOf("/");
             baseUrl = URLroot.Substring(0,baseUrlLimiter);
 
-
-            var stopScrapingCycle = false;
+            var scrapingCycleRuns = true;
             var lastScrapedPage = 1;
-            while (stopScrapingCycle)
+            while (scrapingCycleRuns)
             {
+                var URL = baseUrl + "/s" + meetingNumber.ToString("D3") + lastScrapedPage.ToString("D3") + ".htm";
                 try
                 {
-                    var html = Scraper.WebGetFactory().Load(baseUrl + "/s" + meetingNumber.ToString("D3") + lastScrapedPage.ToString("D3") + ".htm");
-                    
-                    //protocols.Add();
+                    //System.Threading.Thread.Sleep(500);
+                    protocols.Add(new pspProtocolPage(URL));
                     lastScrapedPage += 1;
                 }
-                catch (System.Net.WebException exception)
+                catch (HtmlWebException exception)
                 {
-                    if (exception.Message == "Unable to connect to the remote server")
+                    if (exception.Message.Contains("seems to not yieald any response"))
                     {
-                        stopScrapingCycle = true;
+                        scrapingCycleRuns = false;
                     }
-                    Console.WriteLine("exception");
-                    throw;
+                    else
+                    {
+                        Console.WriteLine("exception");
+                        throw;   
+                    }
+                    
                 }
             }
 
-            
         }
     }
 

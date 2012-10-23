@@ -24,7 +24,6 @@ namespace Dem2Server
         }     // comment is ALWAYS a response to some entity-whether it is a voting, other comment, anything else
         
         public string parentId { get; private set; }
-
         
         public DateTime publishedDate { get; set; }
         public KeyValuePair<int, string> revision_textPair { get; set; }
