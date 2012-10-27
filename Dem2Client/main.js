@@ -15,6 +15,13 @@ require(["Scripts/facebook"], function (FB) {
         $('#notChromeWarning').modal('show')
     }
 
+    function ViewModel() {
+        this.connected = ko.observable(false);
+    }
+    VM = new ViewModel; // for easier debugging we will define VM in global namespace
+
+    ko.applyBindings(VM);
+
     var WSworker = new Worker('Scripts/wsworker.js');   //worker handling server comunication
 
     FB.deffered.then(function (FBAccesToken) {
@@ -25,14 +32,22 @@ require(["Scripts/facebook"], function (FB) {
                     break;
                 case "connectionInfo":
                     console.log("connection status> " + event.data.message);
-                    if (event.data.readyState === 1) {
-                        WSworker.postMessage(
-                            {
-                                msgType: "login", theUser:
-                                  { accessToken: FBAccesToken }
-                            }
-                        );
+                    switch (event.data.readyState) {
+                        case 1:
+                            VM.connected(true);
+                            WSworker.postMessage(
+                                {
+                                    msgType: "login", theUser:
+                                        { accessToken: FBAccesToken }
+                                }
+                            );
+                            break;
+                        case 3:
+                        case 4:
+                            VM.connected(false);
+                            break;
                     }
+                    
                     break;
                 default: //other types of data
                     try {

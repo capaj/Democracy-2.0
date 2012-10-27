@@ -65,6 +65,10 @@
                         </div>
                     </div>
                     <ul class="nav">
+                        <li>
+                            <img data-bind="visible: connected" src="Content/images/green-dot-icon.png" />
+                            <img data-bind="visible: !connected()" src="Content/images/red-dot-icon.png" />
+                        </li>
                         <li class="active"><a href="#">Novinky</a></li>
                         <li><a href="#about">O projektu</a></li>
                         <li><a href="#contact">Kontakt</a></li>
