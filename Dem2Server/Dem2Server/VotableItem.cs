@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Dem2Model;
+using Dem2UserCreated;
 
 namespace Dem2Server
 {

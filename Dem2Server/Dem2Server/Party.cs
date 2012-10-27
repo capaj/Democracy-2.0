@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Dem2Model;
+using Dem2UserCreated;
 
 namespace Dem2Server
 {
@@ -13,7 +14,7 @@ namespace Dem2Server
         
         public event VotingLeader.VoteCastHandler VoteCast;
        
-        public bool CastVote(Dem2Model.Voting onWhat, Dem2Model.Vote vote)
+        public bool CastVote(Dem2Model.Voting onWhat, Vote vote)
         {
             bool voteRegistered = onWhat.RegisterVote(vote);
             if (voteRegistered)

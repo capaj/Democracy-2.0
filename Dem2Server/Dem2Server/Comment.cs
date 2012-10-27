@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
+using Dem2Server;
 
-namespace Dem2Server
+namespace Dem2UserCreated
 {
     public class Comment:VotableItem
     {

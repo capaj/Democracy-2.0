@@ -10,6 +10,7 @@ using Fleck;
 using Raven.Client.Document;
 using Raven.Client;
 using System.Net;
+using Dem2UserCreated;
 
 namespace Dem2Server
 {
@@ -22,6 +23,14 @@ namespace Dem2Server
         public static HashSet<Vote> allVotes { get; set; }
         public static HashSet<Comment> allComments { get; set; }
         //public static ConcurrentBag<Vote> allVotes { get; set; }
+        public static IEnumerable<VotableItem> allVotable { 
+            get {
+                List<VotableItem> votings = allVotings.Select(x => (VotableItem)x).ToList();
+                List<VotableItem> comments = allVotable.Select(x => (VotableItem)x).ToList();
+
+                return votings.Concat(comments);
+            } 
+        }
 
         public static void Initialize(DocumentStore documentDB)     //someone provided us with the DB to load data from
         {
@@ -96,6 +105,37 @@ namespace Dem2Server
                 case "loadView": Console.WriteLine("load request");
                     break;
                 case "saveView": Console.WriteLine("save request");
+
+                    break;
+                case "entity":
+                    char operation = (char)receivedObj["operation"];
+                    switch (operation)
+	                {
+                        case 'c':   //create new user generated entity
+                            //Example shows json which creates new Vote for the present user
+                            //{
+                            //  "msgType": "entity",
+                            //  "operation": "c",
+                            //  "className": "Vote",
+                            //  "ctorArguments": ["user/125", "voting/215", true]
+                            //}
+
+
+                            // TODO implement create spam check here
+                            Type type = Type.GetType("Dem2UserCreated." + (string)receivedObj["className"]);
+                            try
+                            {
+                                object instance = Activator.CreateInstance(type, (Array)receivedObj["ctorArguments"]);
+                            }
+                            catch (Exception)
+                            {
+                                
+                                throw;
+                            }
+                            break;
+		                default:
+                            break;
+	                }
 
                     break;
                 default: Console.WriteLine("Unrecognized msgType");

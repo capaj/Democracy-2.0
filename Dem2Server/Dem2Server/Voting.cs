@@ -5,6 +5,10 @@ using System.Text;
 using System.Collections.Concurrent;
 using Dem2Server;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
+
+using System.Threading;
+using Dem2UserCreated;
 
 namespace Dem2Model
 {
@@ -14,8 +18,13 @@ namespace Dem2Model
     }
     public class Voting : VotableItem     //"votable in parliament democracy"
     {
+        //public static TimeSpan votingInterval = new TimeSpan(2, 0, 0, 0);     //for final
+        public static TimeSpan votingInterval = new TimeSpan(0, 0, 5, 0);     //for testing
+
+        public Timer timer { get; set; }
         [JsonIgnore]
         public pspScraper.pspVoting scrapedVoting { get; set; }
+
         public string subject {
             get {
                 return scrapedVoting.subject;
@@ -62,7 +71,11 @@ namespace Dem2Model
         }
         
         private DateTime Starts { get; set; }
-        private DateTime Ends { get; set; }
+        private DateTime Ends { 
+            get {
+                return Starts + votingInterval;
+            } 
+        }
 
         public override bool RegisterVote(Vote vote)
         {
@@ -85,7 +98,12 @@ namespace Dem2Model
 
         public Voting()        //need to set up schedulers here
         {
-            
+            TimeSpan disablePeriodic = new TimeSpan(0, 0, 0, 0, -1);
+            timer = new System.Threading.Timer((cs) =>
+            {
+                
+                timer.Dispose();
+            }, null, votingInterval, disablePeriodic);
         }
 
 

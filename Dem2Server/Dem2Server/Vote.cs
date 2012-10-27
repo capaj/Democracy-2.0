@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Dem2Server;
+using Dem2Model;
 
-namespace Dem2Model
+namespace Dem2UserCreated
 {
     public class Vote:ServerClientEntity
     {
@@ -21,11 +22,20 @@ namespace Dem2Model
         public bool Agrees { get; private set; }
         public DateTime castedTime { get; private set; }
 
-        public Vote(User voter, bool stance)
+        public Vote(string userID, string subjectID, bool stance)
         {
-            CasterUserID = voter.Id;
+            
+            VotableItem subject = Dem2Hub.allVotable.First(x => x.Id == subjectID);
+            User user = Dem2Hub.allUsers.First(x => x.Id == userID);
             Agrees = stance;
             castedTime = DateTime.Now;
+            InitVote(user, subject);
+        }
+        
+        private void InitVote(User voter, VotableItem subject)
+        {
+            CasterUserID = voter.Id;
+            subjectID = subject.Id;
         }
 
 
