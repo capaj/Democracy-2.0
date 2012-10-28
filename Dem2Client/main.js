@@ -10,19 +10,25 @@ navigator.sayswho = (function () {      // thanks to kennebec on stackoverflow.c
     return M;
 })();
 
-require(["Scripts/facebook"], function (FB) {
-    if (navigator.sayswho[0] != "Chrome") {
-        $('#notChromeWarning').modal('show')
+require(["Scripts/facebook", "Scripts/viewModel", "Scripts/linkClickHandler"], function (FB, VM, linkClickHandler) {
+    if (navigator.sayswho[0] != "Chrome") { 
+        $('#notChromeWarning').modal('show')    //warning about non chrome environment
     }
 
-    function ViewModel() {
-        this.connected = ko.observable(false);
-    }
-    VM = new ViewModel; // for easier debugging we will define VM in global namespace
+    $(document).click(function (e) {
+        
+        if (e.target.attributes["href"]) {
+            var link = e.target.attributes["href"].value;
+            console.log("Click on link intercepted with href " + link);
+            e.preventDefault();
+            linkClickHandler[link](link);
+        }
+
+    });
 
     ko.applyBindings(VM);
 
-    var WSworker = new Worker('Scripts/wsworker.js');   //worker handling server comunication
+    WSworker = new Worker('Scripts/wsworker.js');   //worker handling server comunication
 
     FB.deffered.then(function (FBAccesToken) {
         WSworker.onmessage = function (event) {

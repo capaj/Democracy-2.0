@@ -64,7 +64,7 @@
   <ItemGroup>
     <Compile Include="czechCalendarHelper.cs" />
     <Compile Include="parliamentMember.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Scraper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="pspMeetingProtocol.cs" />
     <Compile Include="pspProtocolPage.cs" />

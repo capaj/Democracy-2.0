@@ -20,6 +20,8 @@ namespace Dem2Model
     {
         //public static TimeSpan votingInterval = new TimeSpan(2, 0, 0, 0);     //for final
         public static TimeSpan votingInterval = new TimeSpan(0, 0, 5, 0);     //for testing
+        public delegate void OnEndHandler();
+        public event OnEndHandler Ends;
 
         public Timer timer { get; set; }
         [JsonIgnore]
@@ -45,7 +47,7 @@ namespace Dem2Model
         {
             get {
                 DateTime now = DateTime.Now;
-                if (Ends<now)
+                if (endTime<now)
                 {
                     if (GetCurrentResolve == true)
                     {
@@ -58,7 +60,7 @@ namespace Dem2Model
                 }
                 else
                 {
-                    if (Starts<now)
+                    if (beginTime<now)
                     {
                         return VotingStates.Ongoing;
                     }
@@ -70,10 +72,10 @@ namespace Dem2Model
             }
         }
         
-        private DateTime Starts { get; set; }
-        private DateTime Ends { 
+        private DateTime beginTime { get; set; }
+        private DateTime endTime { 
             get {
-                return Starts + votingInterval;
+                return beginTime + votingInterval;
             } 
         }
 
@@ -96,14 +98,27 @@ namespace Dem2Model
         }
       
 
-        public Voting()        //need to set up schedulers here
+        private void StartVoting()        //need to set up schedulers here
         {
+           
             TimeSpan disablePeriodic = new TimeSpan(0, 0, 0, 0, -1);
             timer = new System.Threading.Timer((cs) =>
             {
-                
+                if (Ends != null)
+                {
+                    Ends();
+                }
+                Console.WriteLine("Voting id {0} ended.", Id);
                 timer.Dispose();
             }, null, votingInterval, disablePeriodic);
+
+            
+        }
+
+        public Voting(pspScraper.pspVoting scrapedPSPVoting)
+        {
+            beginTime = DateTime.Now;
+            scrapedVoting = scrapedPSPVoting;
         }
 
 

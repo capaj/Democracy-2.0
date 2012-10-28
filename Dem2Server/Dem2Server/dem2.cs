@@ -7,11 +7,12 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Raven.Client.Document;
 using Raven.Client;
+using pspScraper;
 
 
 namespace Dem2Server
 {
-    class Program
+    class dem2
     {
         static void Main(string[] args)
         {
@@ -24,6 +25,9 @@ namespace Dem2Server
             FleckLog.Level = LogLevel.Error;
             var WSserver = new WebSocketServer("http://dem2.cz:8181");
 #else
+            var voting1 = new pspVoting(@"http://www.psp.cz/sqw/hlasy.sqw?g=56686", "http://www.psp.cz/eknih/2010ps/stenprot/047schuz/s047022.htm");
+            var voting2 = new pspVoting(@"http://www.psp.cz/sqw/hlasy.sqw?g=56687", "http://www.psp.cz/eknih/2010ps/stenprot/047schuz/s047025.htm");
+
             FleckLog.Level = LogLevel.Debug;
             var WSserver = new WebSocketServer("ws://localhost:8181");           
 #endif

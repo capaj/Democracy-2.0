@@ -28,6 +28,11 @@ namespace pspScraper
             }
         }
 
+        public pspVoting(string URL, string stenoURL):this(URL)
+        {
+            stenoprotokolURL = stenoURL;
+        }
+
         public pspVoting(string URL)
         {
             var webLoader = Scraper.WebGetFactory();

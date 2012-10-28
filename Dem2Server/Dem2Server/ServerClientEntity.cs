@@ -15,6 +15,9 @@ namespace Dem2Server
             get;
             private set;
         }
+        public delegate void OnChangeHandler();
+        public event OnChangeHandler OnChange;
+
 
         public uint version { get; set; }    // should get incremented everytime the Entity is updated/changed, on creation it is 1
 
