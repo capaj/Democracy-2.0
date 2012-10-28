@@ -20,8 +20,11 @@ require(["Scripts/facebook", "Scripts/viewModel", "Scripts/linkClickHandler"], f
         if (e.target.attributes["href"]) {
             var link = e.target.attributes["href"].value;
             console.log("Click on link intercepted with href " + link);
-            e.preventDefault();
-            linkClickHandler[link](link);
+            if (linkClickHandler.hasOwnProperty(link)) {
+
+                e.preventDefault();
+                linkClickHandler[link](link);
+            }
         }
 
     });
