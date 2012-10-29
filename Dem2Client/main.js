@@ -10,7 +10,7 @@ navigator.sayswho = (function () {      // thanks to kennebec on stackoverflow.c
     return M;
 })();
 
-require(["Scripts/facebook", "Scripts/viewModel", "Scripts/linkClickHandler"], function (FB, VM, linkClickHandler) {
+require(["Scripts/facebook", "Scripts/viewModel", "Scripts/linkClickHandler"], function (FB, viewModel, linkClickHandler) {
     if (navigator.sayswho[0] != "Chrome") { 
         $('#notChromeWarning').modal('show')    //warning about non chrome environment
     }
@@ -28,8 +28,8 @@ require(["Scripts/facebook", "Scripts/viewModel", "Scripts/linkClickHandler"], f
         }
 
     });
-
-    ko.applyBindings(VM);
+    VM = viewModel; // extend a local variable to global, since we will need to acces it from everywhere
+    ko.applyBindings(VM); 
 
     WSworker = new Worker('Scripts/wsworker.js');   //worker handling server comunication
 

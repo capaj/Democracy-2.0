@@ -1,7 +1,10 @@
 ﻿define(function () {
 
     function ViewModel() {
-        this.connected = ko.observable(false);
+        this.connected = ko.observable(false);      //websocket connection flag
+        this.comments = ko.observableArray([]);
+        this.votes = ko.observableArray([]);
+        this.votings = ko.observableArray([]);
     }
-    return new ViewModel; // for easier debugging we will define VM in global namespace
+    return new ViewModel;; 
 });

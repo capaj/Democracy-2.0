@@ -35,16 +35,15 @@ namespace pspScraper
 
         public pspVoting(string URL)
         {
+
             var webLoader = Scraper.WebGetFactory();
             var document = webLoader.Load(URL);
             try
             {
                 scrapedURL = webLoader.ResponseUri;
-
-                var h1 = document.DocumentNode.SelectNodes("//h1");
-                var lis = document.DocumentNode.SelectNodes("//li");
-                //var links = document.DocumentNode.SelectNodes("//a[@href]");
-                //var tableLines = document.DocumentNode.SelectNodes("//tr");
+                var mainContent = document.DocumentNode.SelectSingleNode("//div[@id = 'main-content']");
+                var h1 = mainContent.SelectNodes(".//h1");
+                var lis = mainContent.SelectNodes(".//li");
             
                 var headingText = ScraperStringHelper.RemoveHTMLmarkup(h1.First().InnerText);
                 var scrapedNumbers = ScraperStringHelper.GetNumbersFromString(headingText);
