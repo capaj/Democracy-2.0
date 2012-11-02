@@ -22,7 +22,8 @@
 
     var staticPages =   // static pages are in group defined here
         [
-            "/contact", 
+            "/home",
+            "/contact",
             "/about"
         ];
 
