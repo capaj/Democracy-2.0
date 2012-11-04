@@ -60,7 +60,9 @@ namespace Dem2Model
 	        }
             return voteRegistered;
         }
-
+        //AUTHENTICATION
+        
+        
         internal void ProcessAccesTokenCheckResponse(object sender, System.Net.DownloadDataCompletedEventArgs e) //called when facebook responds to checking the users acces token
         {
             if (e.Error != null)
@@ -82,7 +84,7 @@ namespace Dem2Model
             
         }
 
-        //returns false when user is returning, true when he is new
+        //returns false when user is returning, true when he is a new user
         public bool LogInUser(string FBgraphJSON) {
             this.FBAccount = JsonConvert.DeserializeObject<FacebookAccount>(FBgraphJSON);
 
@@ -97,7 +99,8 @@ namespace Dem2Model
             }
             else
             {
-                Dem2Hub.allUsers.First<User>(x => x.Equals(this)).connection = this.connection;
+                var returningUser = Dem2Hub.allUsers.First<User>(x => x.Equals(this));
+                returningUser.connection = this.connection;
                 this.connection = null;
                 //this is returning user, send him his model he had last  time
             }
@@ -105,6 +108,8 @@ namespace Dem2Model
             //Console.WriteLine(downloadedData);
             return isNew;
         }
+
+        //AUTHENTICATION ENDS
 
         public override bool Equals(System.Object obj)
         {

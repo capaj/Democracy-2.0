@@ -10,7 +10,7 @@ navigator.sayswho = (function () {      // thanks to kennebec on stackoverflow.c
     return M;
 })();
 
-require(["Scripts/facebook", "Scripts/viewModel", "Scripts/linkClickHandler"], function (FB, viewModel, linkClickHandler) {
+require(["Scripts/facebook", "Scripts/viewModel", "Scripts/addressResolver"], function (FB, viewModel, addressResolver) {
     if (navigator.sayswho[0] != "Chrome") { 
         $('#notChromeWarning').modal('show')    //warning about non chrome environment
     }
@@ -20,11 +20,11 @@ require(["Scripts/facebook", "Scripts/viewModel", "Scripts/linkClickHandler"], f
         if (e.target.attributes["href"]) {
             var link = e.target.attributes["href"].value;
             console.log("Click on link intercepted with href " + link);
-            if (linkClickHandler.hasOwnProperty(link)) {
-
+            if (addressResolver.resolverMap.hasOwnProperty(link)) {
                 e.preventDefault();
-                linkClickHandler[link](link);
-            }
+                addressResolver.resolver(link);
+            } 
+            
         }
 
     });
@@ -38,6 +38,9 @@ require(["Scripts/facebook", "Scripts/viewModel", "Scripts/linkClickHandler"], f
             switch (event.data.type) {
                 case "debug":
                     console.log("Msg from wsworker> " + event.data.message);
+                    break;
+                case "":
+                    addressResolver["/voting/1"]("/voting/1"); //hack for now, to get the view of one voting working
                     break;
                 case "connectionInfo":
                     console.log("connection status> " + event.data.message);
@@ -81,7 +84,7 @@ require(["Scripts/facebook", "Scripts/viewModel", "Scripts/linkClickHandler"], f
         }
         WSworker.postMessage(
             {
-                msgType: "command", cmdType: "connect"
+                msgType: "WorkerCommand", cmdType: "connect"
             }
         );
     });

@@ -25,7 +25,7 @@ namespace Dem2Server
             FleckLog.Level = LogLevel.Error;
             var WSserver = new WebSocketServer("http://dem2.cz:8181");
 #else
-            //var voting1 = new pspVoting(@"http://www.psp.cz/sqw/hlasy.sqw?g=56686", "http://www.psp.cz/eknih/2010ps/stenprot/047schuz/s047022.htm");
+            var voting1 = new pspVoting(@"http://www.psp.cz/sqw/hlasy.sqw?g=56686", "http://www.psp.cz/eknih/2010ps/stenprot/047schuz/s047022.htm");
             //var voting2 = new pspVoting(@"http://www.psp.cz/sqw/hlasy.sqw?g=56687", "http://www.psp.cz/eknih/2010ps/stenprot/047schuz/s047025.htm");
 
             FleckLog.Level = LogLevel.Debug;

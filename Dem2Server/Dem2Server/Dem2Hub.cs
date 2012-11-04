@@ -126,6 +126,7 @@ namespace Dem2Server
                             try
                             {
                                 object instance = Activator.CreateInstance(type, (Array)receivedObj["ctorArguments"]);
+                                
                             }
                             catch (Exception)
                             {
