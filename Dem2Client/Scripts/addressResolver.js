@@ -29,22 +29,26 @@
 
     var resolverMap = {
         "/votings": viewVotings,
+        "/": function () {
+            resolver("/home");
+        }
     };
 
     for (var i = 0; i < staticPages.length; i++) {
         resolverMap[staticPages[i]] = loadStaticToMain;
     };
 
-    var resolver = function(link) {
+    var resolver = function(link, title) {
         if (resolverMap.hasOwnProperty(link)) {
             resolverMap[link](link);
+            history.pushState(ko.toJS(VM), title, link);
             return true;
         }
         return false;
     }
 
     return {
-        "resolver": resolver,
+        "resolve": resolver,
         "resolverMap": resolverMap
     };
 });

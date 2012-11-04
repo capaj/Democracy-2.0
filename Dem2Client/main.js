@@ -1,6 +1,6 @@
 ﻿
-//IS_RUNNING_ON_SERVER = true;    //use true when deploying on the live server
-IS_RUNNING_ON_SERVER = false;   // use false value for local testing
+IS_RUNNING_ON_SERVER = true;    //use true when deploying on the live server
+//IS_RUNNING_ON_SERVER = false;   // use false value for local testing
 
 navigator.sayswho = (function () {      // thanks to kennebec on stackoverflow.com
     var N = navigator.appName, ua = navigator.userAgent, tem;
@@ -15,14 +15,21 @@ require(["Scripts/facebook", "Scripts/viewModel", "Scripts/addressResolver"], fu
         $('#notChromeWarning').modal('show')    //warning about non chrome environment
     }
 
+    window.onpopstate = function (event) {
+        console.log("window.onpopstate event fired, location: " + document.location + ", state: " + JSON.stringify(event.state));
+        var path = window.location.pathname;  // future or init, in fact with HTML5 history API we don't care
+        addressResolver.resolve(path);
+    };
+
     $(document).click(function (e) {
         
-        if (e.target.attributes["href"]) {
-            var link = e.target.attributes["href"].value;
+        if (e.target.pathname) {
+            var link = e.target.pathname;
             console.log("Click on link intercepted with href " + link);
             if (addressResolver.resolverMap.hasOwnProperty(link)) {
+                var title = e.srcElement.innerText; 
                 e.preventDefault();
-                addressResolver.resolver(link);
+                addressResolver.resolve(link, title);
             } 
             
         }
