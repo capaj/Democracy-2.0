@@ -30,7 +30,7 @@
     var resolverMap = {
         "/votings": viewVotings,
         "/": function () {
-            resolver("/home");
+            resolverMap["/home"]("/home");
         }
     };
 
@@ -41,7 +41,10 @@
     var resolver = function(link, title) {
         if (resolverMap.hasOwnProperty(link)) {
             resolverMap[link](link);
-            history.pushState(ko.toJS(VM), title, link);
+            if (title) {
+                history.pushState(ko.toJS(VM), title, link);
+            }
+            
             return true;
         }
         return false;

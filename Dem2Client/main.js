@@ -95,4 +95,6 @@ require(["Scripts/facebook", "Scripts/viewModel", "Scripts/addressResolver"], fu
             }
         );
     });
+
+    addressResolver.resolve(window.location.pathname);
 });
