@@ -119,6 +119,13 @@ namespace Dem2Model
         {
             beginTime = DateTime.Now;
             scrapedVoting = scrapedPSPVoting;
+
+            using (var session = Dem2Hub.docDB.OpenSession())
+            {
+                session.Store(this);
+
+                session.SaveChanges();
+            }
         }
 
 

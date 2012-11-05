@@ -23,6 +23,14 @@ namespace Dem2Server
         public static HashSet<Vote> allVotes { get; set; }
         public static HashSet<Comment> allComments { get; set; }
         //public static ConcurrentBag<Vote> allVotes { get; set; }
+
+        public static Dictionary<string, IEnumerable<ServerClientEntity>> entityNamesToSets = new Dictionary<string, IEnumerable<ServerClientEntity>> {
+            {"users", allUsers},
+            {"votings", allVotings},
+            {"votes", allVotes},
+            {"comments", allComments},
+        };
+        
         public static IEnumerable<VotableItem> allVotable { 
             get {
                 List<VotableItem> votings = allVotings.Select(x => (VotableItem)x).ToList();
@@ -133,6 +141,19 @@ namespace Dem2Server
                                 
                                 throw;
                             }
+                            break;
+                        case 'r':
+/*
+Example shows json for this branch 
+{
+  "msgType": "entity",
+  "operation": "r",
+  "entity":{
+      "Id": "user/132"
+  }
+}*/
+                            entityOperation op = JsonConvert.DeserializeObject<entityOperation>(message);
+                            op.respond(socket);
                             break;
 		                default:
                             break;
