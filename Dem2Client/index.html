@@ -66,8 +66,8 @@
                     </div>
                     <ul class="nav">
                         <li style="margin-top: 0.7em; margin-right: 1em;">
-                            <img data-bind="visible: connected" src="Content/images/green-dot-icon.png" />
-                            <img data-bind="visible: !connected()" src="Content/images/red-dot-icon.png" />
+                            <span data-bind="if: connected"><img src="Content/images/green-dot-icon.png" /></span>
+                            <span data-bind="ifnot: connected"><img src="Content/images/red-dot-icon.png" /></span>
                         </li>
                         <li class="active"><a href="/home">Novinky</a></li>
                         <li><a href="/votings"><i class="icon-check"></i>Hlasování</a></li>

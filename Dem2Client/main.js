@@ -1,6 +1,6 @@
 ﻿
-IS_RUNNING_ON_SERVER = true;    //use true when deploying on the live server
-//IS_RUNNING_ON_SERVER = false;   // use false value for local testing
+//IS_RUNNING_ON_SERVER = true;    //use true when deploying on the live server
+IS_RUNNING_ON_SERVER = false;   // use false value for local testing
 
 navigator.sayswho = (function () {      // thanks to kennebec on stackoverflow.com
     var N = navigator.appName, ua = navigator.userAgent, tem;

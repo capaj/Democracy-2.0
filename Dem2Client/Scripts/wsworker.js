@@ -40,7 +40,7 @@ self.onmessage = function (event) {
         case "hostAdress":
             host = data.host;     //for testing we are connecting to local websocket server
             break;
-        case "command":
+        case "WorkerCommand":
             switch (data.cmdType) {
                 case "connect": {
                     connectToWSServer();
