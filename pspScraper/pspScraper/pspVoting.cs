@@ -17,6 +17,7 @@ namespace pspScraper
         public UInt32 votingNumber { get; private set; }
         public DateTime when { get; private set; }
         public string subject { get; private set; }
+        [JsonIgnore]
         public List<individualVote> pspVotes { get; private set; }
         public string stenoprotokolURL { get; set; }            //
         
@@ -27,6 +28,9 @@ namespace pspScraper
                 return (pspVotes.Count/2)<positiveVotes.Count;
             }
         }
+
+        [JsonConstructor]
+        public pspVoting() {}
 
         public pspVoting(string URL, string stenoURL):this(URL)
         {
@@ -89,18 +93,19 @@ namespace pspScraper
                         }
 
                     }
-                    using (var session = pspScraper.Scraper.docDB.OpenSession())
-                    {
-                        foreach (var vote in pspVotes)
-                        {
-                            var pspMember = session.Query<parliamentMember>().FirstOrDefault(x => x.pspUrl == vote.member.pspUrl);
-                            
-                        }
+
+                    //foreach (var vote in pspVotes)
+                    //{
+                    //    using (var session = pspScraper.Scraper.docDB.OpenSession())
+                    //    {
+                    //        var pspMember = session.Query<parliamentMember>().FirstOrDefault(x => x.pspUrl == vote.member.pspUrl);
+
+                    //        session.Store(voting);
                       
-                        //session.Store(voting);
-                      
-                        session.SaveChanges();
-                    }
+                    //        session.SaveChanges();
+                    //    }
+                    //}
+                
                     Console.WriteLine("Added {0} votes", pspVotes.Count);
                 }
                 else

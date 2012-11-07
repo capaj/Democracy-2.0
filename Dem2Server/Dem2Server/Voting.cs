@@ -24,19 +24,21 @@ namespace Dem2Model
         public event OnEndHandler Ends;
 
         public Timer timer { get; set; }
-        [JsonIgnore]
+        
         public pspScraper.pspVoting scrapedVoting { get; set; }
-
+        [JsonIgnore]
         public string subject {
             get {
                 return scrapedVoting.subject;
             }
         }
+        [JsonIgnore]
         public Uri PSPVotingLink { 
             get {
                 return scrapedVoting.scrapedURL;
             }   
         }
+        [JsonIgnore]
         public string PSPStenoprotokolLink { 
             get {
             return scrapedVoting.stenoprotokolURL;
@@ -96,7 +98,11 @@ namespace Dem2Model
                 }
             }
         }
-      
+
+        public Voting()
+        {
+
+        }
 
         private void StartVoting()        //need to set up schedulers here
         {

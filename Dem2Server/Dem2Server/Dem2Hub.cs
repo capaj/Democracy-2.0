@@ -24,12 +24,7 @@ namespace Dem2Server
         public static HashSet<Comment> allComments { get; set; }
         //public static ConcurrentBag<Vote> allVotes { get; set; }
 
-        public static Dictionary<string, IEnumerable<ServerClientEntity>> entityNamesToSets = new Dictionary<string, IEnumerable<ServerClientEntity>> {
-            {"users", allUsers},
-            {"votings", allVotings},
-            {"votes", allVotes},
-            {"comments", allComments},
-        };
+        public static Dictionary<string, IEnumerable<ServerClientEntity>> entityNamesToSets;
         
         public static IEnumerable<VotableItem> allVotable { 
             get {
@@ -46,8 +41,11 @@ namespace Dem2Server
             allVotings = new HashSet<Voting>();
             allVotes = new HashSet<Vote>();
             allComments = new HashSet<Comment>();
+            
             docDB = documentDB;
             docDB.Initialize();
+            pspScraper.Scraper.docDB = docDB;
+            
             using (var session = docDB.OpenSession())
             {
                 foreach (var user in session.Query<User>().ToList())
@@ -62,6 +60,12 @@ namespace Dem2Server
                 // var entity = session.Load<Company>(companyId);
              
             }
+            entityNamesToSets = new Dictionary<string, IEnumerable<ServerClientEntity>> {
+                {"users", allUsers},
+                {"votings", allVotings},
+                {"votes", allVotes},
+                {"comments", allComments},
+            };
         }
         
         public static void ResolveMessage (string message, IWebSocketConnection socket)
@@ -116,8 +120,9 @@ namespace Dem2Server
 
                     break;
                 case "entity":
-                    char operation = (char)receivedObj["operation"];
-                    switch (operation)
+                    entityOperation op = JsonConvert.DeserializeObject<entityOperation>(message);
+                    
+                    switch (op.operation)
 	                {
                         case 'c':   //create new user generated entity
                             //Example shows json which creates new Vote for the present user
@@ -143,17 +148,16 @@ namespace Dem2Server
                             }
                             break;
                         case 'r':
-/*
-Example shows json for this branch 
-{
-  "msgType": "entity",
-  "operation": "r",
-  "entity":{
-      "Id": "user/132"
-  }
-}*/
-                            entityOperation op = JsonConvert.DeserializeObject<entityOperation>(message);
-                            op.respond(socket);
+                            /*
+                            Example shows json for this branch 
+                            {
+                              "msgType": "entity",
+                              "operation": "r",
+                              "entity":{
+                                  "Id": "user/132"
+                              }
+                            }*/
+                            op.respondToReadRequest(socket);
                             break;
 		                default:
                             break;

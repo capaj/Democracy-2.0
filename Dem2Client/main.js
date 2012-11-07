@@ -44,7 +44,7 @@ require(["Scripts/facebook", "Scripts/viewModel", "Scripts/addressResolver"], fu
         WSworker.onmessage = function (event) {
             switch (event.data.type) {
                 case "debug":
-                    console.log("Msg from wsworker> " + event.data.message);
+                    console.log("Debug message from wsworker> " + event.data.message);
                     break;
                 case "":
                     addressResolver["/voting/1"]("/voting/1"); //hack for now, to get the view of one voting working
@@ -73,9 +73,9 @@ require(["Scripts/facebook", "Scripts/viewModel", "Scripts/addressResolver"], fu
                         var json = JSON.parse(event.data);
                     }
                     catch (e) {
-                        alert('invalid json');
+                        alert('invalid json arrived from server');
                     }
-                    console.assert("Msg from wsworker> " + event.data);
+                    console.log("unknown message from wsworker> " + event.data);
 
             }
         };

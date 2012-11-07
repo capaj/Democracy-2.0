@@ -15,12 +15,13 @@ namespace Dem2Server
         public char operation { get; set; }     //crud
         public ServerClientEntity entity { get; set; }
 
-        public void respond(IWebSocketConnection socket)
+        public void respondToReadRequest(IWebSocketConnection socket)
         {
             string type = entity.Id.Split('/')[0];
-            entity = Dem2Hub.entityNamesToSets[type].First(x => x.Id == entity.Id);
+            var ent = Dem2Hub.entityNamesToSets[type].First(x => x.Id == entity.Id);
+
             operation = 'u';
-            socket.Send(JsonConvert.SerializeObject(this, new IsoDateTimeConverter()));
+            socket.Send(JsonConvert.SerializeObject(ent, new IsoDateTimeConverter()));
         }
     }
 }

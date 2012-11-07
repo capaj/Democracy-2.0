@@ -4,16 +4,17 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using Dem2Model;
+using Newtonsoft.Json;
 using System.Collections.Concurrent;
 
 namespace Dem2Server
 {
-    public abstract class ServerClientEntity
+    public class ServerClientEntity
     {
         public string Id    // Raven DB sets this property, it is set upon creation and it CANNOT be changed ever, under any circumstances
         {
             get;
-            private set;
+            set;
         }
         public delegate void OnChangeHandler();
         public event OnChangeHandler OnChange;
@@ -42,10 +43,8 @@ namespace Dem2Server
 	    }
 
         #region contructors
-        protected ServerClientEntity()
-        {
-
-        }
+        [JsonConstructor]
+        public ServerClientEntity() { }
 
         public ServerClientEntity(User creator)
         {
