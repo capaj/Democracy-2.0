@@ -82,6 +82,7 @@
     <Compile Include="Comment.cs" />
     <Compile Include="DiscussionThread.cs" />
     <Compile Include="entityOperation.cs" />
+    <Compile Include="ExceptionIsCritical.cs" />
     <Compile Include="FacebookAccount.cs" />
     <Compile Include="Dem2Hub.cs" />
     <Compile Include="serverStatistics.cs" />

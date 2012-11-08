@@ -18,19 +18,32 @@ namespace Dem2Server
         public void respondToReadRequest(IWebSocketConnection socket)
         {
             string type = entity.Id.Split('/')[0];
-            var ent = Dem2Hub.entityNamesToSets[type].FirstOrDefault(x => x.Id == entity.Id);
-            if (ent!= null)
+            ServerClientEntity ent = null;
+
+            try
             {
-                entity = ent;
-                operation = 'u';
-                socket.Send(JsonConvert.SerializeObject(this, new IsoDateTimeConverter()));
+                ent = Dem2Hub.entityNamesToSets[type].FirstOrDefault(x => x.Id == entity.Id);
             }
-            else
+            catch (Exception ex)
             {
-                operation = 'n';        //not found, nonexistent
-                socket.Send(JsonConvert.SerializeObject(this, new IsoDateTimeConverter()));
+                if (ExceptionIsCriticalCheck.IsCritical(ex)) throw;
+                Console.WriteLine("Entity with ID {0} was not found", entity.Id);
             }
-            
+            finally
+            {
+                if (ent != null)
+                {
+                    entity = ent;
+                    operation = 'u';
+                    socket.Send(JsonConvert.SerializeObject(this, new IsoDateTimeConverter()));
+                }
+                else
+                {
+                    operation = 'n';        //not found, nonexistent
+                    socket.Send(JsonConvert.SerializeObject(this, new IsoDateTimeConverter()));
+                }
+
+            }
         }
     }
 }
