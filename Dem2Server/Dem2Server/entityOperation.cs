@@ -18,10 +18,19 @@ namespace Dem2Server
         public void respondToReadRequest(IWebSocketConnection socket)
         {
             string type = entity.Id.Split('/')[0];
-            var ent = Dem2Hub.entityNamesToSets[type].First(x => x.Id == entity.Id);
-
-            operation = 'u';
-            socket.Send(JsonConvert.SerializeObject(ent, new IsoDateTimeConverter()));
+            var ent = Dem2Hub.entityNamesToSets[type].FirstOrDefault(x => x.Id == entity.Id);
+            if (ent!= null)
+            {
+                entity = ent;
+                operation = 'u';
+                socket.Send(JsonConvert.SerializeObject(this, new IsoDateTimeConverter()));
+            }
+            else
+            {
+                operation = 'n';        //not found, nonexistent
+                socket.Send(JsonConvert.SerializeObject(this, new IsoDateTimeConverter()));
+            }
+            
         }
     }
 }
