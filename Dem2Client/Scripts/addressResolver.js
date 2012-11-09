@@ -8,16 +8,19 @@
 
     };
 
-    var viewVotings = function (url) {
-        //TODO implement functions which will requst entites on server
+    var viewSingleVoting = function (url) {
+        //TODO implement 
+    };
+    var listVotings = function (url) {
+        //TODO implement 
     };
 
     var viewComments = function (url) {
-        //TODO implement functions which will requst entites on server
+        //TODO implement 
     };
 
     var viewUsers = function (url) {
-        //TODO implement functions which will requst entites on server
+        //TODO implement 
     };
 
     var staticPages =   // static pages are in group defined here, if conflicting with resolverMap, static page overrides the previous entry
@@ -28,7 +31,8 @@
         ];
 
     var resolverMap = {
-        "/votings": viewVotings,
+        "/votings": viewSingleVoting,
+        "/votings": listVotings,
         "/": function () {
             resolverMap["/home"]("/home");
         }
@@ -39,8 +43,9 @@
     };
 
     var resolver = function(link, title) {
-        if (resolverMap.hasOwnProperty(link)) {
-            resolverMap[link](link);
+        var sectionOnly = link.substring(0, link.lastIndexOf("/"));
+        if (resolverMap.hasOwnProperty(sectionOnly)) {
+            resolverMap[sectionOnly](link);
             if (title) {
                 history.pushState(ko.toJS(VM), title, link);
             }
