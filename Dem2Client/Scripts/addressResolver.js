@@ -31,7 +31,7 @@
         ];
 
     var resolverMap = {
-        "/votings": viewSingleVoting,
+        "/voting": viewSingleVoting,
         "/votings": listVotings,
         "/": function () {
             resolverMap["/home"]("/home");
@@ -43,8 +43,15 @@
     };
 
     var resolver = function(link, title) {
-        var sectionOnly = link.substring(0, link.lastIndexOf("/"));
+        var indexOfSlash = link.lastIndexOf("/");
+        if (indexOfSlash > 0) {
+            var sectionOnly = link.substring(0, indexOfSlash);
+        } else {
+            var sectionOnly = link;
+        }
+        
         if (resolverMap.hasOwnProperty(sectionOnly)) {
+            VM.currentSection(sectionOnly);
             resolverMap[sectionOnly](link);
             if (title) {
                 history.pushState(ko.toJS(VM), title, link);

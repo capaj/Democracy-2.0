@@ -69,13 +69,13 @@
                             <span data-bind="if: connected"><img src="Content/images/green-dot-icon.png" /></span>
                             <span data-bind="ifnot: connected"><img src="Content/images/red-dot-icon.png" /></span>
                         </li>
-                        <li class="active"><a href="/home">Novinky</a></li>
-                        <li><a href="/votings"><i class="icon-check"></i>Hlasování</a></li>
-                        <li><a href="/comments"><i class="icon-comment"></i>Komentáře</a></li>
-                        <li><a href="/users"><i class="icon-user"></i>Uživatelé</a></li>
+                        <li data-bind="css: { active: currentSection() == '/home'}"><a href="/home">Novinky</a></li>
+                        <li data-bind="css: { active: currentSection() == '/votings'}"><a href="/votings"><i class="icon-check"></i>Hlasování</a></li>
+                        <li data-bind="css: { active: currentSection() == '/comments'}"><a href="/comments"><i class="icon-comment"></i>Komentáře</a></li>
+                        <li data-bind="css: { active: currentSection() == '/users'}"><a href="/users"><i class="icon-user"></i>Uživatelé</a></li>
                         
-                        <li><a href="/about"><i class="icon-road"></i>O projektu</a></li>
-                        <li><a href="/contact"><i class="icon-leaf"></i>Kontakt</a></li>
+                        <li data-bind="css: { active: currentSection() == '/about'}"><a href="/about"><i class="icon-road"></i>O projektu</a></li>
+                        <li data-bind="css: { active: currentSection() == '/contact'}"><a href="/contact"><i class="icon-leaf"></i>Kontakt</a></li>
                     </ul>
                 </div><!--/.nav-collapse -->
             </div>

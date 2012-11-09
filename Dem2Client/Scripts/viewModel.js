@@ -5,6 +5,7 @@
         this.comments = ko.observableArray([]);
         this.votes = ko.observableArray([]);
         this.votings = ko.observableArray([]);
+        this.currentSection = ko.observable(window.location.pathname);
     }
     return new ViewModel;; 
 });
