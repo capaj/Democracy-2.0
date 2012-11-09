@@ -15,6 +15,10 @@ namespace Dem2Server
         public char operation { get; set; }     //crud
         public ServerClientEntity entity { get; set; }
 
+        public void sendTo(IWebSocketConnection socket) {
+            socket.Send(JsonConvert.SerializeObject(this, new IsoDateTimeConverter()));
+        }
+
         public void respondToReadRequest(IWebSocketConnection socket)
         {
             string type = entity.Id.Split('/')[0];

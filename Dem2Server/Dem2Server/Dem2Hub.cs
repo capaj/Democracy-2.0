@@ -158,6 +158,13 @@ namespace Dem2Server
                               }
                             }*/
                             op.respondToReadRequest(socket);
+
+                            var vote = Dem2Hub.allVotes.FirstOrDefault(x => x.subjectID == op.entity.Id && x.OwnerId == socket.ConnectionInfo.Cookies["user"]);
+                            if (vote != null)
+                            {
+                                entityOperation sendVote = new entityOperation { entity = vote, operation = 'c' };
+                                sendVote.sendTo(socket);
+                            }
                             break;
 		                default:
                             break;

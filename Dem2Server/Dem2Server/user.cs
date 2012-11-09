@@ -21,6 +21,12 @@ namespace Dem2Model
         public LinkedList<IVotingLeader> votingLeadersTable { get; set; }
         public DateTime lastDisconnected { get; set; }
         public Uri URL { get; set; }
+        public IEnumerable<Vote> getHisVotes
+        { 
+            get {
+                return Dem2Hub.allVotes.Where(x => x.OwnerId == Id);
+            } 
+        }
 
         public void Send(dynamic package) { //shorter version than to having to type it every time
             this.connection.Send(JsonConvert.SerializeObject(package));
@@ -89,6 +95,8 @@ namespace Dem2Model
             this.FBAccount = JsonConvert.DeserializeObject<FacebookAccount>(FBgraphJSON);
 
             this.connection.ConnectionInfo.Cookies["authentication"] = "authenticated";
+            this.connection.ConnectionInfo.Cookies["user"] = this.Id;
+
             Console.WriteLine("Login granted, sending the model");
             var isNew = Dem2Hub.allUsers.Add(this);
             if (isNew)
