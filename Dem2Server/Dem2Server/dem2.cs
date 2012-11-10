@@ -54,6 +54,8 @@ namespace Dem2Server
                                 
                             break;
                         case "authenticated":
+                            socket.ConnectionInfo.Cookies.Remove("authenticated");
+                            socket.ConnectionInfo.Cookies.Remove("user");
                             Dem2Hub.allUsers.First(x => x.connection == socket).lastDisconnected = DateTime.Now;
                             break;
                         default:
