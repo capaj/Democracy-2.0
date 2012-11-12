@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Dem2Model;
 using Dem2UserCreated;
+using Newtonsoft.Json;
 
 namespace Dem2Server
 {
@@ -24,8 +25,8 @@ namespace Dem2Server
         public virtual bool RegisterVote(Vote vote) {
             return Dem2Hub.allVotes.Add(vote);
         }
-  
 
+        [JsonIgnore]
         public bool GetCurrentResolve
         {
             get { return PositiveVotesCount > NegativeVotesCount; }

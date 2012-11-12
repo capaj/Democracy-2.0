@@ -51,6 +51,8 @@ self.onmessage = function (event) {
         default:
             send(JSON.stringify(data));
     }
+
+    
     
 };
 

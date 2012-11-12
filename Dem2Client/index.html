@@ -51,7 +51,11 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 </a>
-                <a class="brand" href="/home">Demokracie 2.0</a>
+                <div style="float: left;position: relative;top: 0.6em;">
+                    <span data-bind="if: connected"><img src="Content/images/green-dot-icon.png" /></span>
+                    <span data-bind="ifnot: connected"><img src="Content/images/red-dot-icon.png" /></span>
+                </div>
+                <a class="brand" href="/home" style="left: 0.3em;position: relative;">Demokracie 2.0</a>
                 <div class="nav-collapse collapse">
                     <div id="social" class="social-bar">
 	                    <div id="auth-status" class="navbar-text pull-right">
@@ -65,12 +69,8 @@
                         </div>
                     </div>
                     <ul class="nav">
-                        <li style="margin-top: 0.7em; margin-right: 1em;">
-                            <span data-bind="if: connected"><img src="Content/images/green-dot-icon.png" /></span>
-                            <span data-bind="ifnot: connected"><img src="Content/images/red-dot-icon.png" /></span>
-                        </li>
                         <li data-bind="css: { active: currentSection() == '/home'}"><a href="/home">Novinky</a></li>
-                        <li data-bind="css: { active: currentSection() == '/votings'}"><a href="/votings"><i class="icon-check"></i>Hlasování</a></li>
+                        <li data-bind="css: { active: currentSection() == '/votings' || currentSection() == '/voting'}"><a href="/votings/97"><i class="icon-check"></i>Hlasování</a><!--<a href="/votings"><i class="icon-check"></i>Hlasování</a>--></li>    <!--temporary hack for testing loading one voting-->
                         <li data-bind="css: { active: currentSection() == '/comments'}"><a href="/comments"><i class="icon-comment"></i>Komentáře</a></li>
                         <li data-bind="css: { active: currentSection() == '/users'}"><a href="/users"><i class="icon-user"></i>Uživatelé</a></li>
                         
@@ -83,9 +83,15 @@
     </div>
     <div id="FBResponse"></div>
     <div id="fb-root"></div>
-    
-    <section id="main" class="container-fluid">   <!-- content gets loaded here programatically--> 
+    <section id="static" class="container-fluid" data-bind="if:currentSectionIsStatic">   <!-- content gets loaded here programatically by ajax--> 
        
+    </section>
+    <section id="main" class="container-fluid" data-bind="ifnot:currentSectionIsStatic">   <!-- content gets loaded here programatically by json through Websocket--> 
+        
+        <div id="singleVoting" data-bind="if: currentSection() == '/votings'">
+            <div id="voting" data-bind="template: { name: 'votingDetail-template', data: currentVoting}"></div>
+        </div>       
+    
     </section>
     <footer style="text-align: center;">
         <p>&copy; Capaj 2012</p>
@@ -95,6 +101,7 @@
     <!-- Placed at the end of the document so the pages load faster -->
 <script type="text/javascript" src="Scripts/jquery-1.8.2.js"></script>
 <script src="Scripts/knockout-2.2.0.debug.js" type="text/javascript"></script>
+<script src="Scripts/knockout.mapping-latest.debug.js"></script>
 <script type="text/javascript" src="Scripts/bootstrap.js"></script>
 <script type="text/javascript" data-main="main" src="Scripts/require.js"></script>
 
@@ -102,5 +109,44 @@
     <h3 data-bind="text: name"></h3>
     <p>Autor: <span data-bind="text: owner.fullName"></span></p>
 </script>
+
+<script type="text/html" id="votingDetail-template">
+    <div class="hero-unit">
+        <table class="table table-striped">
+            <tbody>
+               <tr data-bind="css: { succes: GetCurrentResolve, error: !GetCurrentResolve}">
+                    <td class="span6" >
+                        <dl class="dl-horizontal">
+                            <dt>Předmět hlasování:</dt>
+                            <dd><a data-bind="text: scrapedVoting.subject, attr: { href:Id }"></a></dd>
+                            <dt>Na schůzi číslo:</dt>
+                            <dd><span data-bind="text: scrapedVoting.meetingNumber"></span></dd>
+                            <dt>Číslo hlasování:</dt>
+                            <dd><span data-bind="text: scrapedVoting.votingNumber"></span></dd>
+                            <dt>Kdy proběhlo v PS:</dt>
+                            <dd><span data-bind="text: scrapedVoting.when"></span></dd>
+                            <dt>Link na psp.cz:</dt>
+                            <dd><a target="_blank" data-bind="attr: { href:scrapedVoting.scrapedURL }">Zde</a></dd>
+                            <dt>Link na stenoprotokol:</dt>
+                            <dd><a target="_blank" data-bind="attr: { href:scrapedVoting.stenoprotokolURL }">Zde</a></dd>
+                            <dt>Hlasů pro:</dt>
+                            <dd><span data-bind="text: PositiveVotesCount"></span></dd>
+                            <dt>Hlasů proti:</dt>
+                            <dd><span data-bind="text: NegativeVotesCount"></span></dd>
+                        </dl> 
+                    </td>
+                    <td class="span3" style="vertical-align: middle;text-align: center;">
+                        <button class="btn btn-large btn-success" data-bind="click: voteYes">Ano</button>       <!--btn-block class indicates that user voted yes-->
+                        <button class="btn btn-large" data-bind="click: deleteVote, visible: aVote">Smazat můj hlas</button>
+                        <button class="btn btn-large btn-danger" data-bind="click: voteNo">Ne</button>          <!--btn-block class indicates that user voted no-->
+                    </td>
+                    </tr>
+              </tbody>
+            </table>
+        </div>    
+        
+
+</script>
+
 
 </html>

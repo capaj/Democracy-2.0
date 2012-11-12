@@ -10,7 +10,7 @@ navigator.sayswho = (function () {      // thanks to kennebec on stackoverflow.c
     return M;
 })();
 
-require(["Scripts/facebook", "Scripts/viewModel", "Scripts/addressResolver"], function (FB, viewModel, addressResolver) {
+require(["Scripts/facebook", "Scripts/viewModel", "Scripts/addressResolver" ], function (FB, viewModel, addressResolver) {
     if (navigator.sayswho[0] != "Chrome") { 
         $('#notChromeWarning').modal('show')    //warning about non chrome environment
     }
@@ -25,8 +25,9 @@ require(["Scripts/facebook", "Scripts/viewModel", "Scripts/addressResolver"], fu
         
         if (e.target.pathname) {
             var link = e.target.pathname;
-            console.log("Click on link intercepted with href " + link);
-            if (addressResolver.resolverMap.hasOwnProperty(link)) {
+            //console.log("Click on link intercepted with href " + link);
+            var section = addressResolver.getStringBeforeLastSlash(link);
+            if (addressResolver.resolverMap.hasOwnProperty(section)) {
                 var title = e.srcElement.innerText; 
                 e.preventDefault();
                 addressResolver.resolve(link, title);
@@ -35,8 +36,8 @@ require(["Scripts/facebook", "Scripts/viewModel", "Scripts/addressResolver"], fu
         }
 
     });
-    VM = viewModel; // extend a local variable to global, since we will need to acces it from everywhere
-    ko.applyBindings(VM); 
+    
+    ko.applyBindings(VM);   //VM is global defined in viewModel.js
 
     WSworker = new Worker('Scripts/wsworker.js');   //worker handling server comunication
 
@@ -45,9 +46,6 @@ require(["Scripts/facebook", "Scripts/viewModel", "Scripts/addressResolver"], fu
             switch (event.data.type) {
                 case "debug":
                     console.log("Debug message from wsworker> " + event.data.message);
-                    break;
-                case "":
-                    addressResolver["/voting/1"]("/voting/1"); //hack for now, to get the view of one voting working
                     break;
                 case "connectionInfo":
                     console.log("connection status> " + event.data.message);
@@ -70,12 +68,22 @@ require(["Scripts/facebook", "Scripts/viewModel", "Scripts/addressResolver"], fu
                     break;
                 default: //other types of data
                     try {
-                        var json = JSON.parse(event.data);
+                        var deserialized = JSON.parse(event.data);
+                        
+                        var entityId = deserialized.entity.Id;
+                        var type = entityId.substring(0, entityId.indexOf("/"))
+                        switch (type) {
+                            case "votings":     // so far we have just votings, TODO implement other types(vote, comment, user)
+                                VM.votings[entityId](VM.newVotingFromJS(deserialized.entity)());
+
+                                break;
+                            default:
+                            console.log("unknown type arrived from wsworker> " + event.data);
+                        }
                     }
                     catch (e) {
                         alert('invalid json arrived from server');
                     }
-                    console.log("unknown message from wsworker> " + event.data);
 
             }
         };

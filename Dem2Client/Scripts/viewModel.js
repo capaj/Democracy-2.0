@@ -1,13 +1,39 @@
-﻿define(function () {
+﻿define(["Scripts/Classes/Voting"], function (Voting) {
+    VM = {
+        //contructors start
+        newVotingFromJS: Voting,      //makes an observable object
+        //
 
-    function ViewModel() {
-        this.connected = ko.observable(false);      //websocket connection flag
-        this.comments = ko.observableArray([]);
-        this.votes = ko.observableArray([]);
-        this.votings = ko.observableArray([]);
-        this.currentSection = ko.observable(window.location.pathname);
-    }
-    return new ViewModel;; 
+        connected: ko.observable(false),      //websocket connection flag
+        comments: ko.observableArray([]),
+        votes: ko.observableArray([]),
+        votings: {
+            "none": Voting({
+                "scrapedVoting": {
+                    "scrapedURL": "nevybráno žádné hlasování",
+                    "meetingNumber": "nevybráno žádné hlasování",
+                    "votingNumber": "nevybráno žádné hlasování",
+                    "when": "nevybráno žádné hlasování",
+                    "subject": "nevybráno žádné hlasování",
+                    "stenoprotokolURL": "nevybráno žádné hlasování"
+                },
+                "State": "nevybráno žádné hlasování",
+                "PositiveVotesCount": "nevybráno žádné hlasování",
+                "NegativeVotesCount": "nevybráno žádné hlasování",
+                "Id": "nevybráno žádné hlasování",
+                "version": "nevybráno žádné hlasování",
+            })
+        },
+        currentSection: ko.observable(window.location.pathname),
+        currentSectionIsStatic: ko.observable(false),     //default value
+        //this.currentVoting = this.votings["none"];
+        currentVotingId: ko.observable("none"),
+        
+    }; // extend a local variable to global, since we will need to acces it from everywhere
+    VM.currentVoting = ko.computed(function () {
+        return VM.votings[VM.currentVotingId()]();
+    })
+    return VM;
 });
 
 

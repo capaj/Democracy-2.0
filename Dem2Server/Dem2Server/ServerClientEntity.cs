@@ -22,6 +22,7 @@ namespace Dem2Server
 
         public uint version { get; set; }    // should get incremented everytime the Entity is updated/changed, on creation it is 1
 
+        [JsonIgnore]
         public ConcurrentDictionary<string,User> subscribedUsers { get; set; } // all the users that should get a newer version of the entity when entity is updated
         public bool Send() { return true; }
 
@@ -36,7 +37,7 @@ namespace Dem2Server
         }
 
         private string _OwnerId;
-	    public string OwnerId
+	    public string OwnerId       // usually the creator
 	    {
 		    get { return _OwnerId;}
 		    protected set { _OwnerId = value;}
