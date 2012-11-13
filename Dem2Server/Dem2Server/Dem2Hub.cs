@@ -22,6 +22,7 @@ namespace Dem2Server
         public static HashSet<Voting> allVotings { get; set; }        // parliamentary votings for now
         public static HashSet<Vote> allVotes { get; set; }
         public static HashSet<Comment> allComments { get; set; }
+        public static HashSet<Listing> allListings { get; set; }
         //public static ConcurrentBag<Vote> allVotes { get; set; }
 
         public static Dictionary<string, IEnumerable<ServerClientEntity>> entityNamesToSets;
@@ -41,6 +42,7 @@ namespace Dem2Server
             allVotings = new HashSet<Voting>();
             allVotes = new HashSet<Vote>();
             allComments = new HashSet<Comment>();
+            allListings = new HashSet<Listing>();
             
             docDB = documentDB;
             docDB.Initialize();
@@ -65,6 +67,7 @@ namespace Dem2Server
                 {"votings", allVotings},
                 {"votes", allVotes},
                 {"comments", allComments},
+                {"listings", allListings},
             };
         }
         
@@ -125,46 +128,42 @@ namespace Dem2Server
                     switch (op.operation)
 	                {
                         case 'c':   //create new user generated entity
-                            //Example shows json which creates new Vote for the present user
-                            //{
-                            //  "msgType": "entity",
-                            //  "operation": "c",
-                            //  "className": "Vote",
-                            //  "ctorArguments": ["user/125", "voting/215", true]
-                            //}
+                            /*    
+                           //Example shows json which creates new Vote for the present user
+                               {
+                                 "msgType": "entity",
+                                 "operation": "c",
+                                 "className": "Vote",
+                                 "entity": {"user/125", "subjectID": "voting/215", "Agrees": true}
+                               }
 
 
-                            // TODO implement create spam check here
-                            Type type = Type.GetType("Dem2UserCreated." + (string)receivedObj["className"]);
-                            try
-                            {
-                                object instance = Activator.CreateInstance(type, (Array)receivedObj["ctorArguments"]);
+                               // TODO implement create spam check here
+                            */
+                               try
+                               {
+                                   Type type = Type.GetType("Dem2UserCreated." + (string)receivedObj["className"]);
+                                   //object instance = Activator.CreateInstance(type, (Array)receivedObj["ctorArguments"]); old way, TODO test and remove this line
+                                   object instance = JsonConvert.DeserializeObject((string)receivedObj["entity"], type);
+                                   Console.WriteLine("Object {0} created",instance.ToString());
+                               }
+                               catch (Exception)
+                               {
                                 
-                            }
-                            catch (Exception)
-                            {
-                                
-                                throw;
-                            }
-                            break;
-                        case 'r':
-                            /*
-                            Example shows json for this branch 
-                            {
-                              "msgType": "entity",
-                              "operation": "r",
-                              "entity":{
-                                  "Id": "user/132"
-                              }
-                            }*/
+                                   throw;
+                               }
+                               break;
+                           case 'r':
+                               /*
+                               Example shows json for this branch 
+                               {
+                                 "msgType": "entity",
+                                 "operation": "r",
+                                 "entity":{
+                                     "Id": "user/132"
+                                 }
+                               }*/
                             op.respondToReadRequest(socket);
-
-                            var vote = Dem2Hub.allVotes.FirstOrDefault(x => x.subjectID == op.entity.Id && x.OwnerId == socket.ConnectionInfo.Cookies["user"]);
-                            if (vote != null)
-                            {
-                                entityOperation sendVote = new entityOperation { entity = vote, operation = 'c' };
-                                sendVote.sendTo(socket);
-                            }
                             break;
 		                default:
                             break;

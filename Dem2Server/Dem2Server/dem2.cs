@@ -15,6 +15,7 @@ namespace Dem2Server
 {
     class dem2
     {
+        static int oneIPConnectionCap = 20;
         static void Main(string[] args)
         {
             
@@ -42,8 +43,24 @@ namespace Dem2Server
                 socket.OnOpen = () =>
                 {
                     Console.WriteLine("Opened connection from IP: {0}", socket.ConnectionInfo.ClientIpAddress);
-                    allSockets.Add(socket);
-                    socket.ConnectionInfo.Cookies["authentication"] = "anonymous";
+                    var socketOpened = true;
+                    if (allSockets.Any(x=>x.ConnectionInfo.ClientIpAddress == socket.ConnectionInfo.ClientIpAddress))
+                    {
+                        if (allSockets.FindAll(x => x.ConnectionInfo.ClientIpAddress == socket.ConnectionInfo.ClientIpAddress).Count >= oneIPConnectionCap)
+                        {
+                            socket.Send("Sorry, the server has a cap of 20 simultanoues connections per IP, you cannot connect until there will be less connections");
+                            socket.Close();
+                            socketOpened = false;
+                            
+                        }   
+                    }
+                    if (socketOpened)
+                    {
+                        allSockets.Add(socket);
+                        socket.ConnectionInfo.Cookies["authentication"] = "anonymous";            
+                    }
+                        
+                 
                     
                 };
                 socket.OnClose = () =>

@@ -85,6 +85,7 @@
     <Compile Include="ExceptionIsCritical.cs" />
     <Compile Include="FacebookAccount.cs" />
     <Compile Include="Dem2Hub.cs" />
+    <Compile Include="Listing.cs" />
     <Compile Include="serverStatistics.cs" />
     <Compile Include="VotableItem.cs" />
     <Compile Include="IVotingLeader.cs" />

@@ -27,6 +27,15 @@ namespace Dem2Server
             try
             {
                 ent = Dem2Hub.entityNamesToSets[type].FirstOrDefault(x => x.Id == entity.Id);
+                if (typeof(VotableItem).IsAssignableFrom(ent.GetType()))    //check if the entity we are responding with is a VotableItem or not, props to http://www.hanselman.com/blog/DoesATypeImplementAnInterface.aspx
+                {
+                    var vote = Dem2Hub.allVotes.FirstOrDefault(x => x.subjectID == entity.Id && x.OwnerId == socket.ConnectionInfo.Cookies["user"]);
+                    if (vote != null)
+                    {
+                        entityOperation sendVote = new entityOperation { entity = vote, operation = 'c' };
+                        sendVote.sendTo(socket);
+                    }
+                }
             }
             catch (Exception ex)
             {
