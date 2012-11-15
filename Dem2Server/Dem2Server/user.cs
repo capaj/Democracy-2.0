@@ -12,6 +12,7 @@ namespace Dem2Model
     public class User : ServerClientEntity, IVotingLeader
     {
         public string nick { get; set; }    // by default Nick will be created out of a user's name, user can change it whenever he likes as much as he likes, but it must be unique
+        [NonSerializedAttribute]    // very important here- we don't want anyone to be able to read other user's acces token simply by reading his entity
         public string accessToken { get; set; }  
         public Name civicName { get; set; }
         public DateTime birth { get; private set; }
@@ -101,9 +102,21 @@ namespace Dem2Model
             var isNew = Dem2Hub.allUsers.Add(this);
             if (isNew)
             {
-                Console.WriteLine("Created a new user with FB id: {0}", this.FBAccount.id);
-                //this is a new user, create a new model and send it to him
-                this.Send(this);
+#if IS_RUNNING_ON_SERVER
+                if (FBAccount.verified)     //for production deployment we do care if user is verified FB user
+#else
+                if (true)    //for testing we don't care if user is verified FB user
+#endif
+                {
+                    Console.WriteLine("Created a new user with FB id: {0}", this.FBAccount.id);
+                    //this is a new user, create a new model and send it to him
+                    this.Send(this);
+                }
+                else
+                {
+                    //send error message to user informing about nonverified account
+                }
+                
             }
             else
             {

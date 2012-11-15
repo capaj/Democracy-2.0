@@ -13,23 +13,6 @@
         console.log("viewSingleVoting called with url " + url);
         var entityId = url.substring(1,url.length)
         WSworker.postMessage({ "msgType": "entity", "operation": "r", "entity": { "Id": entityId } });
-        if (VM.votings.hasOwnProperty(entityId) === false) {
-            VM.votings[entityId] = VM.newVotingFromJS({
-                "scrapedVoting": {
-                    "scrapedURL": "psp odkaz pro hlasování " + entityId,
-                    "meetingNumber": "číslo hlasování u " + entityId,
-                    "votingNumber": "nenačteno",
-                    "when": "nenačteno",
-                    "subject": entityId,
-                    "stenoprotokolURL": "nenačteno"
-                },
-                "State": "nenačteno",
-                "PositiveVotesCount": "nenačteno",
-                "NegativeVotesCount": "nenačteno",
-                "Id": entityId,
-                "version": "nenačteno",
-            });
-        }
         
         VM.currentVotingId(entityId);
     };

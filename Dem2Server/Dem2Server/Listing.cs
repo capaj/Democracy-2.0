@@ -55,7 +55,11 @@ namespace Dem2UserCreated
         public string StrOfType { get; set; }   //used in looking up the right hashset
         public int count { get; set; }      //how many entities should we return
         [JsonIgnore]
-        public Type ofType { get; set; }
+        public Type ofType { 
+            get { 
+                return Dem2Hub.entityNamesToSets[StrOfType].GetType();
+            } 
+        }
         
         public Query(string json)
         {

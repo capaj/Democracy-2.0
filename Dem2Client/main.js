@@ -71,15 +71,16 @@ require(["Scripts/facebook", "Scripts/viewModel", "Scripts/addressResolver" ], f
                         var deserialized = JSON.parse(event.data);
                         
                         var entityId = deserialized.entity.Id;
-                        var type = entityId.substring(0, entityId.indexOf("/"))
-                        switch (type) {
-                            case "votings":     // so far we have just votings, TODO implement other types(vote, comment, user)
-                                VM.votings[entityId](VM.newVotingFromJS(deserialized.entity)());
+                        var type = entityId.substring(0, entityId.indexOf("/"));
+                        VM[type][entityId](VM.newVotingFromJS(deserialized.entity)());
+                        //switch (type) {
+                        //    case "votings":     // so far we have just votings, TODO implement other types(vote, comment, user)
+                        //        VM.votings[entityId](VM.newVotingFromJS(deserialized.entity)());
 
-                                break;
-                            default:
-                            console.log("unknown type arrived from wsworker> " + event.data);
-                        }
+                        //        break;
+                        //    default:
+                        //    console.log("unknown type arrived from wsworker> " + event.data);
+                        //}
                     }
                     catch (e) {
                         alert('invalid json arrived from server');

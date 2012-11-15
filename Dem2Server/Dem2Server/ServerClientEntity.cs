@@ -53,6 +53,24 @@ namespace Dem2Server
         }
         #endregion
 
+        public static ServerClientEntity GetEntityFromSetsByID(string Id){
+            string type = Id.Split('/')[0];
+            ServerClientEntity entityOnServer = null;
+
+            try
+            {
+                entityOnServer = Dem2Hub.entityNamesToSets[type].FirstOrDefault(x => x.Id == Id);
+            }
+            catch (Exception ex)
+            {
+                if (ExceptionIsCriticalCheck.IsCritical(ex)) throw;
+                Console.WriteLine("Entity with ID {0} was not found", Id);
+                return null;
+            }
+            return entityOnServer;
+        }
+
+
         public override int GetHashCode()
         {
                 return Id.GetHashCode();

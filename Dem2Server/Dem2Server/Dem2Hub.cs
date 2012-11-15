@@ -11,6 +11,7 @@ using Raven.Client.Document;
 using Raven.Client;
 using System.Net;
 using Dem2UserCreated;
+using Newtonsoft.Json.Converters;
 
 namespace Dem2Server
 {
@@ -62,6 +63,7 @@ namespace Dem2Server
                 // var entity = session.Load<Company>(companyId);
              
             }
+            // in order for this static method to work: ServerClientEntity.GetEntityFromSetsByID
             entityNamesToSets = new Dictionary<string, IEnumerable<ServerClientEntity>> {
                 {"users", allUsers},
                 {"votings", allVotings},
@@ -124,51 +126,7 @@ namespace Dem2Server
                     break;
                 case "entity":
                     entityOperation op = JsonConvert.DeserializeObject<entityOperation>(message);
-                    
-                    switch (op.operation)
-	                {
-                        case 'c':   //create new user generated entity
-                            /*    
-                           //Example shows json which creates new Vote for the present user
-                               {
-                                 "msgType": "entity",
-                                 "operation": "c",
-                                 "className": "Vote",
-                                 "entity": {"user/125", "subjectID": "voting/215", "Agrees": true}
-                               }
-
-
-                               // TODO implement create spam check here
-                            */
-                               try
-                               {
-                                   Type type = Type.GetType("Dem2UserCreated." + (string)receivedObj["className"]);
-                                   //object instance = Activator.CreateInstance(type, (Array)receivedObj["ctorArguments"]); old way, TODO test and remove this line
-                                   object instance = JsonConvert.DeserializeObject((string)receivedObj["entity"], type);
-                                   Console.WriteLine("Object {0} created",instance.ToString());
-                               }
-                               catch (Exception)
-                               {
-                                
-                                   throw;
-                               }
-                               break;
-                           case 'r':
-                               /*
-                               Example shows json for this branch 
-                               {
-                                 "msgType": "entity",
-                                 "operation": "r",
-                                 "entity":{
-                                     "Id": "user/132"
-                                 }
-                               }*/
-                            op.respondToReadRequest(socket);
-                            break;
-		                default:
-                            break;
-	                }
-
+                    op.resolveEntityRequest(socket, receivedObj);
                     break;
                 default: Console.WriteLine("Unrecognized msgType");
                     break;
