@@ -75,6 +75,11 @@ require(["Scripts/facebook", "Scripts/viewModel", "Scripts/addressResolver" ], f
                             switch (entOp.operation) {                               
                                 case "c":   //create
                                     VM[type][entityId] = VM.constructors[type](entOp.entity);
+                                    if (type == "votes") {
+                                        var subjectId = entOp.entity.subjectId();
+                                        var subjectType = subjectId.substring(0, subjectId.indexOf("/"));
+                                        VM[subjectType][subjectId]().thisClientVoteId(entityId);
+                                    }
                                     break;
                                 case "u":   //update
                                     try {

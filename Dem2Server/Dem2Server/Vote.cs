@@ -12,7 +12,7 @@ namespace Dem2UserCreated
         public string subjectID { get; private set; }   //can be anything which implements IVotable -a voting, a comment or another user
         
         private string _casterUserID; //Vote caster is in special private variable(it may be someone else than Owner)
-        public string CasterUserID  //OwnerID from parent ServerClientEntity contains owner of the vote, caster is the one who initiated the creation of the vote
+        public string casterUserID  //OwnerID from parent ServerClientEntity contains owner of the vote, caster is the one who initiated the creation of the vote
         {
             get { return _casterUserID; }
             private set { _casterUserID = value; } 
@@ -30,11 +30,13 @@ namespace Dem2UserCreated
             Agrees = stance;
             castedTime = DateTime.Now;
             InitVote(user, subject);
+
+            Dem2Hub.StoreThis(this);
         }
         
         private void InitVote(User voter, VotableItem subject)
         {
-            CasterUserID = voter.Id;
+            casterUserID = voter.Id;
             subjectID = subject.Id;
         }
 

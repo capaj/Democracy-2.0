@@ -44,6 +44,9 @@ var connectToWSServer = function () {
                         break;
                     case "d":
                         break;
+                    case "c":
+                        
+                        break;
                     default:
 
                 }
@@ -87,38 +90,35 @@ self.onmessage = function (event) {
 
 
 function EntityOperationHandler(operation) {
-    var entityId = operation.entity.Id;
-    var type = entityId.substring(0, entityId.indexOf("/"));
-    
     switch (operation.operation) {
         case "r":
-            var toSend = null;
-            if (Cached[type].hasOwnProperty(entityId) === false) {
-                //Cached[type][entityId] = template;
-                //var template = getWillLoadEntityTemplate(type, entityId);
-                //toSend = {
-                //    "operation": "c",
-                //    "entity": template
-                //};
+            var entityId = operation.entity.Id;
+            var type = entityId.substring(0, entityId.indexOf("/"));
 
-            } else { //worker has some version of entity already cached, so we append the version to request and continue
+            if (Cached[type].hasOwnProperty(entityId)) {
+                //worker has some version of entity already cached, so we append the version to request and continue
                 operation.entity.version = Cached[type][entityId].version;
-                toSend = {
+                var toSend = {
                     "operation": "u",
                     "entity": Cached[type][entityId]
                 };
-                self.postMessage(toSend);
+                self.postMessage(toSend);   //before server gets a chance to respond, we provide client with the cached copy of entity
             }
-            
 
-            send(JSON.stringify(operation));
             break;
         case "u":
+
+            break;
+        case "c":
+            
+            break;
+        case "d":
 
             break;
         default:
         
     }
+    send(JSON.stringify(operation));
 };
 //comunication with client end
 

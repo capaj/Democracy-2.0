@@ -27,7 +27,13 @@ namespace Dem2UserCreated
         public string parentId { get; private set; }
         
         public DateTime publishedDate { get; set; }
-        public KeyValuePair<int, string> revision_textPair { get; set; }
+        public HashSet<CommentText> texts { get; set; }
         public bool deleted { get; set; } //if the comment is deleted, this is set to false
+    }
+
+    public class CommentText
+    {
+        public uint revision { get; set; }
+        public string text { get; set; }
     }
 }

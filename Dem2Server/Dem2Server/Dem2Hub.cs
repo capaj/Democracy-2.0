@@ -143,5 +143,15 @@ namespace Dem2Server
                 onlineUserCount = (UInt32)allUsers.Where(x=> x.connection != null).Count()
             };
         }
+
+        internal static void StoreThis(ServerClientEntity entity)
+        {
+            using (var session = docDB.OpenSession())
+            {
+                session.Store(entity);
+
+                session.SaveChanges();
+            }
+        }
     }
 }

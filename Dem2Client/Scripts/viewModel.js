@@ -1,12 +1,12 @@
-﻿define(["Scripts/Classes/Voting"], function (Voting) {
+﻿define(["Scripts/Classes/Voting", "Scripts/Classes/Vote"], function (Voting, Vote) {
     VM = {
 
         constructors: {   //contructors start
             "votings": Voting   //makes an observable object
         },// contructors end
         connected: ko.observable(false),      //websocket connection flag
-        comments: ko.observableArray([]),
-        votes: ko.observableArray([]),
+        comments: {},
+        votes: { "none": Vote({})},
         votings: {
             "none": Voting({
                 "scrapedVoting": {
@@ -30,12 +30,14 @@
         currentVotingId: ko.observable("none"),
         
     }; // extend a local variable to global, since we will need to acces it from everywhere
+
+
     VM.currentVoting = ko.computed(function () {
         var Id = VM.currentVotingId();
         if (VM.votings.hasOwnProperty(Id) === false) {
             VM.votings[Id] = Voting(getWillLoadEntityTemplate("votings", Id));
         }
-        return VM.votings[VM.currentVotingId()]();
+        return VM.votings[Id]();
     });
 
     function getWillLoadEntityTemplate(type, entityId) {
