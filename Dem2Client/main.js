@@ -43,7 +43,7 @@ require(["Scripts/facebook", "Scripts/viewModel", "Scripts/addressResolver" ], f
 
     FB.deffered.then(function (FBAccesToken) {
         WSworker.onmessage = function (event) {
-            switch (event.data.type) {
+            switch (event.data.msgType) {
                 case "debug":
                     console.log("Debug message from wsworker> " + event.data.message);
                     break;
@@ -68,22 +68,33 @@ require(["Scripts/facebook", "Scripts/viewModel", "Scripts/addressResolver" ], f
                     break;
                 default: //other types of data
                     try {
-                        var deserialized = JSON.parse(event.data);
-                        
-                        var entityId = deserialized.entity.Id;
-                        var type = entityId.substring(0, entityId.indexOf("/"));
-                        VM[type][entityId](VM.newVotingFromJS(deserialized.entity)());
-                        //switch (type) {
-                        //    case "votings":     // so far we have just votings, TODO implement other types(vote, comment, user)
-                        //        VM.votings[entityId](VM.newVotingFromJS(deserialized.entity)());
+                        var entOp = event.data; // deserialization happens in ws worker, so no need to do it here
+                        if (entOp.hasOwnProperty("operation")) {
+                            var entityId = entOp.entity.Id;
+                            var type = entityId.substring(0, entityId.indexOf("/"));
+                            switch (entOp.operation) {                               
+                                case "c":   //create
+                                    VM[type][entityId] = VM.constructors[type](entOp.entity);
+                                    break;
+                                case "u":   //update
+                                    try {
+                                        VM[type][entityId](VM.constructors[type](entOp.entity)());       //we will contruct the type we have received from server and store it in the proper table under his id
+                                    } catch (e) {
+                                        console.error("failed to update the entity in the viewModel> " + event.data);
+                                    }
+                                    break;
+                                case "d":   //delete
+                                    delete VM[type][entityId];
+                                    break;
+                                default:
 
-                        //        break;
-                        //    default:
-                        //    console.log("unknown type arrived from wsworker> " + event.data);
-                        //}
+                            }
+                           
+                        }
+ 
                     }
                     catch (e) {
-                        alert('invalid json arrived from server');
+                        console.error('invalid json arrived from server');
                     }
 
             }

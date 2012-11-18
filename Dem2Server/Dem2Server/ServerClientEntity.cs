@@ -16,11 +16,16 @@ namespace Dem2Server
             get;
             set;
         }
-        public delegate void OnChangeHandler();
+
+        public delegate void OnChangeHandler(ServerClientEntity o, EventArgs e);
         public event OnChangeHandler OnChange;
 
+        public uint version { get; private set; }    // should get incremented everytime the Entity is updated/changed, on creation it is 1
 
-        public uint version { get; set; }    // should get incremented everytime the Entity is updated/changed, on creation it is 1
+        public void IncrementVersion() {
+            version += 1;
+            OnChange(this, new EventArgs());
+        }
 
         [JsonIgnore]
         public ConcurrentDictionary<string,User> subscribedUsers { get; set; } // all the users that should get a newer version of the entity when entity is updated

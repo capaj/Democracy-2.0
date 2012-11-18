@@ -9,11 +9,13 @@ using Dem2UserCreated;
 
 namespace Dem2Model
 {
+    //[JsonConverter(typeof(UserConverter))]// very important here- we don't want anyone to be able to read other user's acces token simply by reading his entity
     public class User : ServerClientEntity, IVotingLeader
     {
         public string nick { get; set; }    // by default Nick will be created out of a user's name, user can change it whenever he likes as much as he likes, but it must be unique
-        [NonSerializedAttribute]    // very important here- we don't want anyone to be able to read other user's acces token simply by reading his entity
-        public string accessToken { get; set; }  
+
+        public string accessToken { get; set; }
+        
         public Name civicName { get; set; }
         public DateTime birth { get; private set; }
         public FacebookAccount FBAccount { get; set; }
@@ -173,6 +175,25 @@ namespace Dem2Model
             {
                 return FBAccount.GetHashCode();
             }
+        }
+    }
+
+    public class UserConverter : JsonConverter
+    {
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            var user = value as User;
+            user.accessToken = null;
+            serializer.Serialize(writer, user);
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            return serializer.Deserialize<User>(reader);
+        }
+        public override bool CanConvert(Type objectType)
+        {
+            return true;
         }
     }
 }

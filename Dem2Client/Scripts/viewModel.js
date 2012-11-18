@@ -1,21 +1,21 @@
 ﻿define(["Scripts/Classes/Voting"], function (Voting) {
     VM = {
-        //contructors start
-        newVotingFromJS: Voting,      //makes an observable object
-        //
 
+        constructors: {   //contructors start
+            "votings": Voting   //makes an observable object
+        },// contructors end
         connected: ko.observable(false),      //websocket connection flag
         comments: ko.observableArray([]),
         votes: ko.observableArray([]),
         votings: {
             "none": Voting({
                 "scrapedVoting": {
-                    "scrapedURL": "nevybráno žádné hlasování",
+                    "scrapedURL": "#",
                     "meetingNumber": "nevybráno žádné hlasování",
                     "votingNumber": "nevybráno žádné hlasování",
                     "when": "nevybráno žádné hlasování",
                     "subject": "nevybráno žádné hlasování",
-                    "stenoprotokolURL": "nevybráno žádné hlasování"
+                    "stenoprotokolURL": "#"
                 },
                 "State": "nevybráno žádné hlasování",
                 "PositiveVotesCount": "nevybráno žádné hlasování",
@@ -31,8 +31,36 @@
         
     }; // extend a local variable to global, since we will need to acces it from everywhere
     VM.currentVoting = ko.computed(function () {
+        var Id = VM.currentVotingId();
+        if (VM.votings.hasOwnProperty(Id) === false) {
+            VM.votings[Id] = Voting(getWillLoadEntityTemplate("votings", Id));
+        }
         return VM.votings[VM.currentVotingId()]();
-    })
+    });
+
+    function getWillLoadEntityTemplate(type, entityId) {
+        switch (type) {
+            case "votings":
+                return {
+                    "scrapedVoting": {
+                        "scrapedURL": "psp odkaz pro hlasování " + entityId,
+                        "meetingNumber": "číslo hlasování u " + entityId,
+                        "votingNumber": "nenačteno",
+                        "when": "nenačteno",
+                        "subject": entityId,
+                        "stenoprotokolURL": "nenačteno"
+                    },
+                    "State": "nenačteno",
+                    "PositiveVotesCount": "nenačteno",
+                    "NegativeVotesCount": "nenačteno",
+                    "Id": entityId,
+                    "version": "nenačteno",
+                };
+                break;
+            case "listings":
+                return {};
+        }
+    };
     return VM;
 });
 
