@@ -97,7 +97,7 @@ namespace Dem2Server
                     {
                         Type type = Type.GetType("Dem2UserCreated." + (string)receivedObj["className"]);
                         //object instance = Activator.CreateInstance(type, (Array)receivedObj["ctorArguments"]); old way, TODO test and remove this line
-                        object instance = JsonConvert.DeserializeObject((string)receivedObj["entity"], type, new IsoDateTimeConverter());
+                        object instance = JsonConvert.DeserializeObject(receivedObj["entity"].ToString(), type, new IsoDateTimeConverter());
                         Console.WriteLine("Object {0} created", instance.ToString());
                     }
                     catch (Exception)

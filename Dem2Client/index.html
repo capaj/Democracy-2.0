@@ -70,7 +70,7 @@
                     </div>
                     <ul class="nav">
                         <li data-bind="css: { active: currentSection() == '/votes'}"><a href="/votes">Hlasy</a></li>
-                        <li data-bind="css: { active: currentSection() == '/votings' || currentSection() == '/voting'}"><a href="/votings/97"><i class="icon-check"></i>Hlasování</a><!--<a href="/votings"><i class="icon-check"></i>Hlasování</a>--></li>    <!--temporary hack for testing loading one voting-->
+                        <li data-bind="css: { active: currentSection() == '/votings'}"><a href="/votings/97"><i class="icon-check"></i>Hlasování</a><!--<a href="/votings"><i class="icon-check"></i>Hlasování</a>--></li>    <!--temporary hack for testing loading one voting-->
                         <li data-bind="css: { active: currentSection() == '/comments'}"><a href="/comments"><i class="icon-comment"></i>Komentáře</a></li>
                         <li data-bind="css: { active: currentSection() == '/users'}"><a href="/users"><i class="icon-user"></i>Uživatelé</a></li>
                         
@@ -136,8 +136,8 @@
                         </dl> 
                     </td>
                     <td class="span3" style="vertical-align: middle;text-align: center;">
-                        <button class="btn btn-large btn-success" data-bind="click: voteYes">Ano</button>       <!--btn-block class indicates that user voted yes-->
-                        <button class="btn btn-large" data-bind="click: deleteVote, visible: aVote">Smazat můj hlas</button>
+                        <button class="btn btn-large btn-success" data-bind="click: voteYes">Ano</button>       <!--btn-block class indicates that user voted yes  css:{ btn-block: thisClientVote().Agrees()-->
+                        <button class="btn btn-large" data-bind="click: deleteVote, visible: thisClientVoteId">Smazat můj hlas</button>
                         <button class="btn btn-large btn-danger" data-bind="click: voteNo">Ne</button>          <!--btn-block class indicates that user voted no-->
                     </td>
                     </tr>

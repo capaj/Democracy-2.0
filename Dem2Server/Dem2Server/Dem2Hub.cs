@@ -27,15 +27,17 @@ namespace Dem2Server
         //public static ConcurrentBag<Vote> allVotes { get; set; }
 
         public static Dictionary<string, IEnumerable<ServerClientEntity>> entityNamesToSets;
-        
-        public static IEnumerable<VotableItem> allVotable { 
-            get {
-                List<VotableItem> votings = allVotings.Select(x => (VotableItem)x).ToList();
-                List<VotableItem> comments = allVotable.Select(x => (VotableItem)x).ToList();
 
-                return votings.Concat(comments);
-            } 
-        }
+        //public static IEnumerable<VotableItem> allVotable
+        //{
+        //    get
+        //    {
+        //        List<VotableItem> votings = allVotings.Select(x => (VotableItem)x).ToList();
+        //        List<VotableItem> comments = allVotable.Select(x => (VotableItem)x).ToList();
+
+        //        return votings.Concat(comments);
+        //    }
+        //}
 
         public static void Initialize(DocumentStore documentDB)     //someone provided us with the DB to load data from
         {

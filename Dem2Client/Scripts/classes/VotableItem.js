@@ -1,7 +1,7 @@
 ﻿define(["./ServerClientEntity"], function (ServerClientEntity) {
     return function (ent) {
         var r = ServerClientEntity(ent);
-        r.thisClientVoteId = ko.observable();
+        r.thisClientVoteId = ko.observable(null);
         r.thisClientVote = ko.computed({
             read: function () {
                 var Id = r.thisClientVoteId();

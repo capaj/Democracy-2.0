@@ -24,8 +24,8 @@ namespace Dem2UserCreated
 
         public Vote(string userID, string subjectID, bool stance)
         {
-            
-            VotableItem subject = Dem2Hub.allVotable.First(x => x.Id == subjectID);
+
+            VotableItem subject = (VotableItem)ServerClientEntity.GetEntityFromSetsByID(subjectID);
             User user = Dem2Hub.allUsers.First(x => x.Id == userID);
             Agrees = stance;
             castedTime = DateTime.Now;
