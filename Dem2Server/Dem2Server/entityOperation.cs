@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Dem2UserCreated;
+using Dem2Model;
 
 namespace Dem2Server
 {
@@ -90,25 +92,38 @@ namespace Dem2Server
                          "className": "Vote",
                          "entity": {"subjectID": "voting/215", "Agrees": true}
                        }
-
+                     or subscription
+                      {
+                         "msgType": "entity",
+                         "operation": "c",
+                         "className": "Subscription",
+                         "entity": {"onEntityId": "voting/215"}
+                       }
 
                        // TODO implement create spam check here
                     */
                     try
                     {
-                        Type type = Type.GetType("Dem2UserCreated." + (string)receivedObj["className"]);
+                        var className = (string)receivedObj["className"];
+                        Type type = Type.GetType("Dem2UserCreated." + className);
                         //object instance = Activator.CreateInstance(type, (Array)receivedObj["ctorArguments"]); old way, TODO test and remove this line
                         var instance = JsonConvert.DeserializeObject(receivedObj["entity"].ToString(), type, new IsoDateTimeConverter());
-                        if (type == typeof(Dem2UserCreated.Vote))
+                        switch (className)
                         {
-                            var theVote = (Dem2UserCreated.Vote)instance;
-                            var succes = theVote.InitVote(socket.ConnectionInfo.Cookies["user"]); // stores the vote in a DB
-                            if (succes)
-                            {
-                                theVote.Subscribe(Dem2Model.User.GetUserById(socket.ConnectionInfo.Cookies["user"]));
-                                instance = theVote;
-                            }
+                            case "Vote":
+                                var theVote = (Vote)instance;   //the serialized entity must be initialized
+                                instance = Vote.Initialization(socket, theVote);    //the after initialization, we return the entity back
+                                break;
+                            case "Subscription":
+                                var subs = (Subscription)instance;
+                                subs.subscribeUser(socket.ConnectionInfo.Cookies["user"]);
+                                break;
+                            default:
+                                break;
                         }
+                        
+                            
+                        
                         var op = new entityOperation() { operation = 'c', entity = (ServerClientEntity)instance };
                         Dem2Hub.sendTo(instance, socket);
                         Console.WriteLine("Object {0} created", instance.ToString());
@@ -131,19 +146,14 @@ namespace Dem2Server
                     }*/
                     respondToReadRequest(socket);
                     break;
-                case 's': //subscribe to changes on entity
-                    /*
-                        {
-                         "msgType": "entity",
-                         "operation": "s",
-                         "entity": {"user/125"}
-                       }
-                    */
-                    subscribeUserToChanges(socket);
+                case 'd': //delete an entity
+                    
                     break;
                 default:
                     break;
             }
         }
+
+        
     }
 }

@@ -121,11 +121,6 @@ namespace Dem2Server
                     Console.WriteLine("logout request");
                     User heWhoWantsToLogout = JsonConvert.DeserializeObject<User>(message);
                     break;
-                case "loadView": Console.WriteLine("load request");
-                    break;
-                case "saveView": Console.WriteLine("save request");
-
-                    break;
                 case "entity":
                     entityOperation op = JsonConvert.DeserializeObject<entityOperation>(message);
                     op.resolveEntityRequest(socket, receivedObj);

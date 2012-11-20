@@ -38,6 +38,17 @@ namespace Dem2UserCreated
         //    Dem2Hub.StoreThis(this);
         //}
 
+        public static object Initialization(IWebSocketConnection socket, Vote vote)
+        {
+
+            var succes = vote.InitVote(socket.ConnectionInfo.Cookies["user"]); // stores the vote in a DB
+            if (succes)
+            {
+                vote.Subscribe(Dem2Model.User.GetUserById(socket.ConnectionInfo.Cookies["user"]));
+            }
+            return vote;
+        }
+
         public bool InitVote(string casterID)
         {
             OwnerId = casterID;
