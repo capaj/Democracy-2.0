@@ -134,6 +134,10 @@ namespace Dem2Model
 
         //AUTHENTICATION ENDS
 
+        public static User GetUserById(string Id) {
+            return Dem2Hub.allUsers.FirstOrDefault<User>(x => x.Id == Id);
+        }
+
         public override bool Equals(System.Object obj)
         {
             // If parameter is null return false.

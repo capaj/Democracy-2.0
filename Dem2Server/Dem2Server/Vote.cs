@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using Dem2Server;
 using Dem2Model;
+using Fleck;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Dem2UserCreated
 {
@@ -22,24 +25,38 @@ namespace Dem2UserCreated
         public bool Agrees { get; private set; }
         public DateTime castedTime { get; private set; }
 
-        public Vote(string userID, string subjectID, bool stance)
-        {
+        //public Vote(string userID, string subjectID, bool stance)
+        ////public Vote()
+        //{
 
+        //    VotableItem subject = (VotableItem)ServerClientEntity.GetEntityFromSetsByID(subjectID);
+        //    User user = Dem2Hub.allUsers.First(x => x.Id == casterUserID);
+        //   // Agrees = stance;
+        //    castedTime = DateTime.Now;
+        //    InitVote(user, subject);
+
+        //    Dem2Hub.StoreThis(this);
+        //}
+
+        public bool InitVote(string casterID)
+        {
+            OwnerId = casterID;
+            casterUserID = casterID;
             VotableItem subject = (VotableItem)ServerClientEntity.GetEntityFromSetsByID(subjectID);
-            User user = Dem2Hub.allUsers.First(x => x.Id == userID);
-            Agrees = stance;
-            castedTime = DateTime.Now;
-            InitVote(user, subject);
-
-            Dem2Hub.StoreThis(this);
+            if (subject != null)
+            {
+                Dem2Hub.allVotes.Add(this);
+                Dem2Hub.StoreThis(this);
+                subject.IncrementVersion(); // this triggers on change and notifies the subscribers, because on the subject, properties VoteCounts changed 
+                return true;
+            }
+            return false;
         }
-        
-        private void InitVote(User voter, VotableItem subject)
+
+        public void sendTo(IWebSocketConnection socket)
         {
-            casterUserID = voter.Id;
-            subjectID = subject.Id;
+            socket.Send(JsonConvert.SerializeObject(this, new IsoDateTimeConverter()));
         }
-
 
     }
 }

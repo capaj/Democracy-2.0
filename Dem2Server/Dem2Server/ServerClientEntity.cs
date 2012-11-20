@@ -41,6 +41,15 @@ namespace Dem2Server
             return subscribedUsers.TryRemove(theUser.Id, out theUser);        //returns false if the item is not found
         }
 
+        void ServerClientEntity_OnChange(ServerClientEntity o, EventArgs e)
+        {
+            foreach (var subscriber in subscribedUsers)
+            {
+                var op = new entityOperation() { operation = 'u', entity = this };
+                Dem2Hub.sendTo(op, subscriber.Value.connection);
+            }
+        }
+
         private string _OwnerId;
 	    public string OwnerId       // usually the creator
 	    {
@@ -50,10 +59,13 @@ namespace Dem2Server
 
         #region contructors
         [JsonConstructor]
-        public ServerClientEntity() { }
+        public ServerClientEntity() {
+            OnChange += ServerClientEntity_OnChange;
+        }
 
         public ServerClientEntity(User creator)
         {
+            OnChange += ServerClientEntity_OnChange;
             _OwnerId = creator.Id;
         }
         #endregion
@@ -61,7 +73,6 @@ namespace Dem2Server
         public static ServerClientEntity GetEntityFromSetsByID(string Id){
             string type = Id.Split('/')[0];
             ServerClientEntity entityOnServer = null;
-
             try
             {
                 entityOnServer = Dem2Hub.entityNamesToSets[type].FirstOrDefault(x => x.Id == Id);

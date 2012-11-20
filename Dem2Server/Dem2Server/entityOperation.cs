@@ -50,6 +50,7 @@ namespace Dem2Server
                 //second possible outcome
                 operation = 'u';
                 //client must check whether the update he received has greater version of entity, if not, he knows he has the latest version of entity
+                
             }
             else
             {
@@ -87,7 +88,7 @@ namespace Dem2Server
                          "msgType": "entity",
                          "operation": "c",
                          "className": "Vote",
-                         "entity": {"user/125", "subjectID": "voting/215", "Agrees": true}
+                         "entity": {"subjectID": "voting/215", "Agrees": true}
                        }
 
 
@@ -97,7 +98,19 @@ namespace Dem2Server
                     {
                         Type type = Type.GetType("Dem2UserCreated." + (string)receivedObj["className"]);
                         //object instance = Activator.CreateInstance(type, (Array)receivedObj["ctorArguments"]); old way, TODO test and remove this line
-                        object instance = JsonConvert.DeserializeObject(receivedObj["entity"].ToString(), type, new IsoDateTimeConverter());
+                        var instance = JsonConvert.DeserializeObject(receivedObj["entity"].ToString(), type, new IsoDateTimeConverter());
+                        if (type == typeof(Dem2UserCreated.Vote))
+                        {
+                            var theVote = (Dem2UserCreated.Vote)instance;
+                            var succes = theVote.InitVote(socket.ConnectionInfo.Cookies["user"]); // stores the vote in a DB
+                            if (succes)
+                            {
+                                theVote.Subscribe(Dem2Model.User.GetUserById(socket.ConnectionInfo.Cookies["user"]));
+                                instance = theVote;
+                            }
+                        }
+                        var op = new entityOperation() { operation = 'c', entity = (ServerClientEntity)instance };
+                        Dem2Hub.sendTo(instance, socket);
                         Console.WriteLine("Object {0} created", instance.ToString());
                     }
                     catch (Exception)

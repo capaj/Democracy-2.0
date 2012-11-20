@@ -137,7 +137,7 @@ namespace Dem2Server
 
         public static serverStatistics GetStatistics() {
             return new serverStatistics { 
-                userCount = (UInt32)allUsers.Count, 
+                userCount = (UInt32)allUsers.Count,
                 voteCount = (UInt64)allVotes.Count,
                 positiveVoteCount = (UInt64)allVotes.Where(x => x.Agrees == true).Count(),
                 votingCount = (UInt32)allVotings.Count,
@@ -154,6 +154,11 @@ namespace Dem2Server
 
                 session.SaveChanges();
             }
+        }
+
+        public static void sendTo(object that,IWebSocketConnection socket)
+        {
+            socket.Send(JsonConvert.SerializeObject(that, new IsoDateTimeConverter()));
         }
     }
 }
