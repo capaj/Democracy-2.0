@@ -40,9 +40,9 @@
     <StartupObject>Dem2Server.dem2</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Fleck, Version=0.9.6.14, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Fleck, Version=0.9.6.15, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Fleck.0.9.6.14\lib\net40\Fleck.dll</HintPath>
+      <HintPath>..\packages\Fleck.0.9.6.15\lib\net40\Fleck.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.0.8.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
