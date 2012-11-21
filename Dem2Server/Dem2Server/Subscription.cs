@@ -22,10 +22,8 @@ namespace Dem2UserCreated
         }
         //object instance = Activator.CreateInstance(type, (Array)receivedObj["ctorArguments"]);
 
-        public void subscribeUser(string userId) {
-            var ent = onEntity;
-            var user = User.GetUserById(userId);
-            ent.Subscribe(user);
+        public void subscribe(User user) {
+            user.SubscribeToChangesOnEntity(this);
         }
     }
 }

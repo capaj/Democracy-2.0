@@ -40,11 +40,10 @@ namespace Dem2UserCreated
 
         public static object Initialization(IWebSocketConnection socket, Vote vote)
         {
-
             var succes = vote.InitVote(socket.ConnectionInfo.Cookies["user"]); // stores the vote in a DB
             if (succes)
             {
-                vote.Subscribe(Dem2Model.User.GetUserById(socket.ConnectionInfo.Cookies["user"]));
+                vote.Subscribe(User.getUserFromSocket(socket));
             }
             return vote;
         }

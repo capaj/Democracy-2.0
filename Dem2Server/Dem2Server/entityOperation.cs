@@ -116,7 +116,7 @@ namespace Dem2Server
                                 break;
                             case "Subscription":
                                 var subs = (Subscription)instance;
-                                subs.subscribeUser(socket.ConnectionInfo.Cookies["user"]);
+                                User.getUserFromSocket(socket).SubscribeToEntity(subs);
                                 break;
                             default:
                                 break;

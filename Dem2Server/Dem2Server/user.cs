@@ -24,11 +24,34 @@ namespace Dem2Model
         public LinkedList<IVotingLeader> votingLeadersTable { get; set; }
         public DateTime lastDisconnected { get; set; }
         public Uri URL { get; set; }
+        [JsonIgnore]
         public IEnumerable<Vote> getHisVotes
         { 
             get {
                 return Dem2Hub.allVotes.Where(x => x.OwnerId == Id);
             } 
+        }
+        [JsonIgnore]
+        public List<Subscription> subscriptions { get; set; }       //these need to be iterated over when user disconnects and removed
+
+        public void SubscribeToEntity(Subscription subs) {
+            ServerClientEntity ent = subs.onEntity;
+            subscriptions.Add(subs);
+            ent.Subscribe(this);
+        }
+
+        public void UnsubscribeFromEntity(Subscription subs) {
+            ServerClientEntity ent = subs.onEntity;
+            subscriptions.Remove(subs);
+            ent.Unsubscribe(this);
+        }
+
+        public void UnsubscribeAll()
+        {  //
+            foreach (var subscription in subscriptions)
+            {
+                UnsubscribeFromEntity(subscription);
+            }
         }
 
         public void Send(dynamic package) { //shorter version than to having to type it every time
@@ -134,10 +157,6 @@ namespace Dem2Model
 
         //AUTHENTICATION ENDS
 
-        public static User GetUserById(string Id) {
-            return Dem2Hub.allUsers.FirstOrDefault<User>(x => x.Id == Id);
-        }
-
         public override bool Equals(System.Object obj)
         {
             // If parameter is null return false.
@@ -179,6 +198,15 @@ namespace Dem2Model
             {
                 return FBAccount.GetHashCode();
             }
+        }
+
+        public static User GetUserById(string Id)
+        {
+            return Dem2Hub.allUsers.FirstOrDefault<User>(x => x.Id == Id);
+        }
+
+        public static User getUserFromSocket(IWebSocketConnection socket) {
+            return GetUserById(socket.ConnectionInfo.Cookies["user"]);
         }
     }
 
