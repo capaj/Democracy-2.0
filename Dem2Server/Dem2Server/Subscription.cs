@@ -21,8 +21,10 @@ namespace Dem2UserCreated
             }
         }
         //object instance = Activator.CreateInstance(type, (Array)receivedObj["ctorArguments"]);
-
-     
+        public void subscribe(User user)
+        {
+            user.SubscribeToEntity(this);
+        }
 
         public void unsubscribe(User user)
         {
