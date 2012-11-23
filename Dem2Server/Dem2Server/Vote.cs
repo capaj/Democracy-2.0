@@ -12,18 +12,18 @@ namespace Dem2UserCreated
 {
     public class Vote:ServerClientEntity
     {
-        public string subjectID { get; private set; }   //can be anything which implements IVotable -a voting, a comment or another user
+        public string subjectId { get; set; }   //can be anything which implements IVotable -a voting, a comment or another user
         
-        private string _casterUserID; //Vote caster is in special private variable(it may be someone else than Owner)
-        public string casterUserID  //OwnerID from parent ServerClientEntity contains owner of the vote, caster is the one who initiated the creation of the vote
+        private string _casterUserId; //Vote caster is in special private variable(it may be someone else than Owner)
+        public string casterUserId  //OwnerID from parent ServerClientEntity contains owner of the vote, caster is the one who initiated the creation of the vote
         {
-            get { return _casterUserID; }
-            private set { _casterUserID = value; } 
+            get { return _casterUserId; }
+            private set { _casterUserId = value; } 
         }
         
        
-        public bool Agrees { get; private set; }
-        public DateTime castedTime { get; private set; }
+        public bool Agrees { get; set; }
+        public DateTime castedTime { get; set; }
 
         //public Vote(string userID, string subjectID, bool stance)
         ////public Vote()
@@ -50,13 +50,14 @@ namespace Dem2UserCreated
 
         public bool InitVote(string casterID)
         {
+            castedTime = DateTime.Now;
             OwnerId = casterID;
-            casterUserID = casterID;
-            VotableItem subject = (VotableItem)ServerClientEntity.GetEntityFromSetsByID(subjectID);
+            casterUserId = casterID;
+            VotableItem subject = (VotableItem)ServerClientEntity.GetEntityFromSetsByID(subjectId);
             if (subject != null)
             {
+                Dem2Hub.StoreToDB(this);
                 Dem2Hub.allVotes.Add(this);
-                Dem2Hub.StoreThis(this);
                 subject.IncrementVersion(); // this triggers on change and notifies the subscribers, because on the subject, properties VoteCounts changed 
                 return true;
             }

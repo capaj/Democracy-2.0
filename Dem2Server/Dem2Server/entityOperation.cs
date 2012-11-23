@@ -31,7 +31,7 @@ namespace Dem2Server
                 {
                     if (typeof(VotableItem).IsAssignableFrom(entityOnServer.GetType()))    //check if the entity we are responding with is a VotableItem or not, props to http://www.hanselman.com/blog/DoesATypeImplementAnInterface.aspx
                     {
-                        var vote = Dem2Hub.allVotes.FirstOrDefault(x => x.subjectID == entity.Id && x.OwnerId == socket.ConnectionInfo.Cookies["user"]);
+                        var vote = Dem2Hub.allVotes.FirstOrDefault(x => x.subjectId == entity.Id && x.OwnerId == socket.ConnectionInfo.Cookies["user"]);
                         if (vote != null)
                         {
                             entityOperation sendVote = new entityOperation { entity = vote, operation = 'u' };
@@ -60,7 +60,7 @@ namespace Dem2Server
                 operation = 'n';        //not found, nonexistent, in the entity field there is still the one that was in the request, so when it arrives back to the client he will know which request ended up not found
                 
             }
-            socket.Send(JsonConvert.SerializeObject(this, new IsoDateTimeConverter()));    
+            Dem2Hub.sendItTo(this, socket);
 
         }
         
@@ -102,36 +102,36 @@ namespace Dem2Server
 
                        // TODO implement create spam check here
                     */
-                    try
                     {
-                        var className = (string)receivedObj["className"];
-                        Type type = Type.GetType("Dem2UserCreated." + className);
-                        //object instance = Activator.CreateInstance(type, (Array)receivedObj["ctorArguments"]); old way, TODO test and remove this line
-                        var instance = JsonConvert.DeserializeObject(receivedObj["entity"].ToString(), type, new IsoDateTimeConverter());
-                        switch (className)
+                        try
                         {
-                            case "Vote":
-                                var theVote = (Vote)instance;   //the serialized entity must be initialized
-                                instance = Vote.Initialization(socket, theVote);    //the after initialization, we return the entity back
-                                break;
-                            case "Subscription":
-                                var subs = (Subscription)instance;
-                                User.getUserFromSocket(socket).SubscribeToEntity(subs);
-                                break;
-                            default:
-                                break;
-                        }
-                        
-                            
-                        
-                        var op = new entityOperation() { operation = 'c', entity = (ServerClientEntity)instance };
-                        Dem2Hub.sendTo(instance, socket);
-                        Console.WriteLine("Object {0} created", instance.ToString());
-                    }
-                    catch (Exception)
-                    {
+                            var className = (string)receivedObj["className"];
+                            Type type = Type.GetType("Dem2UserCreated." + className);
+                            //object instance = Activator.CreateInstance(type, (Array)receivedObj["ctorArguments"]); old way, TODO test and remove this line
+                            var instance = JsonConvert.DeserializeObject(receivedObj["entity"].ToString(), type, new IsoDateTimeConverter());
+                            switch (className)
+                            {
+                                case "Vote":
+                                    var theVote = (Vote)instance;   //the serialized entity must be initialized
+                                    instance = Vote.Initialization(socket, theVote);    //the after initialization, we return the entity back
+                                    break;
+                                case "Subscription":
+                                    var subs = (Subscription)instance;
+                                    User.getUserFromSocket(socket).SubscribeToEntity(subs);
+                                    break;
+                                default:
+                                    break;
+                            }
 
-                        throw;
+                            var op = new entityOperation() { operation = 'c', entity = (ServerClientEntity)instance };
+                            Dem2Hub.sendItTo(op, socket);
+                            Console.WriteLine("Object {0} created", instance.ToString());
+                        }
+                        catch (Exception)
+                        {
+
+                            throw;
+                        }
                     }
                     break;
                 case 'r':   //read an entity
@@ -147,7 +147,30 @@ namespace Dem2Server
                     respondToReadRequest(socket);
                     break;
                 case 'd': //delete an entity
-                    
+                    /*
+                    {
+                        "msgType": "entity",
+                        "operation": "d",
+                        "className": "Subscription",
+                        "entity": {"onEntityId": "voting/215"}
+                    }
+                      
+                     */
+                    {
+                        var className = (string)receivedObj["className"];
+                        Type type = Type.GetType("Dem2UserCreated." + className);
+
+                        var instance = JsonConvert.DeserializeObject(receivedObj["entity"].ToString(), type, new IsoDateTimeConverter());
+                        switch (className)
+                        {
+                            case "Subscription":
+                                var subs = (Subscription)instance;
+                                User.getUserFromSocket(socket).UnsubscribeFromEntity(subs);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
                     break;
                 default:
                     break;

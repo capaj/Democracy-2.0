@@ -28,7 +28,7 @@ namespace Dem2UserCreated
 
         public void unsubscribe(User user)
         {
-            
+            user.UnsubscribeFromEntity(this);
         }
     }
 }

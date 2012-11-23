@@ -92,70 +92,6 @@ namespace Dem2Model
 	        }
             return voteRegistered;
         }
-        //AUTHENTICATION
-        
-        
-        internal void ProcessAccesTokenCheckResponse(object sender, System.Net.DownloadDataCompletedEventArgs e) //called when facebook responds to checking the users acces token
-        {
-            if (e.Error != null)
-            {
-                Console.WriteLine(e.Error.Message);
-            }
-            else
-            {
-                if (e.Result != null && e.Result.Length > 0)
-                {
-                    string downloadedData = Encoding.UTF8.GetString(e.Result);
-                    LogInUser(downloadedData);                   
-                }
-                else
-                {
-                    Console.WriteLine("No data was downloaded.");
-                }
-            }
-            
-        }
-
-        //returns false when user is returning, true when he is a new user
-        public bool LogInUser(string FBgraphJSON) {
-            this.FBAccount = JsonConvert.DeserializeObject<FacebookAccount>(FBgraphJSON);
-
-            this.connection.ConnectionInfo.Cookies["authentication"] = "authenticated";
-            this.connection.ConnectionInfo.Cookies["user"] = this.Id;
-
-            Console.WriteLine("Login granted, sending the model");
-            var isNew = Dem2Hub.allUsers.Add(this);
-            if (isNew)
-            {
-#if IS_RUNNING_ON_SERVER
-                if (FBAccount.verified)     //for production deployment we do care if user is verified FB user
-#else
-                if (true)    //for testing we don't care if user is verified FB user
-#endif
-                {
-                    Console.WriteLine("Created a new user with FB id: {0}", this.FBAccount.id);
-                    //this is a new user, create a new model and send it to him
-                    this.Send(this);
-                }
-                else
-                {
-                    //send error message to user informing about nonverified account
-                }
-                
-            }
-            else
-            {
-                var returningUser = Dem2Hub.allUsers.First<User>(x => x.Equals(this));
-                returningUser.connection = this.connection;
-                this.connection = null;
-                //this is returning user, send him his model he had last  time
-            }
-
-            //Console.WriteLine(downloadedData);
-            return isNew;
-        }
-
-        //AUTHENTICATION ENDS
 
         public override bool Equals(System.Object obj)
         {
@@ -190,14 +126,9 @@ namespace Dem2Model
 
         public override int GetHashCode()
         {
-            if (Id != null)
-            {
-                return Id.GetHashCode();
-            }
-            else
-            {
-                return FBAccount.GetHashCode();
-            }
+           
+            return FBAccount.GetHashCode();
+
         }
 
         public static User GetUserById(string Id)
@@ -208,6 +139,75 @@ namespace Dem2Model
         public static User getUserFromSocket(IWebSocketConnection socket) {
             return GetUserById(socket.ConnectionInfo.Cookies["user"]);
         }
+
+        //AUTHENTICATION
+        internal void ProcessAccesTokenCheckResponse(object sender, System.Net.DownloadDataCompletedEventArgs e) //called when facebook responds to checking the users acces token
+        {
+            if (e.Error != null)
+            {
+                Console.WriteLine(e.Error.Message);
+            }
+            else
+            {
+                if (e.Result != null && e.Result.Length > 0)
+                {
+                    string downloadedData = Encoding.UTF8.GetString(e.Result);
+                    LogInUser(downloadedData);
+                }
+                else
+                {
+                    Console.WriteLine("No data was downloaded.");
+                }
+            }
+
+        }
+
+        //returns false when user is returning, true when he is a new user
+        public bool LogInUser(string FBgraphJSON)
+        {
+            this.FBAccount = JsonConvert.DeserializeObject<FacebookAccount>(FBgraphJSON);
+
+            var isNew = Dem2Hub.allUsers.Add(this);
+            if (isNew)
+            {
+#if IS_RUNNING_ON_SERVER
+                if (FBAccount.verified)     //for production deployment we do care if user is verified FB user
+#else
+                if (true)    //for testing we don't care if user is verified FB user
+#endif
+                {
+                    Dem2Hub.StoreToDB(this);
+                    Console.WriteLine("Stored new user {0} with FB id: {1}", this.Id, this.FBAccount.id);
+                    //this is a new user, create a new model and send it to him
+                    FinishLogIn();
+                }
+                else
+                {
+                    //send error message to user informing about nonverified account
+                }
+
+            }
+            else
+            {
+                var returningUser = Dem2Hub.allUsers.First<User>(x => x.Equals(this));
+                returningUser.connection = this.connection;
+                returningUser.FinishLogIn();
+                this.connection = null;
+                //this is returning user, send him his model he had last  time
+            }
+            return isNew;
+        }
+
+        internal void FinishLogIn()
+        {
+            this.connection.ConnectionInfo.Cookies["authentication"] = "authenticated";
+            this.connection.ConnectionInfo.Cookies["user"] = this.Id;
+            this.Send(this);
+            Console.WriteLine("Login granted to user id {0}, sending the model", this.Id);
+            
+        }
+
+        //AUTHENTICATION ENDS
     }
 
     public class UserConverter : JsonConverter

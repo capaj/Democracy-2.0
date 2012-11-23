@@ -36,7 +36,7 @@ namespace Dem2Server
             //var voting1 = new pspVoting(@"http://www.psp.cz/sqw/hlasy.sqw?g=56686", "http://www.psp.cz/eknih/2010ps/stenprot/047schuz/s047022.htm");
             //var voting2 = new pspVoting(@"http://www.psp.cz/sqw/hlasy.sqw?g=56687", "http://www.psp.cz/eknih/2010ps/stenprot/047schuz/s047025.htm");
 
-            //Voting sdsd = new Voting(voting2);
+            //Voting sdsd = new Voting(voting1);
             
             WSserver.Start(socket =>
             {
@@ -71,9 +71,12 @@ namespace Dem2Server
                                 
                             break;
                         case "authenticated":
+                            
+                            var user = Dem2Hub.allUsers.First(x => x.connection == socket);
+                            user.lastDisconnected = DateTime.Now;
+                            user.UnsubscribeAll();
                             socket.ConnectionInfo.Cookies.Remove("authenticated");
                             socket.ConnectionInfo.Cookies.Remove("user");
-                            Dem2Hub.allUsers.First(x => x.connection == socket).lastDisconnected = DateTime.Now;
                             break;
                         default:
                             break;

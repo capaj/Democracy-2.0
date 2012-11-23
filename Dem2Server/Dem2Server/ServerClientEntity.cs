@@ -6,6 +6,7 @@ using System.Text;
 using Dem2Model;
 using Newtonsoft.Json;
 using System.Collections.Concurrent;
+using System.Runtime.CompilerServices;
 
 namespace Dem2Server
 {
@@ -46,7 +47,7 @@ namespace Dem2Server
             foreach (var subscriber in subscribedUsers)
             {
                 var op = new entityOperation() { operation = 'u', entity = this };
-                Dem2Hub.sendTo(op, subscriber.Value.connection);
+                Dem2Hub.sendItTo(op, subscriber.Value.connection);
             }
         }
 
@@ -60,11 +61,13 @@ namespace Dem2Server
         #region contructors
         [JsonConstructor]
         public ServerClientEntity() {
+            subscribedUsers = new ConcurrentDictionary<string, User>();
             OnChange += ServerClientEntity_OnChange;
         }
 
         public ServerClientEntity(User creator)
         {
+            subscribedUsers = new ConcurrentDictionary<string, User>();
             OnChange += ServerClientEntity_OnChange;
             _OwnerId = creator.Id;
         }
@@ -89,7 +92,15 @@ namespace Dem2Server
 
         public override int GetHashCode()
         {
+            if (Id != null)
+            {
                 return Id.GetHashCode();
+            }
+            else
+            {
+                return RuntimeHelpers.GetHashCode(this);
+            }
+            
         }
 
         public override bool Equals(System.Object obj)

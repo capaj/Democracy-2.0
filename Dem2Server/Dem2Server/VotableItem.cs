@@ -15,7 +15,7 @@ namespace Dem2Server
         {
             get
             {
-                return Dem2Hub.allVotes.ToList().FindAll(x => x.subjectID == this.Id);
+                return Dem2Hub.allVotes.ToList().FindAll(x => x.subjectId == this.Id);
             }
         }  // or ConcurrentBag?
 
