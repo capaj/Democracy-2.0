@@ -56,10 +56,27 @@ namespace Dem2UserCreated
             VotableItem subject = (VotableItem)ServerClientEntity.GetEntityFromSetsByID(subjectId);
             if (subject != null)
             {
-                Dem2Hub.StoreToDB(this);
-                Dem2Hub.allVotes.Add(this);
-                subject.IncrementVersion(); // this triggers on change and notifies the subscribers, because on the subject, properties VoteCounts changed 
-                return true;
+                if (Dem2Hub.allVotes.Add(this))
+                {
+                    Dem2Hub.StoreToDB(this);
+                    subject.IncrementVersion(); // this triggers on change and notifies the subscribers, because on the subject, properties VoteCounts changed 
+                    return true;
+                }
+                else
+                {
+                    var existingVote = Dem2Hub.allVotes.First<Vote>(x => x.OwnerId == OwnerId && x.subjectId == subjectId);
+                    if (existingVote.Agrees != Agrees)  // when user changed his vote on a subject
+                    {
+                        Id = existingVote.Id;
+                        existingVote.Agrees = Agrees;
+                        existingVote.castedTime = DateTime.Now;
+                        existingVote.IncrementVersion();
+
+                        return true;
+                    }
+                    return false;
+                } 
+               
             }
             return false;
         }
@@ -67,6 +84,43 @@ namespace Dem2UserCreated
         public void sendTo(IWebSocketConnection socket)
         {
             socket.Send(JsonConvert.SerializeObject(this, new IsoDateTimeConverter()));
+        }
+
+        public override bool Equals(System.Object obj)
+        {
+            // If parameter is null return false.
+            if (obj == null)
+            {
+                return false;
+            }
+
+            // If parameter cannot be cast to Point return false.
+            Vote second = obj as Vote;
+            if ((System.Object)second == null)
+            {
+                return false;
+            }
+
+            // Return true if the fields match:
+            return OwnerId.Equals(second.OwnerId) && subjectId == second.subjectId;
+        }
+
+        public bool Equals(Vote second)
+        {
+            // If parameter is null return false:
+            if ((object)second == null)
+            {
+                return false;
+            }
+
+            // Return true if the fields match:
+            return OwnerId.Equals(second.OwnerId) && subjectId == second.subjectId;
+        }
+
+        public override int GetHashCode()
+        {
+
+            return subjectId.GetHashCode()+OwnerId.GetHashCode();
         }
 
     }
