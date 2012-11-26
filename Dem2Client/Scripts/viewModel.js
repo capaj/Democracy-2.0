@@ -1,8 +1,9 @@
 ﻿define(["Scripts/Classes/Voting", "Scripts/Classes/Vote"], function (Voting, Vote) {
     VM = {
-
+        //they make an observable object from plain JS object
         constructors: {   //contructors start
-            "votings": Voting   //makes an observable object
+            "votings": Voting,   
+            "votes": Vote
         },// contructors end
         connected: ko.observable(false),      //websocket connection flag
         comments: {},

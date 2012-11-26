@@ -3,14 +3,9 @@ var Cached = { //here we have all the entities that go through the worker cached
     votings : {},
     listings : {},
     comments : {},
-    users : {}
+    users: {},
+    votes: {}
 }; 
-//var requests = {
-//    votings: {},
-//    listings: {},
-//    comments: {},
-//    users: {}
-//}
 
 var workerMessage = (function () {
     function workerMessage(type, message, _socket) {

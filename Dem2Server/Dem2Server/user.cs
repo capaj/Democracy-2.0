@@ -202,6 +202,7 @@ namespace Dem2Model
         {
             this.connection.ConnectionInfo.Cookies["authentication"] = "authenticated";
             this.connection.ConnectionInfo.Cookies["user"] = this.Id;
+            subscriptions = new List<Subscription>();
             this.Send(this);
             Console.WriteLine("Login granted to user id {0}, sending the model", this.Id);
             

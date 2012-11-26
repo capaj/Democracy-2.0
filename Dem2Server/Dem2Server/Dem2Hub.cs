@@ -60,7 +60,11 @@ namespace Dem2Server
                 foreach (var voting in session.Query<Voting>().ToList())
                 {
                     allVotings.Add(voting);
-                } 
+                }
+                foreach (var vote in session.Query<Vote>().ToList())
+                {
+                    allVotes.Add(vote);
+                }
                
                 // var entity = session.Load<Company>(companyId);
              

@@ -85,7 +85,7 @@ require(["Scripts/facebook", "Scripts/viewModel", "Scripts/addressResolver" ], f
                                     try {
                                         VM[type][entityId](VM.constructors[type](entOp.entity)());       //we will contruct the type we have received from server and store it in the proper table under his id
                                     } catch (e) {
-                                        console.error("failed to update the entity in the viewModel> " + event.data);
+                                        console.error("failed to update the entity in the viewModel> " + event.data);   // either we lack the constructor or we lack the table for this type of entity in the viewModel object
                                     }
                                     break;
                                 case "d":   //delete
