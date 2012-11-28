@@ -8,7 +8,7 @@ using Dem2Server;
 
 namespace Dem2UserCreated
 {
-    public class Listing:Dem2Server.ServerClientEntity
+    public class Listing : ServerClientEntity
     {
         public Query JSONQuery { get; set; }
 
@@ -24,14 +24,14 @@ namespace Dem2UserCreated
                 if (JSONQuery.descending)
                 {
                     list = Dem2Hub.entityNamesToSets[JSONQuery.StrOfType]
-                        .OrderByDescending(x => x.GetType().GetProperty(JSONQuery.sortBy).GetValue(x, null))
+                        .OrderByDescending(x => x.GetType().GetProperty(JSONQuery.sortByProp).GetValue(x, null))
                         .Take(JSONQuery.count)
                         .Select(x => x.Id);
                 }
                 else
                 {
                     list = Dem2Hub.entityNamesToSets[JSONQuery.StrOfType]
-                        .OrderBy(x => x.GetType().GetProperty(JSONQuery.sortBy).GetValue(x, null))
+                        .OrderBy(x => x.GetType().GetProperty(JSONQuery.sortByProp).GetValue(x, null))
                         .Take(JSONQuery.count)
                         .Select(x => x.Id);
                 }
@@ -51,7 +51,7 @@ namespace Dem2UserCreated
     {
         public string sourceJSON { get; set; }
         public bool descending { get; set; }
-        public string sortBy { get; set; }      //
+        public string sortByProp { get; set; }      //
         public string StrOfType { get; set; }   //used in looking up the right hashset
         public int count { get; set; }      //how many entities should we return
         [JsonIgnore]
@@ -77,6 +77,42 @@ namespace Dem2UserCreated
                 return this.ToString();
             }
             
+        }
+
+        public override bool Equals(System.Object obj)
+        {
+            // If parameter is null return false.
+            if (obj == null)
+            {
+                return false;
+            }
+
+            // If parameter cannot be cast to Point return false.
+            Query second = obj as Query;
+            if ((System.Object)second == null)
+            {
+                return false;
+            }
+
+            // Return true if the fields match:
+            return sourceJSON.Equals(second.sourceJSON);
+        }
+
+        public bool Equals(Query second)
+        {
+            // If parameter is null return false:
+            if ((object)second == null)
+            {
+                return false;
+            }
+
+            // Return true if the fields match:
+            return sourceJSON.Equals(second.sourceJSON);
+        }
+
+        public override int GetHashCode()
+        {
+            return sourceJSON.GetHashCode();
         }
 
         

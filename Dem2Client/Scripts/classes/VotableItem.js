@@ -12,28 +12,36 @@
             },
             deferEvaluation: true       // needed or this will cause fail for the whole page init
         });
-        r.voteYes = function () {
-            var VoteReq = {
+        r.updateThisClientVoteTo = function (agrees) {
+            var updateVoteReq = {
+                "msgType": "entity",
+                "operation": "u",
+                "entity": { "Id": r.thisClientVote().Id, "Agrees": agrees }
+            };
+            WSworker.postMessage(updateVoteReq);
+        }
+        r.createThisClientVote = function (agrees) {
+            var createVoteReq = {
                 "className": "Vote",
                 "msgType": "entity",
                 "operation": "c",
                 "entity": { "subjectID": r.Id, "Agrees": true }
             };
-
-            WSworker.postMessage(VoteReq);
-
-
-            //TODO implement
+            WSworker.postMessage(createVoteReq);
+        }
+        r.voteYes = function () {
+            if (r.thisClientVoteId()) {
+                r.updateThisClientVoteTo(true);
+            } else {
+                r.createThisClientVote(true);
+            }
         };
         r.voteNo = function () {
-            var VoteReq = {
-                "className": "Vote",
-                "msgType": "entity",
-                "operation": "c",
-                "entity": { "subjectID": r.Id, "Agrees": false }
-            };
-
-            WSworker.postMessage(VoteReq);
+            if (r.thisClientVoteId()) {
+                r.updateThisClientVoteTo(false);
+            } else {
+                r.createThisClientVote(false);
+            }
         };
         r.deleteVote = function () {
             r.thisClientVote().delete();
