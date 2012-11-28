@@ -23,6 +23,7 @@ namespace Dem2Server
 
         public void respondToReadRequest(IWebSocketConnection socket)       //"r" operation, respond to it can be only "u" (update) or "n" (not found) 
         {
+            Vote vote = null;
             ServerClientEntity entityOnServer = ServerClientEntity.GetEntityFromSetsByID(entity.Id);
 
             if (entityOnServer != null)
@@ -31,12 +32,7 @@ namespace Dem2Server
                 {
                     if (typeof(VotableItem).IsAssignableFrom(entityOnServer.GetType()))    //check if the entity we are responding with is a VotableItem or not, props to http://www.hanselman.com/blog/DoesATypeImplementAnInterface.aspx
                     {
-                        var vote = Dem2Hub.allVotes.FirstOrDefault(x => x.subjectId == entity.Id && x.OwnerId == socket.ConnectionInfo.Cookies["user"]);
-                        if (vote != null)
-                        {
-                            entityOperation sendVote = new entityOperation { entity = vote, operation = 'u' };
-                            sendVote.sendTo(socket);
-                        }
+                        vote = Dem2Hub.allVotes.FirstOrDefault(x => x.subjectId == entity.Id && x.OwnerId == socket.ConnectionInfo.Cookies["user"]);
                     }
                 }
                 catch (Exception ex)
@@ -61,6 +57,12 @@ namespace Dem2Server
                 
             }
             Dem2Hub.sendItTo(this, socket);
+
+            if (vote != null)   //votable Item needs to be sent to client before the vote on a votable itself
+            {
+                entityOperation sendVote = new entityOperation { entity = vote, operation = 'u' };
+                sendVote.sendTo(socket);
+            }
 
         }
         

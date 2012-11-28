@@ -86,6 +86,7 @@
     <Compile Include="FacebookAccount.cs" />
     <Compile Include="Dem2Hub.cs" />
     <Compile Include="Listing.cs" />
+    <Compile Include="Query.cs" />
     <Compile Include="serverStatistics.cs" />
     <Compile Include="Subscription.cs" />
     <Compile Include="VotableItem.cs" />

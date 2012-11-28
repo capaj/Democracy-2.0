@@ -74,19 +74,16 @@ require(["Scripts/facebook", "Scripts/viewModel", "Scripts/addressResolver" ], f
                             var type = entityId.substring(0, entityId.indexOf("/"));
                             switch (entOp.operation) {                               
                                 case "c":   //create
-                                    VM[type][entityId] = VM.constructors[type](entOp.entity);
-                                    if (type == "votes") {
-                                        var subjectId = entOp.entity.subjectId();
-                                        var subjectType = subjectId.substring(0, subjectId.indexOf("/"));
-                                        VM[subjectType][subjectId]().thisClientVoteId(entityId);
-                                    }
+                                    VM.createEntityFromEntOp(type, entityId, entOp);
                                     break;
                                 case "u":   //update
-                                    try {
+                                  
+                                    if (VM[type].hasOwnProperty(entityId) === false) {
+                                        VM.createEntityFromEntOp(type, entityId, entOp);
+                                    } else {
                                         VM[type][entityId](VM.constructors[type](entOp.entity)());       //we will contruct the type we have received from server and store it in the proper table under his id
-                                    } catch (e) {
-                                        console.error("failed to update the entity in the viewModel> " + event.data);   // either we lack the constructor or we lack the table for this type of entity in the viewModel object
                                     }
+
                                     break;
                                 case "d":   //delete
                                     delete VM[type][entityId];

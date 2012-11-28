@@ -121,11 +121,15 @@ function EntityOperationHandler(operation) {
 function updateEntityInCache(type, entityId, entity) {
     if (Cached[type].hasOwnProperty(entityId) === false) {
         Cached[type][entityId] = entity;
-    }else{
-        if (Cached[type][entityId].version < entity.version) {
-            Cached[type][entityId] = entity;  
-        }
+        return true;
     }
+    if (Cached[type][entityId].version < entity.version) {
+        Cached[type][entityId] = entity;
+        return true;
+    } else {
+        return false;   //cached version is higher, this should not occur
+    }
+    
 }
 
 function send(msgToServer) {

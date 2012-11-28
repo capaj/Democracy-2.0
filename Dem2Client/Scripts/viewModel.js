@@ -64,6 +64,20 @@
                 return {};
         }
     };
+
+    VM.createEntityFromEntOp = function (type, entityId, entOp) {
+        VM[type][entityId] = VM.constructors[type](entOp.entity);
+        if (type == "votes") {
+            var subjectId = entOp.entity.subjectId;
+            var subjectType = subjectId.substring(0, subjectId.indexOf("/"));
+            if (VM[subjectType].hasOwnProperty(subjectId) === true) {
+                VM[subjectType][subjectId]().thisClientVoteId(entityId);
+            } else {    //the votable item is not here on the client yet, so it is probably fucked
+                console.error("Vote on unknown subject wnats to be created");
+            }
+            
+        }
+    }
     return VM;
 });
 
