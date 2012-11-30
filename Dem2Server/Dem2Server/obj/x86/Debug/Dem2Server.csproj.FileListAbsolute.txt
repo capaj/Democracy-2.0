@@ -111,3 +111,31 @@ D:\My documents\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\HtmlAgility
 D:\My documents\GitHub\Democracy-2.0\Dem2Server\Dem2Server\obj\x86\Debug\Dem2Server.csprojResolveAssemblyReference.cache
 D:\My documents\GitHub\Democracy-2.0\Dem2Server\Dem2Server\obj\x86\Debug\Dem2Server.exe
 D:\My documents\GitHub\Democracy-2.0\Dem2Server\Dem2Server\obj\x86\Debug\Dem2Server.pdb
+C:\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\Dem2Server.exe.config
+C:\GitHub\Democracy-2.0\Dem2Server\Dem2Server\obj\x86\Debug\Dem2Server.csprojResolveAssemblyReference.cache
+C:\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\Dem2Server.exe
+C:\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\Dem2Server.pdb
+C:\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\Fleck.dll
+C:\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\Newtonsoft.Json.dll
+C:\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\NLog.dll
+C:\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\pspScraper.exe
+C:\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\Raven.Abstractions.dll
+C:\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\Raven.Client.Debug.dll
+C:\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\Raven.Client.Lightweight.dll
+C:\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\Raven.Client.Lightweight.FSharp.dll
+C:\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\Raven.Client.MvcIntegration.dll
+C:\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\HtmlAgilityPack.dll
+C:\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\pspScraper.pdb
+C:\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\Newtonsoft.Json.pdb
+C:\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\Newtonsoft.Json.xml
+C:\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\NLog.xml
+C:\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\Raven.Abstractions.pdb
+C:\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\Raven.Client.Debug.pdb
+C:\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\Raven.Client.Lightweight.pdb
+C:\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\Raven.Client.Lightweight.FSharp.pdb
+C:\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\Raven.Client.Lightweight.FSharp.xml
+C:\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\Raven.Client.MvcIntegration.pdb
+C:\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\HtmlAgilityPack.pdb
+C:\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\HtmlAgilityPack.xml
+C:\GitHub\Democracy-2.0\Dem2Server\Dem2Server\obj\x86\Debug\Dem2Server.exe
+C:\GitHub\Democracy-2.0\Dem2Server\Dem2Server\obj\x86\Debug\Dem2Server.pdb
