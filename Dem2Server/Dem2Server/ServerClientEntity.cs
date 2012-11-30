@@ -7,6 +7,7 @@ using Dem2Model;
 using Newtonsoft.Json;
 using System.Collections.Concurrent;
 using System.Runtime.CompilerServices;
+using Raven.Abstractions.Commands;
 
 namespace Dem2Server
 {
@@ -96,6 +97,13 @@ namespace Dem2Server
             {
                 var entityOnServer = Dem2Hub.entityNamesToSets[type].FirstOrDefault(x => x.Id == Id);
                 Dem2Hub.entityNamesToDynamicSets[type].Remove(entityOnServer);
+                using (var session = Dem2Hub.docDB.OpenSession())
+                {
+                    session.Advanced.Defer(new DeleteCommandData { Key = entityOnServer.Id });
+                    session.SaveChanges();
+
+                }
+                //.Advanced.DocumentStore.DatabaseCommands.Delete("posts/1234", null);
             }
             catch (Exception ex)
             {

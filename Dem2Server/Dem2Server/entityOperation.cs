@@ -171,11 +171,21 @@ namespace Dem2Server
                                 break;
                             default:
                                 ServerClientEntity toDelete = (ServerClientEntity)instance;
-                                var success = ServerClientEntity.DeleteEntityById(toDelete.Id);
-                                if (success)
-	                            {
-		                            
-	                            } 
+                                var deletor = socket.ConnectionInfo.Cookies["user"];
+                                if (deletor == toDelete.OwnerId)
+                                {
+                                    var success = ServerClientEntity.DeleteEntityById(toDelete.Id);
+                                    if (success)
+                                    {
+
+                                    }
+                                }
+                                else
+                                {
+                                    var err = new ServerError(){message = "sorry, you don't own the entity, so you cannot delete it"};
+                                    Dem2Hub.sendItTo(err,socket);
+                                }
+                               
                                 break;
                         }
                     }
