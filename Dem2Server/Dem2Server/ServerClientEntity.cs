@@ -89,6 +89,23 @@ namespace Dem2Server
             return entityOnServer;
         }
 
+        public static bool DeleteEntityById(string Id)
+        {
+            string type = Id.Split('/')[0];
+            try
+            {
+                var entityOnServer = Dem2Hub.entityNamesToSets[type].FirstOrDefault(x => x.Id == Id);
+                Dem2Hub.entityNamesToDynamicSets[type].Remove(entityOnServer);
+            }
+            catch (Exception ex)
+            {
+                if (ExceptionIsCriticalCheck.IsCritical(ex)) throw;
+                Console.WriteLine("Entity with ID {0} was not found", Id);
+                return false;
+            }
+            
+            return true;
+        }
 
         public override int GetHashCode()
         {

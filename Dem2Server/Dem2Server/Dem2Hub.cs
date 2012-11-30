@@ -27,6 +27,7 @@ namespace Dem2Server
         //public static ConcurrentBag<Vote> allVotes { get; set; }
 
         public static Dictionary<string, IEnumerable<ServerClientEntity>> entityNamesToSets;
+        public static Dictionary<string, dynamic> entityNamesToDynamicSets;
 
         //public static IEnumerable<VotableItem> allVotable
         //{
@@ -71,6 +72,14 @@ namespace Dem2Server
             }
             // in order for this static method to work: ServerClientEntity.GetEntityFromSetsByID
             entityNamesToSets = new Dictionary<string, IEnumerable<ServerClientEntity>> {
+                {"users", allUsers},
+                {"votings", allVotings},
+                {"votes", allVotes},
+                {"comments", allComments},
+                {"listings", allListings},
+            };
+
+            entityNamesToDynamicSets = new Dictionary<string, dynamic> {
                 {"users", allUsers},
                 {"votings", allVotings},
                 {"votes", allVotes},

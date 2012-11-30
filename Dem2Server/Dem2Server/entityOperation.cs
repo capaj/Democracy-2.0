@@ -170,6 +170,12 @@ namespace Dem2Server
                                 User.getUserFromSocket(socket).UnsubscribeFromEntity(subs);
                                 break;
                             default:
+                                ServerClientEntity toDelete = (ServerClientEntity)instance;
+                                var success = ServerClientEntity.DeleteEntityById(toDelete.Id);
+                                if (success)
+	                            {
+		                            
+	                            } 
                                 break;
                         }
                     }
