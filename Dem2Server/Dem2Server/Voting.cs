@@ -16,40 +16,32 @@ namespace Dem2Model
     {
         NotStarted, Ongoing, EndedDenied, EndedAccepted
     }
-    public class Voting : VotableItem     //"votable in parliament democracy"
+    public class Voting : VotableItem     
     {
-        //public static TimeSpan votingInterval = new TimeSpan(2, 0, 0, 0);     //for final
-        public static TimeSpan votingInterval = new TimeSpan(0, 0, 5, 0);     //for testing
         public delegate void OnEndHandler();
         public event OnEndHandler Ends;
 
         public Timer timer { get; set; }
-        
-        public pspScraper.pspVoting scrapedVoting { get; set; }
+        //this represents a so called "sněmovní tisk" in czech parliament
+        public pspScraper.pspPrint scrapedPrint { get; set; }   // example can be found here: http://www.psp.cz/sqw/historie.sqw?t=857
         [JsonIgnore]
-        public string subject {
+        public string title {
             get {
-                return scrapedVoting.subject;
+                return scrapedPrint.title;
             }
         }
         [JsonIgnore]
         public Uri PSPVotingLink { 
             get {
-                return scrapedVoting.scrapedURL;
+                return scrapedPrint.URL;
             }   
-        }
-        [JsonIgnore]
-        public string PSPStenoprotokolLink { 
-            get {
-            return scrapedVoting.stenoprotokolURL;
-            } 
         }
         
         public VotingStates State
         {
             get {
                 DateTime now = DateTime.Now;
-                if (endTime<now)
+                if (votingEndDate < now)
                 {
                     if (GetCurrentResolve == true)
                     {
@@ -62,7 +54,7 @@ namespace Dem2Model
                 }
                 else
                 {
-                    if (beginTime<now)
+                    if (creationTime < now)
                     {
                         return VotingStates.Ongoing;
                     }
@@ -74,12 +66,8 @@ namespace Dem2Model
             }
         }
         
-        private DateTime beginTime { get; set; }
-        private DateTime endTime { 
-            get {
-                return beginTime + votingInterval;
-            } 
-        }
+        private DateTime creationTime { get; set; }
+        public DateTime votingEndDate { get; set; }
 
         public override bool RegisterVote(Vote vote)
         {
@@ -121,15 +109,21 @@ namespace Dem2Model
             
         }
 
-        public Voting(pspScraper.pspVoting scrapedPSPVoting)
+        public Voting(pspScraper.pspPrint print)
         {
-            beginTime = DateTime.Now;
-            scrapedVoting = scrapedPSPVoting;
+            creationTime = DateTime.Now;
+            scrapedPrint = print;
 
             Dem2Hub.StoreToDB(this);
 
         }
 
-
+        public TimeSpan votingInterval
+        {
+            get
+            {
+                return votingEndDate - DateTime.Now;
+            } 
+        }
     }
 }
