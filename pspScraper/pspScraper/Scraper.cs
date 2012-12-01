@@ -14,7 +14,9 @@ namespace pspScraper
     public class Scraper
     {
         public static DocumentStore docDB;
-        public static string pspHost = "http://www.psp.cz";
+        
+        public static string pspHostURL = "http://www.psp.cz";
+        public static string pspHostAppURL = "http://www.psp.cz/sqw/";
         public static string documentRoot = "http://www.psp.cz/eknih/index.htm";
         public static Encoding encoding = Encoding.Default;   // this makes sense because you mostly will want to scrape pages, which are in your own language
 
@@ -22,6 +24,8 @@ namespace pspScraper
         {
             //var aMeetingProtocol = new pspMeetingProtocol("http://www.psp.cz/eknih/2010ps/stenprot/047schuz/index.htm");
             //var aTerm = new pspTerm("http://www.psp.cz/eknih/2010ps/index.htm");
+            var aPrint = new pspPrintHistory("http://www.psp.cz/sqw/historie.sqw?t=857");
+        
             
             //GetAllTerms();
             DocumentStore docDB = new DocumentStore { Url = "http://localhost:8080" };        //when on the same machine where Raven runs

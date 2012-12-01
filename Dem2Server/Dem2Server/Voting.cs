@@ -6,7 +6,7 @@ using System.Collections.Concurrent;
 using Dem2Server;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
-
+using pspScraper;
 using System.Threading;
 using Dem2UserCreated;
 
@@ -23,7 +23,7 @@ namespace Dem2Model
 
         public Timer timer { get; set; }
         //this represents a so called "sněmovní tisk" in czech parliament
-        public pspScraper.pspPrint scrapedPrint { get; set; }   // example can be found here: http://www.psp.cz/sqw/historie.sqw?t=857
+        public pspPrintHistory scrapedPrint { get; set; }   // example can be found here: http://www.psp.cz/sqw/historie.sqw?t=857
         [JsonIgnore]
         public string title {
             get {
@@ -33,7 +33,7 @@ namespace Dem2Model
         [JsonIgnore]
         public Uri PSPVotingLink { 
             get {
-                return scrapedPrint.URL;
+                return new Uri(scrapedPrint.historyURL);
             }   
         }
         
@@ -109,7 +109,7 @@ namespace Dem2Model
             
         }
 
-        public Voting(pspScraper.pspPrint print)
+        public Voting(pspScraper.pspPrintHistory print)
         {
             creationTime = DateTime.Now;
             scrapedPrint = print;

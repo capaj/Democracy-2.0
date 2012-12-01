@@ -73,7 +73,7 @@ namespace pspScraper
                         
                             var parliamentMemberLinkNode = LINode.LastChild;
                             var name = ScraperStringHelper.RemoveHTMLmarkup(parliamentMemberLinkNode.InnerText);
-                            var link = "http://www.psp.cz/sqw/" + parliamentMemberLinkNode.Attributes["href"].Value;
+                            var link = Scraper.pspHostAppURL + parliamentMemberLinkNode.Attributes["href"].Value;
 
                             var vote = new individualVote() { member = new parliamentMember { name = name, pspUrl = link } };
                             switch (LINode.FirstChild.Attributes["class"].Value)

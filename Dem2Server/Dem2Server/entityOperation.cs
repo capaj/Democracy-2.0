@@ -30,7 +30,8 @@ namespace Dem2Server
             {
                 try
                 {
-                    if (typeof(VotableItem).IsAssignableFrom(entityOnServer.GetType()))    //check if the entity we are responding with is a VotableItem or not, props to http://www.hanselman.com/blog/DoesATypeImplementAnInterface.aspx
+                    if (entityOnServer is VotableItem)    //check if the entity we are responding with is a VotableItem or not, props to http://www.hanselman.com/blog/DoesATypeImplementAnInterface.aspx
+                    //if (typeof(VotableItem).IsAssignableFrom(entityOnServer.GetType()))    //check if the entity we are responding with is a VotableItem or not, props to http://www.hanselman.com/blog/DoesATypeImplementAnInterface.aspx
                     {
                         vote = Dem2Hub.allVotes.FirstOrDefault(x => x.subjectId == entity.Id && x.OwnerId == socket.ConnectionInfo.Cookies["user"]);
                     }

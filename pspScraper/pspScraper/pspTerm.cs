@@ -55,7 +55,7 @@ namespace pspScraper
                 }
                 if (mainLinks["Stenoprotokoly"] != null)
                 {
-                    meetingsListStenoprotocolLinks = Scraper.pspHost + mainLinks["Stenoprotokoly"];
+                    meetingsListStenoprotocolLinks = Scraper.pspHostURL + mainLinks["Stenoprotokoly"];
 
                     try
                     {
@@ -64,7 +64,7 @@ namespace pspScraper
                         foreach (var boldNode in stenoLinks)
                         {
                             var href = boldNode.ParentNode.GetAttributeValue("href", "");
-                            MeetingProtocols.Add(new pspMeetingProtocol(Scraper.pspHost + href));
+                            MeetingProtocols.Add(new pspMeetingProtocol(Scraper.pspHostURL + href));
                         }
                     }
                     catch (Exception)
