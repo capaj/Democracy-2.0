@@ -63,7 +63,7 @@ namespace pspScraper
                     votingNumber = scrapedNumbers.ElementAt(1).Value;
                     subject = headingText.Substring(headingText.LastIndexOf(":")+3).Trim();
 
-                    when = new DateTime(numbersAsInts.ElementAt(3), czechCalendarHelper.getMonthIntFromString(headingText), numbersAsInts.ElementAt(2), numbersAsInts.ElementAt(4), numbersAsInts.ElementAt(5), 0);
+                    when = new DateTime(numbersAsInts.ElementAt(3), czechCalendarHelper.getMonthFromString(headingText), numbersAsInts.ElementAt(2), numbersAsInts.ElementAt(4), numbersAsInts.ElementAt(5), 0);
 
                     pspVotes = new List<individualVote>();
                     foreach (var LINode in lis)
