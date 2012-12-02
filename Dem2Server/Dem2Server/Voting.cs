@@ -33,7 +33,7 @@ namespace Dem2Model
         [JsonIgnore]
         public Uri PSPVotingLink { 
             get {
-                return new Uri(scrapedPrint.historyURL);
+                return new Uri(scrapedPrint.URL);
             }   
         }
         

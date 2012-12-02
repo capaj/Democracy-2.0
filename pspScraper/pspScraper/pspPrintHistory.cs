@@ -9,11 +9,17 @@ using pspScraper;
 
 namespace pspScraper
 {
+    
     public class pspPrintHistory //sněmovní tisk
     {
+        private static Dictionary<string, printType> typesMapper = new Dictionary<string, printType>() { 
+            {"Návrh zákona", printType.law},
+            {"Mezinárodní smlouva", printType.internationalTreaty},
+            {"Výroční zpráva", printType.document}
+        };
         public pspPrintHistory(string url)
         {
-            this.historyURL = url;
+            this.URL = url;
             var mainContent = Scraper.GetMainContentDivOnURL(url);
             try
             {
@@ -31,6 +37,13 @@ namespace pspScraper
 
                 var links = mainContent.SelectNodes(".//a");
                 var meetingScheduleLinks = links.Where(link => link.Attributes["href"].Value.Contains("ischuze.sqw"));
+                var pspVotingsURLs = links.Where(link => link.Attributes["href"].Value.Contains("hlasy.sqw")).Select(x=>x.Attributes["href"].Value).ToList();
+                
+                relatedpspVotings = new List<pspVoting>();
+                foreach (var votingUrl in pspVotingsURLs)
+                {
+                    relatedpspVotings.Add(new pspVoting(votingUrl));
+                }
                 if (meetingScheduleLinks != null)
                 {
                     //implement TryGetDate from meeting schedule
@@ -48,7 +61,7 @@ namespace pspScraper
         }
 
         public uint number { get; set; }
-        public string historyURL { get; set; }
+        public string URL { get; set; }
         public string relatedPrintsListURL { get; set; }
         public string title { get; set; }
         public printType type { get; set; }

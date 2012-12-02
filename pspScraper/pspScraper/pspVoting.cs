@@ -12,7 +12,7 @@ namespace pspScraper
     public class pspVoting
     {
         public string Id { get; private set; }
-        public Uri scrapedURL { get; private set; }
+        public string URL { get; private set; }
         public UInt32 meetingNumber { get; private set; }
         public UInt32 votingNumber { get; private set; }
         public DateTime when { get; private set; }
@@ -44,7 +44,7 @@ namespace pspScraper
             var document = webLoader.Load(URL);
             try
             {
-                scrapedURL = webLoader.ResponseUri;
+                URL = webLoader.ResponseUri.ToString();
                 var mainContent = document.DocumentNode.SelectSingleNode("//div[@id = 'main-content']");
                 var h1 = mainContent.SelectNodes(".//h1");
                 var lis = mainContent.SelectNodes(".//li");

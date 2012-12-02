@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace pspScraper
 {
-    public class pspProtocolPage
+    public class pspProtocolPage // for example: http://www.psp.cz/eknih/2010ps/stenprot/047schuz/s047001.htm
     {
         public uint pageNumber { get; set; }
-        public Uri scrapedURL { get; set; }
+        public string URL { get; set; }
         public Dictionary<int, string> pspPrints { get; set; }        //links like http://www.psp.cz/sqw/historie.sqw?T=742
         public Dictionary<int, string> pspVotings { get; set; }       // links like http://www.psp.cz/sqw/hlasy.sqw?G=56404
         public Dictionary<int, string> pspProfiles { get; set; }      //links like this http://www.psp.cz/sqw/detail.sqw?id=252
@@ -20,7 +20,7 @@ namespace pspScraper
             var webGet = Scraper.WebGetFactory();
             
             var html = webGet.Load(URL);
-            scrapedURL = webGet.ResponseUri;
+            URL = webGet.ResponseUri.ToString();
             if (html.DocumentNode.InnerText != "")
             {
                 var mainContent = html.DocumentNode.SelectSingleNode("//div[@id = 'main-content']");

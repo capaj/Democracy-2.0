@@ -7,14 +7,16 @@ using System.Threading.Tasks;
 
 namespace pspScraper
 {
-    public class pspMeetingProtocol        // one meeting of Poslanecká sněmovna
+    public class pspMeetingProtocol        // for example: http://www.psp.cz/eknih/2010ps/stenprot/047schuz/index.htm
     {
+        public string URL { get; set; }
         public string baseUrl { get; set; }
         public uint meetingNumber { get; set; }
         public List<pspProtocolPage> protocols { get; set; }
 
         public pspMeetingProtocol(string URLroot)
         {
+            this.URL = URLroot;
             protocols = new List<pspProtocolPage>();
             meetingNumber = ScraperStringHelper.GetNumbersFromString(URLroot).ElementAt(1).Value;
             var baseUrlLimiter = URLroot.LastIndexOf("/");
@@ -25,6 +27,7 @@ namespace pspScraper
             while (scrapingCycleRuns)
             {
                 var URL = baseUrl + "/s" + meetingNumber.ToString("D3") + lastScrapedPage.ToString("D3") + ".htm";
+                //we should end up with something like this: http://www.psp.cz/eknih/2010ps/stenprot/047schuz/s047001.htm
                 try
                 {
                     //System.Threading.Thread.Sleep(500);

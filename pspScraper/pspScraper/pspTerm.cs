@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace pspScraper
 {
-    public class pspTerm
+    public class pspTerm    // term junction, for example:http://www.psp.cz/eknih/2010ps/index.htm
     {
-        public Uri URL { get; set; }    // term junction, for example:http://www.psp.cz/eknih/2010ps/index.htm
+        public string URL { get; set; }    
         public Dictionary<string,string> mainLinks { get; set; }
         public uint meetingsCount { 
             get {
@@ -26,7 +26,7 @@ namespace pspScraper
         {
             mainLinks = new Dictionary<string, string>();
             MeetingProtocols = new List<pspMeetingProtocol>();
-            this.URL = new Uri(url);
+            this.URL = url;
         }
         
         public pspTerm(HtmlNode tableRow, HtmlWeb webGet)
@@ -39,7 +39,7 @@ namespace pspScraper
             {
                 yearTo = years[1];
             }
-            this.URL = new Uri("http://" + webGet.ResponseUri.Host + termLink);
+            this.URL = "http://" + webGet.ResponseUri.Host + termLink;
 
         }
 
