@@ -24,28 +24,37 @@ namespace pspScraper
                 var dateNumbers = ScraperStringHelper.GetNumbersFromString(subtitle.InnerText).Select(unsigned => (int)unsigned.Value);
 
                 starts = new DateTime(dateNumbers.ElementAt(2), dateNumbers.ElementAt(1), dateNumbers.ElementAt(0), dateNumbers.ElementAt(3), 0, 0);
-                var strongNodes = mainContent.SelectNodes(".//strong");
-                meetingDateNodes = strongNodes.Where(node => czechCalendarHelper.getMonthFromString(node.InnerText) != 0);
+               
             }
             catch (Exception)
             {
 
                 throw;
             }
-            var i = 0;
-            meetingDates = new SortedDictionary<int, DateTime>();
-            foreach (var node in meetingDateNodes)
+            var strongNodes = mainContent.SelectNodes(".//strong");
+            if (strongNodes != null)
             {
-                var day = (int)ScraperStringHelper.GetNumbersFromString(node.InnerText).First().Value;     //there should be just one
-                var month = czechCalendarHelper.getMonthFromString(node.InnerText);
-                var date = new DateTime(starts.Year,month,day);
-                meetingDates.Add(i, date);
-                i++;
-                if (date > ends)
+                meetingDateNodes = strongNodes.Where(node => czechCalendarHelper.getMonthFromString(node.InnerText) != 0);
+                var i = 0;
+                meetingDates = new SortedDictionary<int, DateTime>();
+                foreach (var node in meetingDateNodes)
                 {
-                    ends = date;
+                    var day = (int)ScraperStringHelper.GetNumbersFromString(node.InnerText).First().Value;     //there should be just one
+                    var month = czechCalendarHelper.getMonthFromString(node.InnerText);
+                    var date = new DateTime(starts.Year,month,day);
+                    meetingDates.Add(i, date);
+                    i++;
+                    if (date > ends)
+                    {
+                        ends = date;
+                    }
                 }
             }
+            else
+            {
+                ends = starts;
+            }
+
             Console.WriteLine("New pspMeetingAgenda scraped from{0}", URL);
         }
     }

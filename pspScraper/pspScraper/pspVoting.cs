@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using HtmlAgilityPack;
 using Newtonsoft.Json;
 
@@ -49,7 +50,7 @@ namespace pspScraper
                 var h1 = mainContent.SelectNodes(".//h1");
                 var lis = mainContent.SelectNodes(".//li");
             
-                var headingText = ScraperStringHelper.RemoveHTMLmarkup(h1.First().InnerText);
+                var headingText = HttpUtility.HtmlDecode(h1.First().InnerText);
                 var scrapedNumbers = ScraperStringHelper.GetNumbersFromString(headingText);
 
                 Console.WriteLine(headingText);
@@ -72,7 +73,7 @@ namespace pspScraper
                         {
                         
                             var parliamentMemberLinkNode = LINode.LastChild;
-                            var name = ScraperStringHelper.RemoveHTMLmarkup(parliamentMemberLinkNode.InnerText);
+                            var name = HttpUtility.HtmlDecode(parliamentMemberLinkNode.InnerText);
                             var link = Scraper.pspHostAppURL + parliamentMemberLinkNode.Attributes["href"].Value;
 
                             var vote = new individualVote() { member = new parliamentMember { name = name, pspUrl = link } };

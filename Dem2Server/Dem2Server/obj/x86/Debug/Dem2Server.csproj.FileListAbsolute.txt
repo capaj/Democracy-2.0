@@ -70,10 +70,8 @@ C:\Users\Administrator\Documents\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\
 C:\Users\Administrator\Documents\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\Newtonsoft.Json.xml
 C:\Users\Administrator\Documents\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\NLog.xml
 C:\Users\Administrator\Documents\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\Raven.Abstractions.pdb
-C:\Users\Administrator\Documents\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\Raven.Abstractions.xml
 C:\Users\Administrator\Documents\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\Raven.Client.Debug.pdb
 C:\Users\Administrator\Documents\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\Raven.Client.Lightweight.pdb
-C:\Users\Administrator\Documents\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\Raven.Client.Lightweight.xml
 C:\Users\Administrator\Documents\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\Raven.Client.Lightweight.FSharp.pdb
 C:\Users\Administrator\Documents\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\Raven.Client.Lightweight.FSharp.xml
 C:\Users\Administrator\Documents\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\Raven.Client.MvcIntegration.pdb
@@ -139,3 +137,5 @@ C:\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\HtmlAgilityPack.pdb
 C:\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\HtmlAgilityPack.xml
 C:\GitHub\Democracy-2.0\Dem2Server\Dem2Server\obj\x86\Debug\Dem2Server.exe
 C:\GitHub\Democracy-2.0\Dem2Server\Dem2Server\obj\x86\Debug\Dem2Server.pdb
+C:\Users\Administrator\Documents\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\Newtonsoft.Json.pdb
+C:\Users\Administrator\Documents\GitHub\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\HtmlAgilityPack.pdb
