@@ -3,21 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace pspScraper
 {
     static class ScraperStringHelper
     {
-        static public string RemoveHTMLmarkup(string str) {
-            //var tags = new string[]{"&nbsp;", "\n" };
-            //foreach (var tag in tags)
-            //{
-            //    str = str.Replace(tag, "");
-            //}
-
-            return str.Replace("&nbsp;", " ").Replace("\n", "");
-        }
-        
+                
         static public SortedDictionary<UInt16, UInt32> GetNumbersFromString(string str) {
             var numbersInString = new SortedDictionary<UInt16, UInt32>();
             var numberStr = "";

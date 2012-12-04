@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web;
 using pspScraper;
 
 
@@ -28,7 +29,7 @@ namespace pspScraper
                 relatedPrintsListURL = Scraper.pspHostAppURL + relatedPrintsListLink.Attributes["href"].Value;
                 var printsListHTMLDiv = Scraper.GetMainContentDivOnURL(relatedPrintsListURL);
                 relatedPrintsURLs = printsListHTMLDiv.SelectNodes(".//a[@href]").Where(link => link.Attributes["href"].Value.Contains("tiskt.sqw")).Select(link => link.Attributes["href"].Value).ToList();
-                var headingText = ScraperStringHelper.RemoveHTMLmarkup(h1.InnerText);
+                var headingText = HttpUtility.HtmlDecode(h1.InnerText);
                 var scrapedNumbers = ScraperStringHelper.GetNumbersFromString(headingText);
 
                 number = scrapedNumbers.First().Value;
@@ -36,7 +37,7 @@ namespace pspScraper
                 title = ScraperStringHelper.SplitByString(headingText, relatedPrintsListLink.InnerText).ElementAt(1);
 
                 var links = mainContent.SelectNodes(".//a");
-                var meetingScheduleLinks = links.Where(link => link.Attributes["href"].Value.Contains("ischuze.sqw"));
+                var meetingScheduleLinks = links.Where(link => link.Attributes["href"].Value.Contains("ischuze.sqw"));  //this should always return one element or null
                 var pspVotingsURLs = links.Where(link => link.Attributes["href"].Value.Contains("hlasy.sqw")).Select(x=>x.Attributes["href"].Value).ToList();
                 
                 relatedpspVotings = new List<pspVoting>();
@@ -47,6 +48,8 @@ namespace pspScraper
                 if (meetingScheduleLinks != null)
                 {
                     //implement TryGetDate from meeting schedule
+                    var agendaLink = meetingScheduleLinks.First().Attributes["href"].Value;     
+                    agenda = new pspMeetingAgenda(agendaLink);
                 }
 
                 Console.WriteLine("Finished scraping pspPrintHistory");
@@ -67,7 +70,7 @@ namespace pspScraper
         public printType type { get; set; }
         public List<pspVoting> relatedpspVotings { get; set; }
         public List<string> relatedPrintsURLs { get; set; }
-
+        public pspMeetingAgenda agenda { get; set; }
 
     }
 

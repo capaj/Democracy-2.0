@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace pspScraper
 {
@@ -13,6 +14,7 @@ namespace pspScraper
         
         public static int getMonthFromString(string str)     //string can be longer, only the first found(chronologically) is returned
         {
+            str = HttpUtility.HtmlDecode(str);
             for (int i = 0; i < czechMonths.Count; i++)
             {
                 if (str.Contains(czechMonths.ElementAt(i)))
@@ -24,6 +26,7 @@ namespace pspScraper
         }
 
         public static int getDayFromString(string str) {
+            str = HttpUtility.HtmlDecode(str);
             for (int i = 0; i < czechDays.Count; i++)
             {
                 if (str.Contains(czechDays.ElementAt(i)))
