@@ -9,7 +9,11 @@ namespace pspScraper
 {
     static class ScraperStringHelper
     {
-                
+        public static bool Contains(this string source, string toCheck, StringComparison comp)
+        {
+            return source.IndexOf(toCheck, comp) >= 0;
+        }
+        
         static public SortedDictionary<UInt16, UInt32> GetNumbersFromString(string str) {
             var numbersInString = new SortedDictionary<UInt16, UInt32>();
             var numberStr = "";

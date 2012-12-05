@@ -14,6 +14,7 @@ namespace pspScraper
     public class pspPrintHistory //sněmovní tisk http://www.psp.cz/sqw/historie.sqw?t=857
     {
         private static Dictionary<string, printType> typesMapper = new Dictionary<string, printType>() { 
+            //case does not matter
             {"Návrh zákona", printType.law},
             {"Mezinárodní smlouva", printType.internationalTreaty},
             {"Výroční zpráva", printType.document}
@@ -43,8 +44,19 @@ namespace pspScraper
             var mainContent = Scraper.GetMainContentDivOnURL(url);
             try
             {
-                var h1 = mainContent.SelectNodes(".//h1").First();  // there is just one in main-content
-                var relatedPrintsListLink = h1.SelectSingleNode(".//a[@href]");
+                var h1 = mainContent.SelectNodes(".//h1").First();  // there is just one in main-content up at the top
+                var relatedPrintsListLink = h1.SelectSingleNode(".//a[@href]"); //in the title
+                var docTypeDiv = mainContent.SelectSingleNode(".//div[@class='section-content simple']");
+                var typeText = HttpUtility.HtmlDecode(docTypeDiv.InnerText);
+                foreach (var atype in typesMapper)
+                {
+                    if (typeText.Contains(atype.Key, StringComparison.OrdinalIgnoreCase))   //case insensitive search
+                    {
+                        type = atype.Value;
+                        break;
+                    }
+                }
+
                 relatedPrintsListURL = Scraper.pspHostAppURL + relatedPrintsListLink.Attributes["href"].Value;
                 var printsListHTMLDiv = Scraper.GetMainContentDivOnURL(relatedPrintsListURL);
                 relatedPrintsURLs = printsListHTMLDiv.SelectNodes(".//a[@href]").Where(link => link.Attributes["href"].Value.Contains("tiskt.sqw")).Select(link => link.Attributes["href"].Value).ToList();
