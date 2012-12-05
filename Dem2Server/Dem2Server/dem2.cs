@@ -32,11 +32,12 @@ namespace Dem2Server
             var WSserver = new WebSocketServer("ws://localhost:8181");           
 #endif
             Dem2Hub.Initialize(docDB);
+            // temporary scraping hack 
+            //for (int i = 834; i < 844; i++)
+            //{
+            //    var voting = new Voting("http://www.psp.cz/sqw/historie.sqw?t="+i);
+            //}
 
-            //var voting1 = new pspVoting(@"http://www.psp.cz/sqw/hlasy.sqw?g=56686", "http://www.psp.cz/eknih/2010ps/stenprot/047schuz/s047022.htm");
-            //var voting2 = new pspVoting(@"http://www.psp.cz/sqw/hlasy.sqw?g=56687", "http://www.psp.cz/eknih/2010ps/stenprot/047schuz/s047025.htm");
-
-            //Voting sdsd = new Voting(voting1);
             
             WSserver.Start(socket =>
             {

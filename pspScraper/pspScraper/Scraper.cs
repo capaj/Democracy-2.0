@@ -27,7 +27,7 @@ namespace pspScraper
         {
             //var aMeetingProtocol = new pspMeetingProtocol("http://www.psp.cz/eknih/2010ps/stenprot/047schuz/index.htm");
             //var aTerm = new pspTerm("http://www.psp.cz/eknih/2010ps/index.htm");
-            var aPrint = new pspPrintHistory("http://www.psp.cz/sqw/historie.sqw?t=788");
+            //var aPrint = new pspPrintHistory("http://www.psp.cz/sqw/historie.sqw?t=834");
 
             //GetAllTerms();
             DocumentStore docDB = new DocumentStore { Url = "http://localhost:8080" };        //when on the same machine where Raven runs
