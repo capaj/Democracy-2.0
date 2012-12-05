@@ -28,6 +28,8 @@ namespace pspScraper
         public List<pspVoting> relatedpspVotings { get; set; }
         public List<string> relatedPrintsURLs { get; set; }
         public pspMeetingAgenda inAgenda { get; set; }
+        public DateTime scrapedDate { get; set; }
+
         public bool approved { 
             get { 
                 if (relatedpspVotings.Count != 0)
@@ -61,11 +63,12 @@ namespace pspScraper
                 var printsListHTMLDiv = Scraper.GetMainContentDivOnURL(relatedPrintsListURL);
                 relatedPrintsURLs = printsListHTMLDiv.SelectNodes(".//a[@href]").Where(link => link.Attributes["href"].Value.Contains("tiskt.sqw")).Select(link => link.Attributes["href"].Value).ToList();
                 var headingText = HttpUtility.HtmlDecode(h1.InnerText);
-                var scrapedNumbers = ScraperStringHelper.GetNumbersFromString(headingText);
 
+                var dividedTitle = ScraperStringHelper.SplitByString(headingText, relatedPrintsListLink.InnerText);
+                title = dividedTitle.ElementAt(1);
+                var scrapedNumbers = ScraperStringHelper.GetNumbersFromString(relatedPrintsListLink.InnerText);
+                
                 number = scrapedNumbers.First().Value;
-
-                title = ScraperStringHelper.SplitByString(headingText, relatedPrintsListLink.InnerText).ElementAt(1);
 
                 var links = mainContent.SelectNodes(".//a");
                 var pspVotingsURLs = links.Where(link => link.Attributes["href"].Value.Contains("hlasy.sqw")).Select(x=>x.Attributes["href"].Value).ToList();
@@ -85,6 +88,7 @@ namespace pspScraper
                     var agendaLink = meetingScheduleLinks.First().Attributes["href"].Value;
                     inAgenda = new pspMeetingAgenda(Scraper.pspHostAppURL + agendaLink);
                 }
+                scrapedDate = DateTime.Now;
 
                 Console.WriteLine("Finished scraping pspPrintHistory");
 

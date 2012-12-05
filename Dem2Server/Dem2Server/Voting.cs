@@ -67,7 +67,18 @@ namespace Dem2Model
         }
         
         private DateTime creationTime { get; set; }
-        public DateTime votingEndDate { get; set; }
+        public DateTime votingEndDate { 
+            get { 
+                if (scrapedPrint.inAgenda != null)
+	            {
+		            if (scrapedPrint.inAgenda.ends != null)
+	                {
+		                return scrapedPrint.inAgenda.ends;
+	                }
+	            }
+                return scrapedPrint.scrapedDate + new TimeSpan(365,0,0,0,0);
+            } 
+        }
 
         public override bool RegisterVote(Vote vote)
         {

@@ -37,7 +37,14 @@ namespace pspScraper
                             numbersInString.Add((UInt16)startIndexOfTheNumber, Convert.ToUInt32(numberStr));
                             startIndexOfTheNumber = -1;
                             numberStr = "";
-                        } 
+                        }
+                    }
+                    else
+                    {
+                        if (numberStr != "")
+                        {
+                            numbersInString.Add((UInt16)startIndexOfTheNumber, Convert.ToUInt32(numberStr));
+                        }
                     }
                 }
          
