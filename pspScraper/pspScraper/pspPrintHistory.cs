@@ -10,14 +10,33 @@ using pspScraper;
 
 namespace pspScraper
 {
-    
-    public class pspPrintHistory //sněmovní tisk
+
+    public class pspPrintHistory //sněmovní tisk http://www.psp.cz/sqw/historie.sqw?t=857
     {
         private static Dictionary<string, printType> typesMapper = new Dictionary<string, printType>() { 
             {"Návrh zákona", printType.law},
             {"Mezinárodní smlouva", printType.internationalTreaty},
             {"Výroční zpráva", printType.document}
         };
+
+        public uint number { get; set; }
+        public string URL { get; set; }
+        public string relatedPrintsListURL { get; set; }
+        public string title { get; set; }
+        public printType type { get; set; }
+        public List<pspVoting> relatedpspVotings { get; set; }
+        public List<string> relatedPrintsURLs { get; set; }
+        public pspMeetingAgenda inAgenda { get; set; }
+        public bool approved { 
+            get { 
+                if (relatedpspVotings.Count != 0)
+	            {
+		            return relatedpspVotings.Last().resolution;
+	            }
+                return false;
+            } 
+        }
+        
         public pspPrintHistory(string url)
         {
             this.URL = url;
@@ -37,19 +56,22 @@ namespace pspScraper
                 title = ScraperStringHelper.SplitByString(headingText, relatedPrintsListLink.InnerText).ElementAt(1);
 
                 var links = mainContent.SelectNodes(".//a");
-                var meetingScheduleLinks = links.Where(link => link.Attributes["href"].Value.Contains("ischuze.sqw"));  //this should always return one element or null
                 var pspVotingsURLs = links.Where(link => link.Attributes["href"].Value.Contains("hlasy.sqw")).Select(x=>x.Attributes["href"].Value).ToList();
-                
                 relatedpspVotings = new List<pspVoting>();
-                foreach (var votingUrl in pspVotingsURLs)
+                foreach (var votingLink in pspVotingsURLs)
                 {
-                    relatedpspVotings.Add(new pspVoting(votingUrl));
+                    var voting = new pspVoting(Scraper.pspHostAppURL + votingLink);
+                    relatedpspVotings.Add(voting);
                 }
-                if (meetingScheduleLinks != null)
+
+
+                var meetingScheduleLinks = links.Where(link => link.Attributes["href"].Value.Contains("ischuze.sqw")).ToList();  //this should always return one element or null
+                
+                if (meetingScheduleLinks.Count != 0)
                 {
                     //implement TryGetDate from meeting schedule
-                    var agendaLink = meetingScheduleLinks.First().Attributes["href"].Value;     
-                    agenda = new pspMeetingAgenda(agendaLink);
+                    var agendaLink = meetingScheduleLinks.First().Attributes["href"].Value;
+                    inAgenda = new pspMeetingAgenda(Scraper.pspHostAppURL + agendaLink);
                 }
 
                 Console.WriteLine("Finished scraping pspPrintHistory");
@@ -63,14 +85,6 @@ namespace pspScraper
             }
         }
 
-        public uint number { get; set; }
-        public string URL { get; set; }
-        public string relatedPrintsListURL { get; set; }
-        public string title { get; set; }
-        public printType type { get; set; }
-        public List<pspVoting> relatedpspVotings { get; set; }
-        public List<string> relatedPrintsURLs { get; set; }
-        public pspMeetingAgenda agenda { get; set; }
 
     }
 

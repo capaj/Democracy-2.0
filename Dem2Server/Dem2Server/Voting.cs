@@ -87,10 +87,7 @@ namespace Dem2Model
             }
         }
 
-        public Voting()
-        {
-
-        }
+        public Voting(string printHistory):this(new pspPrintHistory(printHistory)){}
 
         private void StartVoting()        //need to set up schedulers here
         {
@@ -109,10 +106,10 @@ namespace Dem2Model
             
         }
 
-        public Voting(pspScraper.pspPrintHistory print)
+        public Voting(pspScraper.pspPrintHistory printHistory)
         {
             creationTime = DateTime.Now;
-            scrapedPrint = print;
+            scrapedPrint = printHistory;
 
             Dem2Hub.StoreToDB(this);
 
