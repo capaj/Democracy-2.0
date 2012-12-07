@@ -11,7 +11,7 @@ namespace Dem2Server
 {
     public static class EntityRepository
     {
-        private static HashSet<ServerClientEntity> all { get; set; }
+        public static HashSet<ServerClientEntity> all { get; set; } // I would like to have this as private, but according to this: http://msdn.microsoft.com/en-us/library/bb359438.aspx I need to leave it public
         public static IEnumerable<User> allUsers
         {
             get
