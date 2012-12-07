@@ -90,13 +90,13 @@ namespace Dem2Server
             return entityOnServer;
         }
 
-        public static bool DeleteEntityById(string Id)
+        public static bool DeleteEntityById(string Id, Type pok)
         {
-            string type = Id.Split('/')[0];
+            string typeStr = Id.Split('/')[0];
             try
             {
-                var entityOnServer = Dem2Hub.entityNamesToSets[type].FirstOrDefault(x => x.Id == Id);
-                Dem2Hub.entityNamesToDynamicSets[type].Remove(entityOnServer);
+                var entityOnServer = Dem2Hub.entityNamesToSets[typeStr].FirstOrDefault(x => x.Id == Id);
+                //Dem2Hub.entityNamesToDynamicSets[typeStr].RemoveWhere(x => x.); TODO fix
                 using (var session = Dem2Hub.docDB.OpenSession())
                 {
                     session.Advanced.Defer(new DeleteCommandData { Key = entityOnServer.Id });
@@ -158,6 +158,6 @@ namespace Dem2Server
             // Return true if the fields match:
             return Id == second.Id;
         }
-	
+
     }
 }

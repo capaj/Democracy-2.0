@@ -24,13 +24,13 @@ namespace Dem2Server
         public void respondToReadRequest(IWebSocketConnection socket)       //"r" operation, respond to it can be only "u" (update) or "n" (not found) 
         {
             Vote vote = null;
-            ServerClientEntity entityOnServer = ServerClientEntity.GetEntityFromSetsByID(entity.Id);
+            ServerClientEntity foundEntity = ServerClientEntity.GetEntityFromSetsByID(entity.Id);
 
-            if (entityOnServer != null)
+            if (foundEntity != null)
             {
                 try
                 {
-                    if (entityOnServer is VotableItem)    //check if the entity we are responding with is a VotableItem or not, props to http://www.hanselman.com/blog/DoesATypeImplementAnInterface.aspx
+                    if (foundEntity is VotableItem)    //check if the entity we are responding with is a VotableItem or not, props to http://www.hanselman.com/blog/DoesATypeImplementAnInterface.aspx
                     //if (typeof(VotableItem).IsAssignableFrom(entityOnServer.GetType()))    //check if the entity we are responding with is a VotableItem or not, props to http://www.hanselman.com/blog/DoesATypeImplementAnInterface.aspx
                     {
                         vote = Dem2Hub.allVotes.FirstOrDefault(x => x.subjectId == entity.Id && x.OwnerId == socket.ConnectionInfo.Cookies["user"]);
@@ -41,15 +41,15 @@ namespace Dem2Server
                     if (ExceptionIsCriticalCheck.IsCritical(ex)) throw;
                 }
                 
-                if (entity.version < entityOnServer.version)
+                if (entity.version < foundEntity.version)
                 {
                     //first possible outcome
-                    entity = entityOnServer;    //so if the version on client is current by any chance we send back the same as we received
+                    entity = foundEntity;    //so if the version on client is current by any chance we send back the same as we received
                 }
                 //second possible outcome
                 operation = 'u';
                 //client must check whether the update he received has greater version of entity, if not, he knows he has the latest version of entity
-                
+                entity = foundEntity;
             }
             else
             {
@@ -171,11 +171,12 @@ namespace Dem2Server
                                 User.getUserFromSocket(socket).UnsubscribeFromEntity(subs);
                                 break;
                             default:
-                                ServerClientEntity toDelete = (ServerClientEntity)instance;
+                                var Id = (string)receivedObj["entity"]["Id"];
+                                ServerClientEntity toDelete = ServerClientEntity.GetEntityFromSetsByID(Id);
                                 var deletor = socket.ConnectionInfo.Cookies["user"];
                                 if (deletor == toDelete.OwnerId)
                                 {
-                                    var success = ServerClientEntity.DeleteEntityById(toDelete.Id);
+                                    var success = ServerClientEntity.DeleteEntityById(toDelete.Id, type);
                                     if (success)
                                     {
 

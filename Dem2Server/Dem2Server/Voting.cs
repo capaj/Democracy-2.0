@@ -97,6 +97,11 @@ namespace Dem2Model
                 }
             }
         }
+        [JsonConstructor]
+        public Voting()
+        {
+            Console.WriteLine("deserialized voting");
+        }
 
         public Voting(string printHistory):this(new pspPrintHistory(printHistory)){}
 

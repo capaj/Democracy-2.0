@@ -9,7 +9,6 @@ using HtmlAgilityPack;
 using Raven.Client.Document;
 
 
-
 namespace pspScraper
 {
     public class Scraper

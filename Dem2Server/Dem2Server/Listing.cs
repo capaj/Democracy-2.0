@@ -26,14 +26,14 @@ namespace Dem2UserCreated
                     list = Dem2Hub.entityNamesToSets[JSONQuery.StrOfType]
                         .OrderByDescending(x => x.GetType().GetProperty(JSONQuery.sortByProp).GetValue(x, null))
                         .Take(JSONQuery.count)
-                        .Select(x => x.Id);
+                        .Select(x => x.Id);     //listings only contain entity Ids
                 }
                 else
                 {
                     list = Dem2Hub.entityNamesToSets[JSONQuery.StrOfType]
                         .OrderBy(x => x.GetType().GetProperty(JSONQuery.sortByProp).GetValue(x, null))
                         .Take(JSONQuery.count)
-                        .Select(x => x.Id);
+                        .Select(x => x.Id);     //listings only contain entity Ids
                 }
             }
             catch (Exception)

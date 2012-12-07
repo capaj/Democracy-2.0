@@ -10,19 +10,26 @@
         votes: { "none": Vote({})},
         votings: {
             "none": Voting({
-                "scrapedVoting": {
-                    "scrapedURL": "#",
-                    "meetingNumber": "nevybráno žádné hlasování",
-                    "votingNumber": "nevybráno žádné hlasování",
-                    "when": "nevybráno žádné hlasování",
-                    "subject": "nevybráno žádné hlasování",
-                    "stenoprotokolURL": "#"
+                "scrapedPrint": {
+                    "number": 0,
+                    "URL": "nenačteno",
+                    "relatedPrintsListURL": "nenačteno",
+                    "title": "nenačteno",
+                    "type": "nenačteno",
+                    "relatedpspVotings": [],
+                    "relatedPrintsURLs": [],
+                    "inAgenda": {
+                        "URL": "nenačteno",
+                        "starts": "nenačteno",
+                        "ends": "nenačteno",
+                        "meetingDates": {}
+                    }
                 },
-                "State": "nevybráno žádné hlasování",
-                "PositiveVotesCount": "nevybráno žádné hlasování",
-                "NegativeVotesCount": "nevybráno žádné hlasování",
-                "Id": "nevybráno žádné hlasování",
-                "version": "nevybráno žádné hlasování",
+                "State": "nenačteno",
+                "PositiveVotesCount": "nenačteno",
+                "NegativeVotesCount": "nenačteno",
+                "Id": "nenačteno",
+                "version": "nenačteno",
             })
         },
         currentSection: ko.observable(window.location.pathname),
@@ -45,13 +52,20 @@
         switch (type) {
             case "votings":
                 return {
-                    "scrapedVoting": {
-                        "scrapedURL": "psp odkaz pro hlasování " + entityId,
-                        "meetingNumber": "číslo hlasování u " + entityId,
-                        "votingNumber": "nenačteno",
-                        "when": "nenačteno",
-                        "subject": entityId,
-                        "stenoprotokolURL": "nenačteno"
+                    "scrapedPrint": {
+                        "number": 0,
+                        "URL": "nenačteno",
+                        "relatedPrintsListURL": "nenačteno",
+                        "title": "nenačteno",
+                        "type": "nenačteno",
+                        "relatedpspVotings": [],
+                        "relatedPrintsURLs": [],
+                        "inAgenda": {
+                            "URL": "nenačteno",
+                            "starts": "nenačteno",
+                            "ends": "nenačteno",
+                            "meetingDates": {}
+                        }
                     },
                     "State": "nenačteno",
                     "PositiveVotesCount": "nenačteno",
@@ -73,7 +87,7 @@
             if (VM[subjectType].hasOwnProperty(subjectId) === true) {
                 VM[subjectType][subjectId]().thisClientVoteId(entityId);
             } else {    //the votable item is not here on the client yet, so it is probably fucked
-                console.error("Vote on unknown subject wnats to be created");
+                console.error("Vote on unknown subject wants to be created");
             }
             
         }

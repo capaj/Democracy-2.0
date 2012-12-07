@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using pspScraper;
+using Newtonsoft.Json;
 
 
 namespace pspScraper
@@ -38,6 +39,11 @@ namespace pspScraper
 	            }
                 return false;
             } 
+        }
+        [JsonConstructor]
+        public pspPrintHistory()
+        {
+            Console.WriteLine("deserialized pspPrintHistory");
         }
         
         public pspPrintHistory(string url)

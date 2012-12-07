@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,8 @@ namespace pspScraper
         public DateTime starts { get; set; }
         public DateTime ends { get; set; }
         public SortedDictionary<int, DateTime> meetingDates { get; set; }
+        [JsonConstructor]
+        public pspMeetingAgenda(){}
 
         public pspMeetingAgenda(string url)
         {

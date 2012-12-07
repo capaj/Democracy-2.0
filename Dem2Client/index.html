@@ -70,7 +70,7 @@
                     </div>
                     <ul class="nav">
                         <li data-bind="css: { active: currentSection() == '/votes'}"><a href="/votes">Hlasy</a></li>
-                        <li data-bind="css: { active: currentSection() == '/votings'}"><a href="/votings/97"><i class="icon-check"></i>Hlasování</a><!--<a href="/votings"><i class="icon-check"></i>Hlasování</a>--></li>    <!--temporary hack for testing loading one voting-->
+                        <li data-bind="css: { active: currentSection() == '/votings'}"><a href="/votings/162"><i class="icon-check"></i>Hlasování</a><!--<a href="/votings"><i class="icon-check"></i>Hlasování</a>--></li>    <!--temporary hack for testing loading one voting-->
                         <li data-bind="css: { active: currentSection() == '/comments'}"><a href="/votings/129"><i class="icon-comment"></i>Komentáře</a></li><!--<a href="/comments"><i class="icon-comment"></i>Komentáře</a>-->
                         <li data-bind="css: { active: currentSection() == '/users'}"><a href="/users"><i class="icon-user"></i>Uživatelé</a></li>
                         
@@ -89,7 +89,7 @@
     <section id="main" class="container-fluid" data-bind="ifnot:currentSectionIsStatic">   <!-- content gets loaded here programatically by json through Websocket--> 
         
         <div id="singleVoting" data-bind="if: currentSection() == '/votings'">
-            <div id="voting" data-bind="template: { name: 'votingDetail-template', data: currentVoting}"></div>
+            <div id="voting" data-bind="template: { name: 'voting-template', data: currentVoting}"></div>
         </div>       
     
     </section>
@@ -99,7 +99,7 @@
 </body>
     <!--================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-<script type="text/javascript" src="Scripts/jquery-1.8.2.js"></script>
+<script type="text/javascript" src="Scripts/jquery-1.8.3.js"></script>
 <script src="Scripts/knockout-2.2.0.debug.js" type="text/javascript"></script>
 <script src="Scripts/knockout.mapping-latest.debug.js"></script>
 <script type="text/javascript" src="Scripts/bootstrap.js"></script>
@@ -110,25 +110,25 @@
     <p>Autor: <span data-bind="text: owner.fullName"></span></p>
 </script>
 
-<script type="text/html" id="votingDetail-template">
-    <div class="hero-unit">
+<script type="text/html" id="voting-template">
+    <div class="well">
         <table class="table table-striped">
             <tbody>
                <tr data-bind="css: { succes: GetCurrentResolve, error: !GetCurrentResolve}">
                     <td class="span6" >
                         <dl class="dl-horizontal">
                             <dt>Předmět hlasování:</dt>
-                            <dd><a data-bind="text: scrapedVoting.subject, attr: { href:Id }"></a></dd>
-                            <dt>Na schůzi číslo:</dt>
-                            <dd><span data-bind="text: scrapedVoting.meetingNumber"></span></dd>
-                            <dt>Číslo hlasování:</dt>
-                            <dd><span data-bind="text: scrapedVoting.votingNumber"></span></dd>
-                            <dt>Kdy proběhlo v PS:</dt>
-                            <dd><span data-bind="text: scrapedVoting.when"></span></dd>
-                            <dt>Link na psp.cz:</dt>
-                            <dd><a target="_blank" data-bind="attr: { href:scrapedVoting.scrapedURL }">Zde</a></dd>
-                            <dt>Link na stenoprotokol:</dt>
-                            <dd><a target="_blank" data-bind="attr: { href:scrapedVoting.stenoprotokolURL }">Zde</a></dd>
+                            <dd><a data-bind="text: scrapedPrint.title, attr: { href:Id }"></a></dd>
+                            <dt>Sněmovní tisk číslo:</dt>
+                            <dd><span data-bind="text: scrapedPrint.number"></span></dd>
+                            <dt>Typ dokumentu:</dt>
+                            <dd><span data-bind="text: typeOfPrintMapped"></span></dd>
+                            <dt>Kdy bylo přidáno:</dt>
+                            <dd><span data-bind="text: scrapedPrint.scrapedDate"></span></dd>
+                            <dt>Historie tisku na psp.cz:</dt>
+                            <dd><a target="_blank" data-bind="attr: { href:scrapedPrint.URL }">Zde</a></dd>
+                            <dt>Program schůze:</dt>
+                            <dd><a target="_blank" data-bind="attr: { href:scrapedPrint.inAgenda.URL }">Zde</a></dd>
                             <dt>Hlasů pro:</dt>
                             <dd><span data-bind="text: PositiveVotesCount"></span></dd>
                             <dt>Hlasů proti:</dt>
