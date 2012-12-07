@@ -18,17 +18,7 @@ namespace Dem2Server
     public static class Dem2Hub         //where everything coexists-inmemory copy of the DB
     {
         public static DocumentStore docDB;
-
-        public static HashSet<User> allUsers { get; set; }
-        public static HashSet<Voting> allVotings { get; set; }        // parliamentary votings for now
-        public static HashSet<Vote> allVotes { get; set; }
-        public static HashSet<Comment> allComments { get; set; }
-        public static HashSet<Listing> allListings { get; set; }
-        //public static ConcurrentBag<Vote> allVotes { get; set; }
-
-        public static Dictionary<string, IEnumerable<ServerClientEntity>> entityNamesToSets;
-        public static Dictionary<string, dynamic> entityNamesToDynamicSets;
-
+        
         //public static IEnumerable<VotableItem> allVotable
         //{
         //    get
@@ -42,50 +32,11 @@ namespace Dem2Server
 
         public static void Initialize(DocumentStore documentDB)     //someone provided us with the DB to load data from
         {
-            allUsers = new HashSet<User>();
-            allVotings = new HashSet<Voting>();
-            allVotes = new HashSet<Vote>();
-            allComments = new HashSet<Comment>();
-            allListings = new HashSet<Listing>();
-            
             docDB = documentDB;
+            EntityRepository.Initialize();
             docDB.Initialize();
             pspScraper.Scraper.docDB = docDB;
-            
-            using (var session = docDB.OpenSession())
-            {
-                foreach (var user in session.Query<User>().ToList())
-                {
-                    allUsers.Add(user);
-                }
-                foreach (var voting in session.Query<Voting>().ToList())
-                {
-                    allVotings.Add(voting);
-                }
-                foreach (var vote in session.Query<Vote>().ToList())
-                {
-                    allVotes.Add(vote);
-                }
-               
-                // var entity = session.Load<Company>(companyId);
-             
-            }
-            // in order for this static method to work: ServerClientEntity.GetEntityFromSetsByID
-            entityNamesToSets = new Dictionary<string, IEnumerable<ServerClientEntity>> {
-                {"users", allUsers},
-                {"votings", allVotings},
-                {"votes", allVotes},
-                {"comments", allComments},
-                {"listings", allListings},
-            };
 
-            entityNamesToDynamicSets = new Dictionary<string, dynamic> {
-                {"users", allUsers},
-                {"votings", allVotings},
-                {"votes", allVotes},
-                {"comments", allComments},
-                {"listings", allListings},
-            };
         }
         
         public static void ResolveMessage (string message, IWebSocketConnection socket)
@@ -144,13 +95,13 @@ namespace Dem2Server
         }
 
         public static serverStatistics GetStatistics() {
-            return new serverStatistics { 
-                userCount = (UInt32)allUsers.Count,
-                voteCount = (UInt64)allVotes.Count,
-                positiveVoteCount = (UInt64)allVotes.Where(x => x.Agrees == true).Count(),
-                votingCount = (UInt32)allVotings.Count,
-                commentCount = (UInt64)allComments.Count,
-                onlineUserCount = (UInt32)allUsers.Where(x=> x.connection != null).Count()
+            return new serverStatistics {
+                userCount = (UInt32)EntityRepository.allUsers.Count(),
+                voteCount = (UInt64)EntityRepository.allVotes.Count(),
+                positiveVoteCount = (UInt64)EntityRepository.allVotes.Where(x => x.Agrees == true).Count(),
+                votingCount = (UInt32)EntityRepository.allVotings.Count(),
+                commentCount = (UInt64)EntityRepository.allComments.Count(),
+                onlineUserCount = (UInt32)EntityRepository.allUsers.Where(x => x.connection != null).Count()
             };
         }
 

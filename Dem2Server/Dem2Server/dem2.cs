@@ -73,7 +73,7 @@ namespace Dem2Server
                             break;
                         case "authenticated":
                             
-                            var user = Dem2Hub.allUsers.First(x => x.connection == socket);
+                            var user = EntityRepository.allUsers.First(x => x.connection == socket);
                             user.lastDisconnected = DateTime.Now;
                             user.UnsubscribeAll();
                             socket.ConnectionInfo.Cookies.Remove("authenticated");

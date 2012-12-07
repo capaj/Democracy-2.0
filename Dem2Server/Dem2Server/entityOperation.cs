@@ -24,7 +24,7 @@ namespace Dem2Server
         public void respondToReadRequest(IWebSocketConnection socket)       //"r" operation, respond to it can be only "u" (update) or "n" (not found) 
         {
             Vote vote = null;
-            ServerClientEntity foundEntity = ServerClientEntity.GetEntityFromSetsByID(entity.Id);
+            ServerClientEntity foundEntity = EntityRepository.GetEntityFromSetsByID(entity.Id);
 
             if (foundEntity != null)
             {
@@ -33,7 +33,7 @@ namespace Dem2Server
                     if (foundEntity is VotableItem)    //check if the entity we are responding with is a VotableItem or not, props to http://www.hanselman.com/blog/DoesATypeImplementAnInterface.aspx
                     //if (typeof(VotableItem).IsAssignableFrom(entityOnServer.GetType()))    //check if the entity we are responding with is a VotableItem or not, props to http://www.hanselman.com/blog/DoesATypeImplementAnInterface.aspx
                     {
-                        vote = Dem2Hub.allVotes.FirstOrDefault(x => x.subjectId == entity.Id && x.OwnerId == socket.ConnectionInfo.Cookies["user"]);
+                        vote = EntityRepository.allVotes.FirstOrDefault(x => x.subjectId == entity.Id && x.OwnerId == socket.ConnectionInfo.Cookies["user"]);
                     }
                 }
                 catch (Exception ex)
@@ -172,11 +172,11 @@ namespace Dem2Server
                                 break;
                             default:
                                 var Id = (string)receivedObj["entity"]["Id"];
-                                ServerClientEntity toDelete = ServerClientEntity.GetEntityFromSetsByID(Id);
+                                ServerClientEntity toDelete = EntityRepository.GetEntityFromSetsByID(Id);
                                 var deletor = socket.ConnectionInfo.Cookies["user"];
                                 if (deletor == toDelete.OwnerId)
                                 {
-                                    var success = ServerClientEntity.DeleteEntityById(toDelete.Id, type);
+                                    var success = EntityRepository.DeleteEntityById(toDelete.Id);
                                     if (success)
                                     {
 

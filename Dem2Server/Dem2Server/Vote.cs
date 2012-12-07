@@ -53,10 +53,10 @@ namespace Dem2UserCreated
             castedTime = DateTime.Now;
             OwnerId = casterID;
             casterUserId = casterID;
-            VotableItem subject = (VotableItem)ServerClientEntity.GetEntityFromSetsByID(subjectId);
+            VotableItem subject = (VotableItem)EntityRepository.GetEntityFromSetsByID(subjectId);
             if (subject != null)
             {
-                if (Dem2Hub.allVotes.Add(this))
+                if (EntityRepository.Add(this))
                 {
                     Dem2Hub.StoreToDB(this);
                     subject.IncrementVersion(); // this triggers on change and notifies the subscribers, because on the subject, properties VoteCounts changed 
@@ -64,7 +64,7 @@ namespace Dem2UserCreated
                 }
                 else
                 {
-                    var existingVote = Dem2Hub.allVotes.First<Vote>(x => x.OwnerId == OwnerId && x.subjectId == subjectId);
+                    var existingVote = EntityRepository.allVotes.First<Vote>(x => x.OwnerId == OwnerId && x.subjectId == subjectId);
                     if (existingVote.Agrees != Agrees)  // when user changed his vote on a subject
                     {
                         Id = existingVote.Id;

@@ -19,7 +19,7 @@ namespace Dem2Server
         {
             get
             {
-                return Dem2Hub.entityNamesToSets[StrOfType].GetType();
+                return EntityRepository.entityNamesToSets[StrOfType].GetType();
             }
         }
 

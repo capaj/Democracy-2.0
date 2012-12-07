@@ -17,7 +17,7 @@ namespace Dem2UserCreated
         [JsonIgnore]
         public ServerClientEntity onEntity {
             get {
-                return ServerClientEntity.GetEntityFromSetsByID(onEntityId);
+                return EntityRepository.GetEntityFromSetsByID(onEntityId);
             }
         }
         //object instance = Activator.CreateInstance(type, (Array)receivedObj["ctorArguments"]);

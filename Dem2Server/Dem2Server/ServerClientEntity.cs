@@ -74,47 +74,6 @@ namespace Dem2Server
         }
         #endregion
 
-        public static ServerClientEntity GetEntityFromSetsByID(string Id){
-            string type = Id.Split('/')[0];
-            ServerClientEntity entityOnServer = null;
-            try
-            {
-                entityOnServer = Dem2Hub.entityNamesToSets[type].FirstOrDefault(x => x.Id == Id);
-            }
-            catch (Exception ex)
-            {
-                if (ExceptionIsCriticalCheck.IsCritical(ex)) throw;
-                Console.WriteLine("Entity with ID {0} was not found", Id);
-                return null;
-            }
-            return entityOnServer;
-        }
-
-        public static bool DeleteEntityById(string Id, Type pok)
-        {
-            string typeStr = Id.Split('/')[0];
-            try
-            {
-                var entityOnServer = Dem2Hub.entityNamesToSets[typeStr].FirstOrDefault(x => x.Id == Id);
-                //Dem2Hub.entityNamesToDynamicSets[typeStr].RemoveWhere(x => x.); TODO fix
-                using (var session = Dem2Hub.docDB.OpenSession())
-                {
-                    session.Advanced.Defer(new DeleteCommandData { Key = entityOnServer.Id });
-                    session.SaveChanges();
-
-                }
-                //.Advanced.DocumentStore.DatabaseCommands.Delete("posts/1234", null);
-            }
-            catch (Exception ex)
-            {
-                if (ExceptionIsCriticalCheck.IsCritical(ex)) throw;
-                Console.WriteLine("Entity with ID {0} was not found", Id);
-                return false;
-            }
-            
-            return true;
-        }
-
         public override int GetHashCode()
         {
             if (Id != null)

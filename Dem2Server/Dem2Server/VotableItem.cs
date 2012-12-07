@@ -15,7 +15,7 @@ namespace Dem2Server
         {
             get
             {
-                return Dem2Hub.allVotes.ToList().FindAll(x => x.subjectId == this.Id);
+                return EntityRepository.allVotes.ToList().FindAll(x => x.subjectId == this.Id);
             }
         }  // or ConcurrentBag?
 
@@ -23,7 +23,7 @@ namespace Dem2Server
         public int NegativeVotesCount { get { return CastedVotes.Where(vote => vote.Agrees == false).Count(); } }
 
         public virtual bool RegisterVote(Vote vote) {
-            return Dem2Hub.allVotes.Add(vote);
+            return EntityRepository.Add(vote);
         }
 
         [JsonIgnore]

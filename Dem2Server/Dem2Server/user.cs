@@ -28,7 +28,7 @@ namespace Dem2Model
         public IEnumerable<Vote> getHisVotes
         { 
             get {
-                return Dem2Hub.allVotes.Where(x => x.OwnerId == Id);
+                return EntityRepository.allVotes.Where(x => x.OwnerId == Id);
             } 
         }
         [JsonIgnore]
@@ -133,7 +133,7 @@ namespace Dem2Model
 
         public static User GetUserById(string Id)
         {
-            return Dem2Hub.allUsers.FirstOrDefault<User>(x => x.Id == Id);
+            return EntityRepository.allUsers.FirstOrDefault<User>(x => x.Id == Id);
         }
 
         public static User getUserFromSocket(IWebSocketConnection socket) {
@@ -167,7 +167,7 @@ namespace Dem2Model
         {
             this.FBAccount = JsonConvert.DeserializeObject<FacebookAccount>(FBgraphJSON);
 
-            var isNew = Dem2Hub.allUsers.Add(this);
+            var isNew = EntityRepository.Add(this);
             if (isNew)
             {
 #if IS_RUNNING_ON_SERVER
@@ -189,7 +189,7 @@ namespace Dem2Model
             }
             else
             {
-                var returningUser = Dem2Hub.allUsers.First<User>(x => x.Equals(this));
+                var returningUser = EntityRepository.allUsers.First<User>(x => x.Equals(this));
                 returningUser.connection = this.connection;
                 returningUser.FinishLogIn();
                 this.connection = null;
