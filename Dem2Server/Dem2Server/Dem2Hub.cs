@@ -33,8 +33,8 @@ namespace Dem2Server
         public static void Initialize(DocumentStore documentDB)     //someone provided us with the DB to load data from
         {
             docDB = documentDB;
-            EntityRepository.Initialize();
             docDB.Initialize();
+            EntityRepository.Initialize();
             pspScraper.Scraper.docDB = docDB;
 
         }

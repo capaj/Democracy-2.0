@@ -11,7 +11,14 @@ namespace Dem2Server
 {
     public static class EntityRepository
     {
-        public static HashSet<ServerClientEntity> all { get; set; } // I would like to have this as private, but according to this: http://msdn.microsoft.com/en-us/library/bb359438.aspx I need to leave it public
+        public static HashSet<ServerClientEntity> _all = new HashSet<ServerClientEntity>(); // I would like to have this as private, but according to this: http://msdn.microsoft.com/en-us/library/bb359438.aspx I need to leave it public
+
+        public static HashSet<ServerClientEntity> all
+        {
+            get { return _all; }
+            private set { _all = value; }
+        }
+        
         public static IEnumerable<User> allUsers
         {
             get
@@ -46,9 +53,8 @@ namespace Dem2Server
             {"listings", allListings},
         };
 
-        internal static bool Initialize()
+        public static bool Initialize()
         {
-            all = new HashSet<ServerClientEntity>();
             using (var session = Dem2Hub.docDB.OpenSession())
             {
                 foreach (var user in session.Query<User>().ToList())
