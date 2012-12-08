@@ -19,66 +19,10 @@ namespace Dem2Server
 
         public void sendTo(IWebSocketConnection socket) {
             socket.Send(JsonConvert.SerializeObject(this, new IsoDateTimeConverter()));
-        }
-
-        public void respondToReadRequest(IWebSocketConnection socket)       //"r" operation, respond to it can be only "u" (update) or "n" (not found) 
-        {
-            Vote vote = null;
-            ServerClientEntity foundEntity = EntityRepository.GetEntityFromSetsByID(entity.Id);
-
-            if (foundEntity != null)
+            if (operation == 'u')
             {
-                try
-                {
-                    if (foundEntity is VotableItem)    //check if the entity we are responding with is a VotableItem or not, props to http://www.hanselman.com/blog/DoesATypeImplementAnInterface.aspx
-                    //if (typeof(VotableItem).IsAssignableFrom(entityOnServer.GetType()))    //check if the entity we are responding with is a VotableItem or not, props to http://www.hanselman.com/blog/DoesATypeImplementAnInterface.aspx
-                    {
-                        vote = EntityRepository.allVotes.FirstOrDefault(x => x.subjectId == entity.Id && x.OwnerId == socket.ConnectionInfo.Cookies["user"]);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    if (ExceptionIsCriticalCheck.IsCritical(ex)) throw;
-                }
-                
-                if (entity.version < foundEntity.version)
-                {
-                    //first possible outcome
-                    entity = foundEntity;    //so if the version on client is current by any chance we send back the same as we received
-                }
-                //second possible outcome
-                operation = 'u';
-                //client must check whether the update he received has greater version of entity, if not, he knows he has the latest version of entity
-                entity = foundEntity;
-            }
-            else
-            {
-                //third possible outcome
-                operation = 'n';        //not found, nonexistent, in the entity field there is still the one that was in the request, so when it arrives back to the client he will know which request ended up not found
-                
-            }
-            Dem2Hub.sendItTo(this, socket);
-
-            if (vote != null)   //votable Item needs to be sent to client before the vote on a votable itself
-            {
-                entityOperation sendVote = new entityOperation { entity = vote, operation = 'u' };
-                sendVote.sendTo(socket);
-            }
-
-        }
-        
-
-        public void subscribeUserToChanges(IWebSocketConnection socket) {
-            string type = entity.Id.Split('/')[0];
-            ServerClientEntity entityOnServer = null;
-            try
-            {
-
-            }
-            catch (Exception)
-            {
-                
-                throw;
+                var subs = new Subscription() { onEntityId = entity.Id };  //we presume, that the entity will be displayed at the client, so we subscribe him
+                subs.subscribe(socket);
             }
         }
 
@@ -149,6 +93,18 @@ namespace Dem2Server
                     }*/
                     respondToReadRequest(socket);
                     break;
+                case 'u':   //read an entity
+                    /*
+                    Example shows json for this branch 
+                    {
+                      "msgType": "entity",
+                      "operation": "r",
+                      "entity":{
+                          "Id": "user/132"
+                      }
+                    }*/
+                    respondToUpdateRequest(socket);
+                    break;
                 case 'd': //delete an entity
                     /*
                     {
@@ -176,15 +132,16 @@ namespace Dem2Server
                                 var deletor = socket.ConnectionInfo.Cookies["user"];
                                 if (deletor == toDelete.OwnerId)
                                 {
-                                    var success = EntityRepository.DeleteEntityById(toDelete.Id);
+                                    var success = EntityRepository.DeleteEntity(toDelete);
                                     if (success)
                                     {
-
+                                        var op = new entityOperation() { operation = 'd', entity = new ServerClientEntity() { Id = toDelete.Id } };
+                                        Dem2Hub.sendItTo(op, socket);
                                     }
                                 }
                                 else
                                 {
-                                    var err = new ServerError(){message = "sorry, you don't own the entity, so you cannot delete it"};
+                                    var err = new ServerError() { message = "sorry, you can't delete the entity id " + Id };
                                     Dem2Hub.sendItTo(err,socket);
                                 }
                                
@@ -193,7 +150,65 @@ namespace Dem2Server
                     }
                     break;
                 default:
+                    Console.WriteLine("Unknown type of request: {0}", operation);
                     break;
+            }
+        }
+
+        public void respondToReadRequest(IWebSocketConnection socket)       //"r" operation, respond to it can be only "u" (update) or "n" (not found) 
+        {
+            Vote vote = null;
+            ServerClientEntity foundEntity = EntityRepository.GetEntityFromSetsByID(entity.Id);
+
+            if (foundEntity != null)
+            {
+                try
+                {
+                    if (foundEntity is VotableItem)    //check if the entity we are responding with is a VotableItem or not, props to http://www.hanselman.com/blog/DoesATypeImplementAnInterface.aspx
+                    //if (typeof(VotableItem).IsAssignableFrom(entityOnServer.GetType()))    //check if the entity we are responding with is a VotableItem or not, props to http://www.hanselman.com/blog/DoesATypeImplementAnInterface.aspx
+                    {
+                        vote = EntityRepository.allVotes.FirstOrDefault(x => x.subjectId == entity.Id && x.OwnerId == socket.ConnectionInfo.Cookies["user"]);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (ExceptionIsCriticalCheck.IsCritical(ex)) throw;
+                }
+
+                if (entity.version < foundEntity.version)
+                {
+                    //first possible outcome
+                    entity = foundEntity;    //so if the version on client is current by any chance we send back the same as we received
+                }
+                //second possible outcome
+                operation = 'u';
+                //client must check whether the update he received has greater version of entity, if not, he knows he has the latest version of entity
+                entity = foundEntity;
+            }
+            else
+            {
+                //third possible outcome
+                operation = 'n';        //not found, nonexistent, in the entity field there is still the one that was in the request, so when it arrives back to the client he will know which request ended up not found
+
+            }
+            sendTo(socket);
+
+            if (vote != null)   //votable Item needs to be sent to client before the vote on a votable itself
+            {
+                entityOperation sendVoteOp = new entityOperation { entity = vote, operation = 'u' };
+                sendVoteOp.sendTo(socket);
+            }
+
+        }
+
+        private void respondToUpdateRequest(IWebSocketConnection socket)
+        {
+            ServerClientEntity foundEntity = EntityRepository.GetEntityFromSetsByID(entity.Id);
+
+            if (foundEntity != null)
+            {
+                foundEntity = entity;
+                foundEntity.IncrementVersion();
             }
         }
 

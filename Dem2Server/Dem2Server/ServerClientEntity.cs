@@ -24,7 +24,7 @@ namespace Dem2Server
 
         public uint version { get; private set; }    // should get incremented everytime the Entity is updated/changed, on creation it is 1
 
-        public void IncrementVersion() {
+        public void IncrementVersion() {    //this should be called whenever mutation of this entity occurs
             version += 1;
             OnChange(this, new EventArgs());
         }

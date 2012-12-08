@@ -125,7 +125,7 @@ namespace Dem2Model
             creationTime = DateTime.Now;
             scrapedPrint = printHistory;
 
-            Dem2Hub.StoreToDB(this);
+            EntityRepository.StoreToDB(this);
 
         }
 

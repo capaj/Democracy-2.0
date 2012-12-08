@@ -104,15 +104,27 @@ namespace Dem2Server
             }
             return entityOnServer;
         }
+        public static bool DeleteEntity(ServerClientEntity ent) {
+            var success = Remove(ent);
+            using (var session = Dem2Hub.docDB.OpenSession())
+            {
+                session.Advanced.Defer(new DeleteCommandData { Key = ent.Id });
+                session.SaveChanges();
+
+            }
+            return success;
+        }
+
 
         public static bool DeleteEntityById(string Id)
         {
             string typeStr = Id.Split('/')[0];
+            bool success = false;
             try
             {
                 var entityOnServer = EntityRepository.entityNamesToSets[typeStr].FirstOrDefault(x => x.Id == Id);
 
-                Remove(entityOnServer);
+                success = Remove(entityOnServer);
                 using (var session = Dem2Hub.docDB.OpenSession())
                 {
                     session.Advanced.Defer(new DeleteCommandData { Key = entityOnServer.Id });
@@ -128,7 +140,17 @@ namespace Dem2Server
                 return false;
             }
 
-            return true;
+            return success;
+        }
+
+        internal static void StoreToDB(ServerClientEntity entity)
+        {
+            using (var session = Dem2Hub.docDB.OpenSession())
+            {
+                session.Store(entity);
+
+                session.SaveChanges();
+            }
         }
     }
 }

@@ -42,7 +42,7 @@ namespace Dem2Model
 
         public void UnsubscribeFromEntity(Subscription subs) {
             ServerClientEntity ent = subs.onEntity;
-            subscriptions.Remove(subs);
+            
             ent.Unsubscribe(this);
         }
 
@@ -52,6 +52,7 @@ namespace Dem2Model
             {
                 UnsubscribeFromEntity(subscription);
             }
+            subscriptions.RemoveAll(x => true);
         }
 
         public void Send(dynamic package) { //shorter version than to having to type it every time
@@ -176,7 +177,7 @@ namespace Dem2Model
                 if (true)    //for testing we don't care if user is verified FB user
 #endif
                 {
-                    Dem2Hub.StoreToDB(this);
+                    EntityRepository.StoreToDB(this);
                     Console.WriteLine("Stored new user {0} with FB id: {1}", this.Id, this.FBAccount.id);
                     //this is a new user, create a new model and send it to him
                     FinishLogIn();

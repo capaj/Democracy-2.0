@@ -105,16 +105,6 @@ namespace Dem2Server
             };
         }
 
-        internal static void StoreToDB(ServerClientEntity entity)
-        {
-            using (var session = docDB.OpenSession())
-            {
-                session.Store(entity);
-
-                session.SaveChanges();
-            }
-        }
-
         public static void sendItTo(object that,IWebSocketConnection socket)
         {
             socket.Send(JsonConvert.SerializeObject(that, new IsoDateTimeConverter()));

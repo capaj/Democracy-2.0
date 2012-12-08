@@ -58,7 +58,7 @@ namespace Dem2UserCreated
             {
                 if (EntityRepository.Add(this))
                 {
-                    Dem2Hub.StoreToDB(this);
+                    EntityRepository.StoreToDB(this);
                     subject.IncrementVersion(); // this triggers on change and notifies the subscribers, because on the subject, properties VoteCounts changed 
                     return true;
                 }
