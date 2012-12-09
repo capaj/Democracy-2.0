@@ -120,32 +120,37 @@ namespace Dem2Server
                         Type type = Type.GetType("Dem2UserCreated." + className);
 
                         var instance = JsonConvert.DeserializeObject(receivedObj["entity"].ToString(), type, new IsoDateTimeConverter());
-                        switch (className)
+                        
+                        if (className == "Subscription")
                         {
-                            case "Subscription":
-                                var subs = (Subscription)instance;
-                                User.getUserFromSocket(socket).UnsubscribeFromEntity(subs);
-                                break;
-                            default:
-                                var Id = (string)receivedObj["entity"]["Id"];
-                                ServerClientEntity toDelete = EntityRepository.GetEntityFromSetsByID(Id);
-                                var deletor = socket.ConnectionInfo.Cookies["user"];
-                                if (deletor == toDelete.OwnerId)
+                            var subs = (Subscription)instance;
+                            User.getUserFromSocket(socket).UnsubscribeFromEntity(subs);
+                        }
+                        else
+                        {
+                            var Id = (string)receivedObj["entity"]["Id"];
+                            ServerClientEntity toDelete = EntityRepository.GetEntityFromSetsByID(Id);
+                            var deletor = socket.ConnectionInfo.Cookies["user"];
+                            if (deletor == toDelete.OwnerId)
+                            {
+                                var success = EntityRepository.DeleteEntity(toDelete);
+                                if (success)
                                 {
-                                    var success = EntityRepository.DeleteEntity(toDelete);
-                                    if (success)
-                                    {
-                                        var op = new entityOperation() { operation = 'd', entity = new ServerClientEntity() { Id = toDelete.Id } };
-                                        Dem2Hub.sendItTo(op, socket);
+                                    if (toDelete is Vote)
+                                    {   // update the subject
+                                        Vote aVote = (Vote)toDelete;
+                                        var subject = EntityRepository.GetEntityFromSetsByID(aVote.subjectId);
+                                        subject.IncrementVersion();
                                     }
+                                    var op = new entityOperation() { operation = 'd', entity = new ServerClientEntity(toDelete.Id, toDelete.version) };
+                                    Dem2Hub.sendItTo(op, socket);
                                 }
-                                else
-                                {
-                                    var err = new ServerError() { message = "sorry, you can't delete the entity id " + Id };
-                                    Dem2Hub.sendItTo(err,socket);
-                                }
-                               
-                                break;
+                            }
+                            else
+                            {
+                                var err = new ServerError() { message = "sorry, you can't delete the entity id " + Id };
+                                Dem2Hub.sendItTo(err, socket);
+                            }
                         }
                     }
                     break;

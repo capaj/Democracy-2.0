@@ -84,7 +84,7 @@ namespace Dem2Server
 
         public static bool Remove(ServerClientEntity entity) {
             var succes = all.Remove(entity);
-            Console.WriteLine("Removing entity {0} ended with succes:{1}", entity.ToString(), succes);
+            Console.WriteLine("Removing entity {0} with id {1} ended with succes:{2}", entity.ToString(), entity.Id, succes);
             return succes;
         }
 

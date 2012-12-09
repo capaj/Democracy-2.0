@@ -5,10 +5,14 @@
         r.thisClientVote = ko.computed({
             read: function () {
                 var Id = r.thisClientVoteId();
-                if (VM.votes.hasOwnProperty(Id) === false) {
-                    VM.votes[Id] = Vote(getWillLoadEntityTemplate("votes", Id));
+                if (Id) {
+                    if (VM.votes.hasOwnProperty(Id) === false) {
+                        VM.votes[Id] = Vote(getWillLoadEntityTemplate("votes", Id));
+                    }
+                    return VM.votes[Id]();
+                } else {
+                    return null;
                 }
-                return VM.votes[Id]();
             },
             deferEvaluation: true       // needed or this will cause fail for the whole page init
         });

@@ -2,7 +2,7 @@
     return function (ent) {
         var r = ServerClientEntity(ent);
         r.Agrees = ko.observable(ent.Agrees);
-        r.subjectID = ko.observable(ent.subjectID);
+        r.subjectId = ko.observable(ent.subjectId);
         r.delete = function () {    //should get called from VotableItem
             var VoteDeleteReq = {
                 "msgType": "entity",

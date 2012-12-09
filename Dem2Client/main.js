@@ -86,6 +86,11 @@ require(["Scripts/facebook", "Scripts/viewModel", "Scripts/addressResolver" ], f
 
                                     break;
                                 case "d":   //delete
+                                    if (type == "votes") {
+                                        var subjectId = VM[type][entityId]().subjectId();
+                                        var subjectType = subjectId.substring(0, subjectId.indexOf("/"));
+                                        VM[subjectType][subjectId]().thisClientVoteId(null);    // we have to remove it from the votable item
+                                    }
                                     delete VM[type][entityId];
                                     break;
                                 default:

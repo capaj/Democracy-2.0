@@ -60,6 +60,15 @@ namespace Dem2Server
 	    }
 
         #region contructors
+        public ServerClientEntity(string cId, uint ver)
+        {
+            version = ver;
+            Id = cId;
+            subscribedUsers = new ConcurrentDictionary<string, User>();
+            OnChange += ServerClientEntity_OnChange;
+        }
+        
+        
         [JsonConstructor]
         public ServerClientEntity() {
             subscribedUsers = new ConcurrentDictionary<string, User>();
