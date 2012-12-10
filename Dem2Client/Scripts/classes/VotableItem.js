@@ -29,7 +29,7 @@
                 "className": "Vote",
                 "msgType": "entity",
                 "operation": "c",
-                "entity": { "subjectID": r.Id, "Agrees": true }
+                "entity": { "subjectID": r.Id, "Agrees": agrees }
             };
             WSworker.postMessage(createVoteReq);
         }
@@ -65,6 +65,32 @@
                 }
             }
         });
+
+        r.percentAgrees = ko.computed({
+            read: function () {
+                var votesSum = r.NegativeVotesCount() + r.PositiveVotesCount();
+                if (votesSum > 0) {
+                    var onePercent = votesSum / 100;
+                    return r.PositiveVotesCount() / onePercent;
+                }
+                return 50;
+            },
+            deferEvaluation: true
+        });
+
+        r.percentDisagrees = ko.computed({
+            read: function () {
+                var votesSum = r.NegativeVotesCount() + r.PositiveVotesCount();
+                if (votesSum > 0) {
+                    var onePercent = votesSum / 100;
+                    return r.NegativeVotesCount() / onePercent;
+                }
+                return 50;
+            },
+            deferEvaluation: true
+        });
+
+        
 
         return ko.observable(r);
     };

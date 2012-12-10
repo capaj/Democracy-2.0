@@ -19,7 +19,7 @@ namespace Dem2Server
 
         public void sendTo(IWebSocketConnection socket) {
             socket.Send(JsonConvert.SerializeObject(this, new IsoDateTimeConverter()));
-            if (operation == 'u')
+            if (operation == 'u' || operation == 'c')
             {
                 var subs = new Subscription() { onEntityId = entity.Id };  //we presume, that the entity will be displayed at the client, so we subscribe him
                 subs.subscribe(socket);
@@ -64,14 +64,14 @@ namespace Dem2Server
                                     break;
                                 case "Subscription":
                                     var subs = (Subscription)instance;
-                                    User.getUserFromSocket(socket).SubscribeToEntity(subs);
+                                    subs.subscribe(socket);
                                     break;
                                 default:
                                     break;
                             }
-
-                            var op = new entityOperation() { operation = 'c', entity = (ServerClientEntity)instance };
-                            Dem2Hub.sendItTo(op, socket);
+                            entity = instance as ServerClientEntity;
+                            //var op = new entityOperation() { operation = 'c', entity = instance as ServerClientEntity };
+                            sendTo(socket);
                             Console.WriteLine("Object {0} created", instance.ToString());
                         }
                         catch (Exception)
@@ -133,7 +133,7 @@ namespace Dem2Server
                             var deletor = socket.ConnectionInfo.Cookies["user"];
                             if (deletor == toDelete.OwnerId)
                             {
-                                var success = EntityRepository.DeleteEntity(toDelete);
+                                var success = toDelete.Delete();
                                 if (success)
                                 {
                                     if (toDelete is Vote)

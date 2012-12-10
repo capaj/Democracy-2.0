@@ -82,10 +82,16 @@ namespace Dem2Server
             return succes;
         }
 
-        public static bool Remove(ServerClientEntity entity) {
-            var succes = all.Remove(entity);
-            Console.WriteLine("Removing entity {0} with id {1} ended with succes:{2}", entity.ToString(), entity.Id, succes);
-            return succes;
+        internal static bool Remove(ServerClientEntity entity) {
+            var success = all.Remove(entity);
+            Console.WriteLine("Removing entity {0} with id {1} ended with succes:{2}", entity.ToString(), entity.Id, success);
+            using (var session = Dem2Hub.docDB.OpenSession())
+            {
+                session.Advanced.Defer(new DeleteCommandData { Key = entity.Id });
+                session.SaveChanges();
+
+            }
+            return success;
         }
 
         public static ServerClientEntity GetEntityFromSetsByID(string Id)
@@ -104,19 +110,8 @@ namespace Dem2Server
             }
             return entityOnServer;
         }
-        public static bool DeleteEntity(ServerClientEntity ent) {
-            var success = Remove(ent);
-            using (var session = Dem2Hub.docDB.OpenSession())
-            {
-                session.Advanced.Defer(new DeleteCommandData { Key = ent.Id });
-                session.SaveChanges();
 
-            }
-            return success;
-        }
-
-
-        public static bool DeleteEntityById(string Id)
+        public static bool RemoveEntityById(string Id)
         {
             string typeStr = Id.Split('/')[0];
             bool success = false;

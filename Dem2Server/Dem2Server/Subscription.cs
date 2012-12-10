@@ -33,7 +33,7 @@ namespace Dem2UserCreated
 
         public void subscribe(Fleck.IWebSocketConnection socket)
         {
-            User.getUserFromSocket(socket).SubscribeToEntity(this);
+            subscribe(User.getUserFromSocket(socket));
         }
     }
 }

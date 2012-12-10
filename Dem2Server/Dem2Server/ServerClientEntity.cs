@@ -31,16 +31,39 @@ namespace Dem2Server
 
         [JsonIgnore]
         public ConcurrentDictionary<string,User> subscribedUsers { get; set; } // all the users that should get a newer version of the entity when entity is updated
-        public bool Send() { return true; }
+        [JsonIgnore]
+        private bool inDeletionPhase = false;
 
-        public void Subscribe(User theUser)
+        public bool Delete()
         {
-            subscribedUsers.TryAdd(theUser.Id, theUser);
+            inDeletionPhase = true;
+            foreach (var user in subscribedUsers)
+            {
+                var userSubs = user.Value.subscriptions.Single(x => x.onEntityId == Id);
+                if (userSubs != null)
+                {
+                    user.Value.subscriptions.Remove(userSubs);
+                }
+            }
+            return EntityRepository.Remove(this);
+        }
+
+        public bool Subscribe(User theUser)
+        {
+            if (inDeletionPhase == false)
+            {
+                return subscribedUsers.TryAdd(theUser.Id, theUser);
+            }
+            return false;
         }
 
         public bool Unsubscribe(User theUser)
         {
-            return subscribedUsers.TryRemove(theUser.Id, out theUser);        //returns false if the item is not found
+            if (inDeletionPhase == false)
+            {
+                return subscribedUsers.TryRemove(theUser.Id, out theUser);        //returns false if the item is not found
+            }
+            return false;
         }
 
         void ServerClientEntity_OnChange(ServerClientEntity o, EventArgs e)

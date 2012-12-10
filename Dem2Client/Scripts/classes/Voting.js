@@ -22,6 +22,7 @@
                 return "neznámý typ dokumentu";
             }
         });
+
         return ko.observable(r);
     };
 });

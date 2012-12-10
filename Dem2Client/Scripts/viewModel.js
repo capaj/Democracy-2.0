@@ -26,10 +26,10 @@
                     }
                 },
                 "State": "nenačteno",
-                "PositiveVotesCount": "nenačteno",
-                "NegativeVotesCount": "nenačteno",
+                "PositiveVotesCount": 0,
+                "NegativeVotesCount": 0,
                 "Id": "nenačteno",
-                "version": "nenačteno",
+                "version": 0,
             })
         },
         currentSection: ko.observable(window.location.pathname),
@@ -68,10 +68,10 @@
                         }
                     },
                     "State": "nenačteno",
-                    "PositiveVotesCount": "nenačteno",
-                    "NegativeVotesCount": "nenačteno",
+                    "PositiveVotesCount": 0,
+                    "NegativeVotesCount": 0,
                     "Id": entityId,
-                    "version": "nenačteno",
+                    "version": 0,
                 };
                 break;
             case "listings":

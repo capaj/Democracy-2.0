@@ -129,10 +129,6 @@
                             <dd><a target="_blank" data-bind="attr: { href:scrapedPrint.URL }">Zde</a></dd>
                             <dt>Program schůze:</dt>
                             <dd><a target="_blank" data-bind="attr: { href:scrapedPrint.inAgenda.URL }">Zde</a></dd>
-                            <dt>Hlasů pro:</dt>
-                            <dd><span data-bind="text: PositiveVotesCount"></span></dd>
-                            <dt>Hlasů proti:</dt>
-                            <dd><span data-bind="text: NegativeVotesCount"></span></dd>
                         </dl> 
                     </td>
                     <td class="span3" style="vertical-align: middle;text-align: center;">
@@ -141,9 +137,15 @@
                         <button class="btn btn-large btn-danger" data-bind="click: voteNo">Ne</button>          <!--btn-block class indicates that user voted no-->
                     </td>
                     </tr>
-              </tbody>
-            </table>
-        </div>    
+            </tbody>
+           
+        </table>
+        <hr class="bs-docs-separator">
+        <div class="progress">
+            <div class="bar bar-success" data-bind="style: {width: percentAgrees() + '%'}">Hlasů pro:<span data-bind="text: PositiveVotesCount"></span></div>
+            <div class="bar bar-danger" data-bind="style: {width: percentDisagrees() + '%'}">Hlasů proti:<span data-bind="text: NegativeVotesCount"></span></div>
+        </div>
+    </div>    
         
 
 </script>
