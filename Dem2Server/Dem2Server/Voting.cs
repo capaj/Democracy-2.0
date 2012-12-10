@@ -20,7 +20,7 @@ namespace Dem2Model
     {
         public delegate void OnEndHandler();
         public event OnEndHandler Ends;
-
+        [JsonIgnore]
         public Timer timer { get; set; }
         //this represents a so called "sněmovní tisk" in czech parliament
         public pspPrintHistory scrapedPrint { get; set; }   // example can be found here: http://www.psp.cz/sqw/historie.sqw?t=857
@@ -128,7 +128,7 @@ namespace Dem2Model
             EntityRepository.StoreToDB(this);
 
         }
-
+        [JsonIgnore]
         public TimeSpan votingInterval
         {
             get

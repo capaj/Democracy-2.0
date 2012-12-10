@@ -10,6 +10,22 @@ navigator.sayswho = (function () {      // thanks to kennebec on stackoverflow.c
     return M;
 })();
 
+var updateObjectsObservables = function(toUpdate, newData) {        
+    for (var key in newData) {  //new data might not be complete, so we wan't to iterate over the new data, not the ones we already have
+        if (newData.hasOwnProperty(key)) {
+            // missing check for hasOwnProperty is intentional, this can serve as our client side type checker
+            if (typeof (toUpdate[key]) == "function") {
+                // its ko.observable hopefully
+                try {
+                    toUpdate[key](newData[key]);
+                } catch (e) {
+                    console.error("updating the observables didn't go as planned, key "+ key + " is somehow problematic");
+                }
+            }// we don't need to update any properties, which are not observables   
+        }
+    }
+}
+
 require(["Scripts/facebook", "Scripts/viewModel", "Scripts/addressResolver" ], function (FB, viewModel, addressResolver) {
     if (navigator.sayswho[0] != "Chrome") { 
         $('#notChromeWarning').modal('show')    //warning about non chrome environment
@@ -81,7 +97,8 @@ require(["Scripts/facebook", "Scripts/viewModel", "Scripts/addressResolver" ], f
                                     if (VM[type].hasOwnProperty(entityId) === false) {
                                         VM.createEntityFromEntOp(type, entityId, entOp);
                                     } else {
-                                        VM[type][entityId](VM.constructors[type](entOp.entity)());       //we will contruct the type we have received from server and store it in the proper table under his id
+                                        updateObjectsObservables(VM[type][entityId](), entOp.entity);   //we will contruct the type we have received from server and store it in the proper table under his id
+                                        console.log("Update on entity Id " + entityId + " has ended.");
                                     }
 
                                     break;

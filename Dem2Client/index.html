@@ -118,17 +118,17 @@
                     <td class="span6" >
                         <dl class="dl-horizontal">
                             <dt>Předmět hlasování:</dt>
-                            <dd><a data-bind="text: scrapedPrint.title, attr: { href:Id }"></a></dd>
+                            <dd><a data-bind="text: scrapedPrint().title, attr: { href:Id }"></a></dd>
                             <dt>Sněmovní tisk číslo:</dt>
-                            <dd><span data-bind="text: scrapedPrint.number"></span></dd>
+                            <dd><span data-bind="text: scrapedPrint().number"></span></dd>
                             <dt>Typ dokumentu:</dt>
                             <dd><span data-bind="text: typeOfPrintMapped"></span></dd>
                             <dt>Kdy bylo přidáno:</dt>
-                            <dd><span data-bind="text: scrapedPrint.scrapedDate"></span></dd>
+                            <dd><span data-bind="text: scrapedPrint().scrapedDate"></span></dd>
                             <dt>Historie tisku na psp.cz:</dt>
-                            <dd><a target="_blank" data-bind="attr: { href:scrapedPrint.URL }">Zde</a></dd>
+                            <dd><a target="_blank" data-bind="attr: { href:scrapedPrint().URL }">Zde</a></dd>
                             <dt>Program schůze:</dt>
-                            <dd><a target="_blank" data-bind="attr: { href:scrapedPrint.inAgenda.URL }">Zde</a></dd>
+                            <dd><a target="_blank" data-bind="attr: { href:scrapedPrint().inAgenda.URL }">Zde</a></dd>
                         </dl> 
                     </td>
                     <td class="span3" style="vertical-align: middle;text-align: center;">
