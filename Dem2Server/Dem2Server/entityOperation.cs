@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Dem2UserCreated;
 using Dem2Model;
+using Newtonsoft.Json.Linq;
 
 namespace Dem2Server
 {
@@ -16,6 +17,9 @@ namespace Dem2Server
     {
         public char operation { get; set; }     //crud
         public ServerClientEntity entity { get; set; }
+        [JsonIgnore]
+        public User fromUser { get; set; }
+
 
         public void sendTo(IWebSocketConnection socket) {
             socket.Send(JsonConvert.SerializeObject(this, new IsoDateTimeConverter()));
@@ -26,7 +30,7 @@ namespace Dem2Server
             }
         }
 
-        internal void resolveEntityRequest(IWebSocketConnection socket, Newtonsoft.Json.Linq.JObject receivedObj)
+        internal void resolveEntityRequest(IWebSocketConnection socket, JObject receivedObj)
         {
             switch (operation)
             {
@@ -39,13 +43,6 @@ namespace Dem2Server
                          "className": "Vote",
                          "entity": {"subjectID": "voting/215", "Agrees": true}
                        }
-                     or subscription
-                      {
-                         "msgType": "entity",
-                         "operation": "c",
-                         "className": "Subscription",
-                         "entity": {"onEntityId": "voting/215"}
-                       }
 
                        // TODO implement create spam check here
                     */
@@ -54,17 +51,14 @@ namespace Dem2Server
                         {
                             var className = (string)receivedObj["className"];
                             Type type = Type.GetType("Dem2UserCreated." + className);
+
                             //object instance = Activator.CreateInstance(type, (Array)receivedObj["ctorArguments"]); old way, TODO test and remove this line
                             var instance = JsonConvert.DeserializeObject(receivedObj["entity"].ToString(), type, new IsoDateTimeConverter());
                             switch (className)
                             {
                                 case "Vote":
                                     var theVote = (Vote)instance;   //the serialized entity must be initialized
-                                    instance = Vote.Initialization(socket, theVote);    //the after initialization, we return the entity back
-                                    break;
-                                case "Subscription":
-                                    var subs = (Subscription)instance;
-                                    subs.subscribe(socket);
+                                    instance = Vote.Initialization(fromUser, theVote);    //the after initialization, we return the entity back
                                     break;
                                 default:
                                     break;
@@ -103,30 +97,23 @@ namespace Dem2Server
                           "Id": "user/132"
                       }
                     }*/
-                    respondToUpdateRequest(socket);
+                    respondToUpdateRequest(receivedObj);
                     break;
                 case 'd': //delete an entity
                     /*
                     {
                         "msgType": "entity",
                         "operation": "d",
-                        "className": "Subscription",
-                        "entity": {"onEntityId": "voting/215"}
+                        "entity": {"Id": "voting/215"}
                     }
                       
                      */
                     {
-                        var className = (string)receivedObj["className"];
-                        Type type = Type.GetType("Dem2UserCreated." + className);
+                        string IdPrefixStr = entity.Id.Split('/')[0];
+                        Type type = EntityRepository.GetRepoTypeById(IdPrefixStr);
 
                         var instance = JsonConvert.DeserializeObject(receivedObj["entity"].ToString(), type, new IsoDateTimeConverter());
-                        
-                        if (className == "Subscription")
-                        {
-                            var subs = (Subscription)instance;
-                            User.getUserFromSocket(socket).UnsubscribeFromEntity(subs);
-                        }
-                        else
+
                         {
                             var Id = (string)receivedObj["entity"]["Id"];
                             ServerClientEntity toDelete = EntityRepository.GetEntityFromSetsByID(Id);
@@ -206,14 +193,26 @@ namespace Dem2Server
 
         }
 
-        private void respondToUpdateRequest(IWebSocketConnection socket)
+        private void respondToUpdateRequest(JObject obj)
         {
-            ServerClientEntity foundEntity = EntityRepository.GetEntityFromSetsByID(entity.Id);
+            var toUpdate = EntityRepository.GetEntityFromSetsByID(entity.Id);
 
-            if (foundEntity != null)
+            if (toUpdate != null)
             {
-                foundEntity = entity;
-                foundEntity.IncrementVersion();
+                var userId = fromUser.Id;
+              
+                if (toUpdate is Vote)
+                {   // update the subject
+                    Vote updatedVote = (Vote)toUpdate;
+                    var success = updatedVote.updateFromJO(obj);
+                    if (success)
+                    {
+                        var subject = EntityRepository.GetEntityFromSetsByID(updatedVote.subjectId);
+                        subject.IncrementVersion();     ///we have to increment version of the subject too
+                    }
+                    
+                }
+               
             }
         }
 

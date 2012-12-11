@@ -147,5 +147,20 @@ namespace Dem2Server
                 session.SaveChanges();
             }
         }
+
+        public static Type GetRepoTypeById(string IdPrefixStr)
+        {
+            var IdPrefixToClassnames = new Dictionary<string, string>() { 
+                {"votes", "Vote"},
+                {"votings", "Voting"},
+                {"users", "User"},
+                {"comments", "Comment"},
+                {"listings", "Listing"},
+            };
+            var className = IdPrefixToClassnames[IdPrefixStr];
+            Type type = Type.GetType("Dem2UserCreated." + className);
+
+            return type;
+        }
     }
 }

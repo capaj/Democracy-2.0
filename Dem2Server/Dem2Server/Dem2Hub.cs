@@ -42,6 +42,7 @@ namespace Dem2Server
         public static void ResolveMessage (string message, IWebSocketConnection socket)
         {
             JObject receivedObj = JObject.Parse(message);
+            User user = null;
            
             switch ((string)receivedObj["msgType"])
             {
@@ -86,8 +87,41 @@ namespace Dem2Server
                     User heWhoWantsToLogout = JsonConvert.DeserializeObject<User>(message);
                     break;
                 case "entity":
-                    entityOperation op = JsonConvert.DeserializeObject<entityOperation>(message);
-                    op.resolveEntityRequest(socket, receivedObj);
+                    user = User.getUserFromSocket(socket);
+                    if (user != null)
+                    {
+                        entityOperation op = JsonConvert.DeserializeObject<entityOperation>(message);
+                        op.fromUser = user;
+                        op.resolveEntityRequest(socket, receivedObj);
+                    }
+                    
+                    break;
+                case "Subscription":
+                    /*
+                   {
+                       "msgType": "Subscription",
+                       "operation": "d",
+                       "entity": {"onEntityId": "voting/215"}
+                   }  
+                    */
+                    user = User.getUserFromSocket(socket);
+                    if (user != null)
+                    {
+                        var subsOp = (string)receivedObj["operation"];
+                        var id = (string)receivedObj["operation"]["onEntityId"];
+                        var entity = EntityRepository.GetEntityFromSetsByID(id);
+                        switch (subsOp)
+                        {
+                            case "d":
+                                entity.Unsubscribe(user);
+                                break;
+                            case "c":
+                                entity.Subscribe(user);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
                     break;
                 default: Console.WriteLine("Unrecognized msgType");
                     break;
