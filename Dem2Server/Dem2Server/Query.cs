@@ -12,15 +12,20 @@ namespace Dem2Server
         public string sourceJSON { get; set; }
         public bool descending { get; set; }
         public string sortByProp { get; set; }      //
-        public string StrOfType { get; set; }   //used in looking up the right hashset
+        public string ofTypeInStr { get; set; }   //used in looking up the right hashset
         public int count { get; set; }      //how many entities should we return
         [JsonIgnore]
         public Type ofType
         {
             get
             {
-                return EntityRepository.entityNamesToSets[StrOfType].GetType();
+                return EntityRepository.entityNamesToSets[ofTypeInStr].GetType();
             }
+        }
+
+        public Query()
+        {
+
         }
 
         public Query(string json)

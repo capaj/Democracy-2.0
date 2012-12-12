@@ -23,14 +23,14 @@ namespace Dem2UserCreated
             {
                 if (JSONQuery.descending)
                 {
-                    list = EntityRepository.entityNamesToSets[JSONQuery.StrOfType]
+                    list = EntityRepository.entityNamesToSets[JSONQuery.ofTypeInStr]
                         .OrderByDescending(x => x.GetType().GetProperty(JSONQuery.sortByProp).GetValue(x, null))
                         .Take(JSONQuery.count)
                         .Select(x => x.Id);     //listings only contain entity Ids
                 }
                 else
                 {
-                    list = EntityRepository.entityNamesToSets[JSONQuery.StrOfType]
+                    list = EntityRepository.entityNamesToSets[JSONQuery.ofTypeInStr]
                         .OrderBy(x => x.GetType().GetProperty(JSONQuery.sortByProp).GetValue(x, null))
                         .Take(JSONQuery.count)
                         .Select(x => x.Id);     //listings only contain entity Ids

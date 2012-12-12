@@ -33,6 +33,12 @@ namespace Dem2Server
 #endif
             Dem2Hub.Initialize(docDB);
             // temporary scraping hack 
+            //var q = new Query() { count = 10, descending = true, sortByProp = "votingEndDate", ofTypeInStr = "votings" };
+            //var l = new Dem2UserCreated.Listing(q);
+            //foreach (var item in l.GetEntities())
+            //{
+            //    Console.WriteLine("item " + item.ToString());
+            //}
             //for (int i = 834; i < 844; i++)
             //{
             //    var voting = new Voting("http://www.psp.cz/sqw/historie.sqw?t="+i);

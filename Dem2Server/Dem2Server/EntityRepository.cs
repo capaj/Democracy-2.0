@@ -57,7 +57,7 @@ namespace Dem2Server
         {
             using (var session = Dem2Hub.docDB.OpenSession())
             {
-                foreach (var user in session.Query<User>().ToList())
+                 foreach (var user in session.Query<User>().ToList())
                 {
                     all.Add(user);
                 }
@@ -69,9 +69,13 @@ namespace Dem2Server
                 {
                     all.Add(vote);
                 }
-
+                foreach (var comment in session.Query<Comment>().ToList())
+                {
+                    all.Add(comment);
+                }
                 // var entity = session.Load<Company>(companyId);
-
+                var stats = Dem2Hub.GetStatistics();
+                Console.WriteLine("Repository initialized with {0} users, {1} votings, {2} votes and {3} comments", stats.userCount, stats.votingCount, stats.voteCount, stats.commentCount);
             }
             return true;
         }
