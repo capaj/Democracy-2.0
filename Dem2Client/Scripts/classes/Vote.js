@@ -11,7 +11,8 @@
             };
 
             WSworker.postMessage(VoteDeleteReq);
-        }
+        };
+
         return ko.observable(r);
     };
 });

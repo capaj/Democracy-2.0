@@ -132,9 +132,9 @@
                         </dl> 
                     </td>
                     <td class="span3" style="vertical-align: middle;text-align: center;">
-                        <button class="btn btn-large btn-success" data-bind="click: voteYes">Ano</button>       <!--btn-block class indicates that user voted yes  css:{ btn-block: thisClientVote().Agrees()-->
+                        <button class="btn btn-large btn-success" data-bind="text: yesText, click: voteYes">Ano</button>       <!--btn-block class indicates that user voted yes  css:{ btn-block: thisClientVote().Agrees()-->
                         <button class="btn btn-large" data-bind="click: deleteVote, visible: thisClientVote">Smazat můj hlas</button>
-                        <button class="btn btn-large btn-danger" data-bind="click: voteNo">Ne</button>          <!--btn-block class indicates that user voted no-->
+                        <button class="btn btn-large btn-danger" data-bind="text: noText, click: voteNo">Ne</button>          <!--btn-block class indicates that user voted no-->
                     </td>
                     </tr>
             </tbody>
