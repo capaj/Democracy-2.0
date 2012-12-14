@@ -35,6 +35,9 @@
         }
         r.voteYes = function () {
             if (r.thisClientVoteId()) {
+                if (r.thisClientVote().Agrees()) {
+                    return;
+                }
                 r.updateThisClientVoteTo(true);
             } else {
                 r.createThisClientVote(true);
@@ -42,7 +45,11 @@
         };
         r.voteNo = function () {
             if (r.thisClientVoteId()) {
-                r.updateThisClientVoteTo(false);
+                if (r.thisClientVote().Agrees()) {
+                    r.updateThisClientVoteTo(false);
+                } else {
+                    return;
+                }
             } else {
                 r.createThisClientVote(false);
             }

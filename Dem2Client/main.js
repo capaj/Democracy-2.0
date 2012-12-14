@@ -83,7 +83,7 @@ require(["Scripts/facebook", "Scripts/viewModel", "Scripts/addressResolver" ], f
                     
                     break;
                 default: //other types of data
-                    try {
+                    //try {
                         var entOp = event.data; // deserialization happens in ws worker, so no need to do it here
                         if (entOp.hasOwnProperty("operation")) {
                             var entityId = entOp.entity.Id;
@@ -116,10 +116,10 @@ require(["Scripts/facebook", "Scripts/viewModel", "Scripts/addressResolver" ], f
                            
                         }
  
-                    }
-                    catch (e) {
-                        console.error('invalid json arrived from server');
-                    }
+                    //}
+                    //catch (e) {
+                    //    console.error('invalid json arrived from server');
+                    //}
 
             }
         };

@@ -27,23 +27,28 @@
 
         r.yesText = ko.defferedComputed({
             read: function () {
-                //if (vote.agrees() == true){
-                //    return "Hlasovali jste pro návrh v " + new Date();
-                //}
-                //if (vote.agrees() == false){
-                //    return "Změnit hlas na ano";
-                //}
+                var aVote = r.thisClientVote();
+                if (aVote) {
+                    if (aVote.Agrees()) {
+                        return "Hlasovali jste pro návrh v " + aVote.castedTime();
+                    }
+                    else{
+                        return "Změnit hlas na ano";
+                    }
+                }
                 return "Ano";
             }
         });
         r.noText = ko.defferedComputed({
             read: function () {
-                //if (vote.agrees() == false){
-                //    return "Hlasovali jste proti návrhu v " + new Date();
-                //}
-                //if (vote.agrees() == true){
-                //    return "Změnit hlas na ne";
-                //}
+                var aVote = r.thisClientVote();
+                if (aVote) {
+                    if (aVote.Agrees()) {
+                        return "Změnit hlas na ne";
+                    }else{
+                        return "Hlasovali jste proti návrhu v " + aVote.castedTime(); 
+                    }
+                }
                 return "Ne";
             }
         });
