@@ -23,7 +23,7 @@
                 "entity": { "Id": r.thisClientVote().Id, "Agrees": agrees }
             };
             WSworker.postMessage(updateVoteReq);
-        }
+        };
         r.createThisClientVote = function (agrees) {
             var createVoteReq = {
                 "className": "Vote",
@@ -32,7 +32,32 @@
                 "entity": { "subjectID": r.Id, "Agrees": agrees }
             };
             WSworker.postMessage(createVoteReq);
-        }
+        };
+
+        r.thisClientVoteAgrees = ko.computed({ // used for disabling the voting buttons
+            read: function () {
+                if (r.thisClientVote()) {
+                    if (r.thisClientVote().Agrees()) {
+                        return true;
+                    }
+                }
+                return false;
+            },
+            deferEvaluation: true       // needed or this will cause fail for the whole page init
+        });
+
+        r.thisClientVoteDisagrees = ko.computed({ // used for disabling the voting buttons
+            read: function () {
+                if (r.thisClientVote()) {
+                    if (r.thisClientVote().Agrees() === false) {
+                        return true;
+                    }
+                }
+                return false;
+            },
+            deferEvaluation: true       // needed or this will cause fail for the whole page init
+        });
+
         r.voteYes = function () {
             if (r.thisClientVoteId()) {
                 if (r.thisClientVote().Agrees()) {
@@ -42,6 +67,7 @@
             } else {
                 r.createThisClientVote(true);
             }
+            
         };
         r.voteNo = function () {
             if (r.thisClientVoteId()) {
@@ -53,9 +79,12 @@
             } else {
                 r.createThisClientVote(false);
             }
+            
         };
+
         r.deleteVote = function () {
             r.thisClientVote().delete();
+            
         };
         r.PositiveVotesCount = ko.observable(ent.PositiveVotesCount);
         r.NegativeVotesCount = ko.observable(ent.NegativeVotesCount);
@@ -72,6 +101,10 @@
                 }
             }
         });
+
+        r.showVotesListing = function () {
+
+        };
 
         r.percentAgrees = ko.computed({
             read: function () {

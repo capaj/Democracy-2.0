@@ -13,7 +13,8 @@ namespace Dem2Server
         public bool descending { get; set; }
         public string sortByProp { get; set; }      //
         public string ofTypeInStr { get; set; }   //used in looking up the right hashset
-        public int count { get; set; }      //how many entities should we return
+        public UInt16 pageSize { get; set; }      //how many entities should we return
+        public UInt32 pageNumber { get; set; }      //how many entities should we return
         [JsonIgnore]
         public Type ofType
         {

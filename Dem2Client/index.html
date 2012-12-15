@@ -129,12 +129,14 @@
                             <dd><a target="_blank" data-bind="attr: { href:scrapedPrint().URL }">Zde</a></dd>
                             <dt>Program schůze:</dt>
                             <dd><a target="_blank" data-bind="attr: { href:scrapedPrint().inAgenda.URL }">Zde</a></dd>
+                           <!-- <dt></dt>-->
+                            <dd><a data-bind="click: showVotesListing">Seznam hlasů</a></dd>
                         </dl> 
                     </td>
                     <td class="span3" style="vertical-align: middle;text-align: center;">
-                        <button class="btn btn-large btn-success" data-bind="text: yesText, click: voteYes">Ano</button>       <!--btn-block class indicates that user voted yes  css:{ btn-block: thisClientVote().Agrees()-->
+                        <button class="btn btn-large btn-success" data-bind="text: yesText, click: voteYes, disable: thisClientVoteAgrees()">Ano</button>       <!--btn-block class indicates that user voted yes  css:{ btn-block: thisClientVote().Agrees()-->
                         <button class="btn btn-large" data-bind="click: deleteVote, visible: thisClientVote">Smazat můj hlas</button>
-                        <button class="btn btn-large btn-danger" data-bind="text: noText, click: voteNo">Ne</button>          <!--btn-block class indicates that user voted no-->
+                        <button class="btn btn-large btn-danger" data-bind="text: noText, click: voteNo, disable: thisClientVoteDisagrees()">Ne</button>          <!--btn-block class indicates that user voted no-->
                     </td>
                     </tr>
             </tbody>
