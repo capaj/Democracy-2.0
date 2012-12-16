@@ -15,19 +15,15 @@ namespace Dem2UserCreated
         [JsonIgnore]
         public ServerClientEntity parent 
         { 
-            get { 
-                using(var session = Dem2Hub.docDB.OpenSession())
-	            {
-		            return session.Load<ServerClientEntity>(parentId);
-	            } 
+            get {
+                return EntityRepository.GetEntityFromSetsByID(parentId);
             }
             set { _parent = value; } 
         }     // comment is ALWAYS a response to some entity-whether it is a voting, other comment, anything else
         
-        public string parentId { get; private set; }
-        
-        public DateTime publishedDate { get; set; }
-        public HashSet<CommentText> texts { get; set; }
+        public string parentId { get; set; }
+
+        public List<CommentText> texts { get; set; }
         public bool deleted { get; set; } //if the comment is deleted, this is set to false
     }
 

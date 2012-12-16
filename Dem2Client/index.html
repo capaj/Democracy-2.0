@@ -105,9 +105,34 @@
 <script type="text/javascript" src="Scripts/bootstrap.js"></script>
 <script type="text/javascript" data-main="main" src="Scripts/require.js"></script>
 
-<script type="text/html" id="comment-template">
-    <h3 data-bind="text: name"></h3>
-    <p>Autor: <span data-bind="text: owner.fullName"></span></p>
+<script type="text/html" id="comment-tree-template">
+    <div class="well">
+        <a data-bind="text: author" href="#nogo"></a><br>
+        <p><span data-bind="text: comment"></span></p>
+        <div data-bind="template: { name: 'comments-action-dialog' }"></div>
+        <div data-bind="template: { name: 'comment-tree-template', foreach: responses}">    
+        </div>   
+            
+    </div>
+</script>
+
+<script type="text/html" id="comments-action-dialog">
+    <div class="clearfix">
+        <span data-bind="text: PositiveVotesCount"></span>
+            
+        <button class="btn btn-success btn-small"><i class="icon-thumbs-up"></i></button>
+        <button type="button" class="btn btn-small" data-toggle="collapse" data-bind="attr: {'data-target':'#'+elementId}">
+            Vložte odpověď
+        </button>
+            
+        <button class="btn btn-danger btn-small"><i class="icon-thumbs-down"></i></button>
+        <span data-bind="text: NegativeVotesCount"></span>
+        <div class="collapse" data-bind="attr: {id:elementId}" style="margin-top:5px">
+            <textarea class="xxlarge" id="textarea2" name="textarea2" rows="3" style="width: 535px; height: 71px;"></textarea>
+            <button class="btn btn-large primary" data-bind="click: createComment">Odeslat</button>
+        </div>
+    </div>
+      
 </script>
 
 <script type="text/html" id="voting-template">
@@ -142,11 +167,32 @@
             </tbody>
            
         </table>
-        <hr class="bs-docs-separator">
         <div class="progress">
             <div class="bar bar-success" data-bind="style: {width: percentAgrees() + '%'}">Hlasů pro:<span data-bind="text: PositiveVotesCount"></span></div>
             <div class="bar bar-danger" data-bind="style: {width: percentDisagrees() + '%'}">Hlasů proti:<span data-bind="text: NegativeVotesCount"></span></div>
         </div>
+
+        <div class="accordion-group">
+                  <div class="accordion-heading">
+                    <a class="accordion-toggle" data-toggle="collapse" data-target="#collapseComments">
+                      Komentáře
+                    </a>
+                  </div>
+                  <div id="collapseComments" class="accordion-body collapse" style="height: 0px;">
+                    <div class="accordion-inner">
+                      <button type="button" class="btn btn-small" data-toggle="collapse" data-bind="attr: {'data-target':'#'+elementId}">
+                        Vložte odpověď
+                      </button>
+                      <div class="collapse" data-bind="attr: {id:elementId}" style="margin-top:5px">
+                      <textarea class="xxlarge" id="textarea1" data-bind="value: responseText" rows="3"></textarea>
+                      <button class="btn btn-large primary" data-bind="click: createComment">Odeslat</button>
+                    </div>
+                <div class="container" data-bind="template: { name: 'comment-tree-template', foreach: commentTree }"></div>
+                      
+            </div>
+            </div>
+        </div>
+
     </div>    
         
 

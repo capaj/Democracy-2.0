@@ -9,7 +9,7 @@
         r.scrapedPrint = ko.observable(ent.scrapedPrint);
         r.State = ko.observable(ent.State);
         r.votingEndDate = ko.observable(ent.votingEndDate);
-
+        r.commentTree = ko.observableArray([]);
         r.typeOfPrintMapped = ko.computed(function () {
             var types = {
                 1: "novela zákona",

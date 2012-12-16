@@ -17,34 +17,36 @@ namespace Dem2UserCreated
             JSONQuery = query;
         }
 
-        public List<string> GetEntities() {
-            IEnumerable<string> list = null;
-            try
-            {
-                if (JSONQuery.descending)
+        public List<string> list { 
+            get{
+                IEnumerable<string> list = null;
+                try
                 {
-                    list = EntityRepository.entityNamesToSets[JSONQuery.ofTypeInStr]
-                        .OrderByDescending(x => x.GetType().GetProperty(JSONQuery.sortByProp).GetValue(x, null))
-                        .Take(JSONQuery.count)
-                        .Select(x => x.Id);     //listings only contain entity Ids
+                    if (JSONQuery.descending)
+                    {
+                        list = EntityRepository.entityNamesToSets[JSONQuery.ofTypeInStr]
+                            .OrderByDescending(x => x.GetType().GetProperty(JSONQuery.sortByProp).GetValue(x, null))
+                            .Take(JSONQuery.pageSize)
+                            .Select(x => x.Id);     //listings only contain entity Ids
+                    }
+                    else
+                    {
+                        list = EntityRepository.entityNamesToSets[JSONQuery.ofTypeInStr]
+                            .OrderBy(x => x.GetType().GetProperty(JSONQuery.sortByProp).GetValue(x, null))
+                            .Take(JSONQuery.pageSize)
+                            .Select(x => x.Id);     //listings only contain entity Ids
+                    }
                 }
-                else
+                catch (Exception)
                 {
-                    list = EntityRepository.entityNamesToSets[JSONQuery.ofTypeInStr]
-                        .OrderBy(x => x.GetType().GetProperty(JSONQuery.sortByProp).GetValue(x, null))
-                        .Take(JSONQuery.count)
-                        .Select(x => x.Id);     //listings only contain entity Ids
+
+                    throw;
                 }
-            }
-            catch (Exception)
-            {
-                
-                throw;
-            }
-            
-            return list.ToList();
-            //TODO implement properly
+
+                return list.ToList();
+            } 
         }
+
     }
 
     

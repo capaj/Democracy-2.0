@@ -1,6 +1,8 @@
 ﻿define(["./ServerClientEntity"], function (ServerClientEntity) {
     return function (ent) {
         var r = ServerClientEntity(ent);
+        r.elementId = r.Id.split("/").join("");     //there were troubles with "/" in element ids, to we cut it out and use the string without it
+        r.creationTime = ko.observable(new Date(ent.creationTime));
         r.thisClientVoteId = ko.observable(null);
         r.thisClientVote = ko.computed({
             read: function () {
@@ -130,7 +132,18 @@
             deferEvaluation: true
         });
 
-        
+        r.responseText = ko.observable("");
+
+        r.createComment = function () {
+            var createCommentReq = {
+                "className": "Comment",
+                "msgType": "entity",
+                "operation": "c",
+                "entity": { "parentID": r.Id, "texts": {1: r.responseText() } }
+            };
+            WSworker.postMessage(createCommentReq);
+            console.log("New comment on entity Id " + r.Id + ".");
+        };
 
         return ko.observable(r);
     };
