@@ -39,7 +39,7 @@ namespace Dem2Server
             //{
             //    Console.WriteLine("item " + item.ToString());
             //}
-            //for (int i = 834; i < 844; i++)
+            //for (int i = 874; i < 884; i++)
             //{
             //    var voting = new Voting("http://www.psp.cz/sqw/historie.sqw?t="+i);
             //}
