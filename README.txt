@@ -1,4 +1,4 @@
-﻿Sigle page web application powered by Javascript(KnockoutJS, Twitter bootstrap), .NET(Fleck and RavenDB) on server.
+Single page web application powered by Javascript(KnockoutJS, Twitter bootstrap), .NET(Fleck and RavenDB) on server.
 Server-client comunication is done only via webscokets.
 Contains 3 VS2012 projects - Scraper, Websocket server and javascript fat client.
 Usecase should be like this: 
