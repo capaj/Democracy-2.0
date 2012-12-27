@@ -86,7 +86,6 @@ namespace Dem2Model
 
                 if (this.State == VotingStates.Ongoing)
                 {
-                    this.CastedVotes.Add(vote);
                     return EntityRepository.Add(vote);
                 }
                 else

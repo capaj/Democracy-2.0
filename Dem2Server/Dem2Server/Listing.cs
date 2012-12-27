@@ -38,7 +38,7 @@ namespace Dem2UserCreated
                     }
                     foreach (var item in JSONQuery.propertiesEqualValues)
                     {
-                        list = list.Where(x => x.GetType().GetProperty(item.Key).GetValue(x, null) == item.Value);
+                        list = list.Where(x => (string)x.GetType().GetProperty(item.Key).GetValue(x, null) == (string)item.Value);
                     }
                 }
                 catch (Exception)

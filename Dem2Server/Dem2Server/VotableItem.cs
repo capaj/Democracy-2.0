@@ -12,7 +12,7 @@ namespace Dem2Server
     public class VotableItem:ServerClientEntity
     {
         [JsonIgnore]
-        protected List<Vote> castedVotes
+        protected List<Vote> getCastedVotes
         {
             get
             {
@@ -20,8 +20,8 @@ namespace Dem2Server
             }
         }  // or ConcurrentBag?
 
-        public int PositiveVotesCount { get { return castedVotes.Where(vote => vote.Agrees == true).Count(); } }
-        public int NegativeVotesCount { get { return castedVotes.Where(vote => vote.Agrees == false).Count(); } }
+        public int PositiveVotesCount { get { return getCastedVotes.Where(vote => vote.Agrees == true).Count(); } }
+        public int NegativeVotesCount { get { return getCastedVotes.Where(vote => vote.Agrees == false).Count(); } }
 
         public virtual bool RegisterVote(Vote vote) {
             return EntityRepository.Add(vote);
