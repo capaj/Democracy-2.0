@@ -36,6 +36,10 @@ namespace Dem2UserCreated
                             .Take(JSONQuery.pageSize)
                             .Select(x => x.Id);     //listings only contain entity Ids
                     }
+                    foreach (var item in JSONQuery.propertiesEqualValues)
+                    {
+                        list = list.Where(x => x.GetType().GetProperty(item.Key).GetValue(x, null) == item.Value);
+                    }
                 }
                 catch (Exception)
                 {

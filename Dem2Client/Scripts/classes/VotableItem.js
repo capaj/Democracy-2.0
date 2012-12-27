@@ -142,6 +142,7 @@
                 "entity": { "parentID": r.Id, "texts": {1: r.responseText() } }
             };
             WSworker.postMessage(createCommentReq);
+            r.responseText("");
             console.log("New comment on entity Id " + r.Id + ".");
         };
 

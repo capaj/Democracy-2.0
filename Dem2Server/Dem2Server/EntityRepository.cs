@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Dem2Model;
 using Dem2UserCreated;
 using Raven.Abstractions.Commands;
+using Raven.Client.Document;
 
 namespace Dem2Server
 {
@@ -55,34 +56,42 @@ namespace Dem2Server
 
         public static bool Initialize()
         {
-            using (var session = Dem2Hub.docDB.OpenSession())
+            
+            foreach (var user in getAll<User>(Dem2Hub.docDB))
             {
-                 foreach (var user in session.Query<User>().ToList())
-                {
-                    all.Add(user);
-                }
-                foreach (var voting in session.Query<Voting>().ToList())
-                {
-                    all.Add(voting);
-                }
-                foreach (var vote in session.Query<Vote>().ToList())
-                {
-                    all.Add(vote);
-                }
-                foreach (var comment in session.Query<Comment>().ToList())
-                {
-                    all.Add(comment);
-                }
-                // var entity = session.Load<Company>(companyId);
-                var stats = Dem2Hub.GetStatistics();
-                Console.WriteLine("Repository initialized with {0} users, {1} votings, {2} votes and {3} comments", stats.userCount, stats.votingCount, stats.voteCount, stats.commentCount);
+                all.Add(user);
             }
+            foreach (var voting in getAll<Voting>(Dem2Hub.docDB))
+            {
+                all.Add(voting);
+            }
+            foreach (var vote in getAll<Vote>(Dem2Hub.docDB))
+            {
+                all.Add(vote);
+            }
+            foreach (var comment in getAll<Comment>(Dem2Hub.docDB))
+            {
+                all.Add(comment);
+            }
+            // var entity = session.Load<Company>(companyId);
+            var stats = Dem2Hub.GetStatistics();
+            Console.WriteLine("Repository initialized with {0} users, {1} votings, {2} votes and {3} comments", stats.userCount, stats.votingCount, stats.voteCount, stats.commentCount);
+           
             return true;
         }
 
         public static bool Add(ServerClientEntity entity) {
             var succes = all.Add(entity);
-            Console.WriteLine("Adding entity {0} ended with succes:{1}", entity.ToString(), succes);
+            if (succes)
+            {
+                entity.IncrementVersion();      //this should increment from 0 to 1
+                StoreToDB(entity);
+                Console.WriteLine("Adding entity {0} ended with succes:{1}", entity.ToString(), succes);
+            }
+            else
+            {
+                Console.WriteLine("Entity was nto added because the same entity is already in all hashset");
+            }
             return succes;
         }
 
@@ -144,12 +153,44 @@ namespace Dem2Server
 
         internal static void StoreToDB(ServerClientEntity entity)
         {
-            using (var session = Dem2Hub.docDB.OpenSession())
+            using (Raven.Client.IDocumentSession session = Dem2Hub.docDB.OpenSession())
             {
                 session.Store(entity);
 
                 session.SaveChanges();
             }
+        }
+
+        public static List<T> getAll<T>(DocumentStore docDB)
+        {
+            return getAllFrom(0, new List<T>(), docDB);
+        }
+
+        public static List<T> getAllFrom<T>(int startFrom, List<T> list, DocumentStore docDB)
+        {
+            var allUsers = list;
+
+            using (var session = docDB.OpenSession())
+            {
+                int queryCount = 0;
+                int start = startFrom;
+                while (true)
+                {
+                    var current = session.Query<T>().Take(1024).Skip(start).ToList();
+                    queryCount += 1;
+                    if (current.Count == 0)
+                        break;
+
+                    start += current.Count;
+                    allUsers.AddRange(current);
+
+                    if (queryCount >= 30)
+                    {
+                        return getAllFrom(start, allUsers, docDB);
+                    }
+                }
+            }
+            return allUsers;
         }
 
         public static Type GetRepoTypeById(string IdPrefixStr)

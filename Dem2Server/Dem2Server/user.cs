@@ -177,7 +177,6 @@ namespace Dem2Model
                 if (true)    //for testing we don't care if user is verified FB user
 #endif
                 {
-                    EntityRepository.StoreToDB(this);
                     Console.WriteLine("Stored new user {0} with FB id: {1}", this.Id, this.FBAccount.id);
                     //this is a new user, create a new model and send it to him
                     FinishLogIn();

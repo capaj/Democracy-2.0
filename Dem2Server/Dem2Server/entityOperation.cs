@@ -57,8 +57,13 @@ namespace Dem2Server
                             switch (className)
                             {
                                 case "Vote":
-                                    var theVote = (Vote)instance;   //the serialized entity must be initialized
-                                    instance = Vote.Initialization(fromUser, theVote);    //the after initialization, we return the entity back
+                                    var newVote = (Vote)instance;   //the serialized entity must be initialized
+                                    instance = Vote.Initialization(fromUser, newVote);    //the after initialization, we return the entity back
+                                    break;
+                                case "Comment":
+                                    var newComment = (Comment)instance;
+                                    EntityRepository.Add(newComment);
+                                    Console.WriteLine("Added new comment with Id {0}",newComment.Id);
                                     break;
                                 default:
                                     break;
@@ -157,10 +162,19 @@ namespace Dem2Server
                 try
                 {
                     if (foundEntity is VotableItem)    //check if the entity we are responding with is a VotableItem or not, props to http://www.hanselman.com/blog/DoesATypeImplementAnInterface.aspx
-                    //if (typeof(VotableItem).IsAssignableFrom(entityOnServer.GetType()))    //check if the entity we are responding with is a VotableItem or not, props to http://www.hanselman.com/blog/DoesATypeImplementAnInterface.aspx
                     {
                         vote = EntityRepository.allVotes.FirstOrDefault(x => x.subjectId == entity.Id && x.OwnerId == socket.ConnectionInfo.Cookies["user"]);
+                        
                     }
+                    //var comments = new List<Comment>();
+                   
+                    //comments = EntityRepository.allComments.Where(x => x.parentId == entity.Id).ToList();
+                    //foreach (var comment in comments)
+                    //{
+                    //    entityOperation createCommentOp = new entityOperation { entity = comment, operation = 'u' };
+                    //    createCommentOp.sendTo(socket);
+                    //}
+                    
                 }
                 catch (Exception ex)
                 {

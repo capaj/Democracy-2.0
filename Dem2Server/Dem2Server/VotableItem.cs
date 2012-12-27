@@ -11,7 +11,8 @@ namespace Dem2Server
 {
     public class VotableItem:ServerClientEntity
     {
-        protected List<Vote> CastedVotes
+        [JsonIgnore]
+        protected List<Vote> castedVotes
         {
             get
             {
@@ -19,8 +20,8 @@ namespace Dem2Server
             }
         }  // or ConcurrentBag?
 
-        public int PositiveVotesCount { get { return CastedVotes.Where(vote => vote.Agrees == true).Count(); } }
-        public int NegativeVotesCount { get { return CastedVotes.Where(vote => vote.Agrees == false).Count(); } }
+        public int PositiveVotesCount { get { return castedVotes.Where(vote => vote.Agrees == true).Count(); } }
+        public int NegativeVotesCount { get { return castedVotes.Where(vote => vote.Agrees == false).Count(); } }
 
         public virtual bool RegisterVote(Vote vote) {
             return EntityRepository.Add(vote);
@@ -31,6 +32,15 @@ namespace Dem2Server
         {
             get { return PositiveVotesCount > NegativeVotesCount; }
 
+        }
+
+        internal void IncrementVotableVersion()
+        {
+            foreach (var subscriber in subscribedUsers)
+            {
+                var op = new entityOperation() { operation = 'u', entity = this };
+                Dem2Hub.sendItTo(op, subscriber.Value.connection);
+            }
         }
     }
 }
