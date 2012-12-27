@@ -28,9 +28,16 @@ namespace Dem2Server
         }
 
         [JsonIgnore]
-        public bool GetCurrentResolve
+        public bool getResolve
         {
             get { return PositiveVotesCount > NegativeVotesCount; }
+
+        }
+
+        [JsonIgnore]
+        public int getResolveCount
+        {
+            get { return PositiveVotesCount - NegativeVotesCount; }
 
         }
 

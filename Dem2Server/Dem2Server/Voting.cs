@@ -43,7 +43,7 @@ namespace Dem2Model
                 DateTime now = DateTime.Now;
                 if (votingEndDate < now)
                 {
-                    if (GetCurrentResolve == true)
+                    if (getResolve == true)
                     {
                         return VotingStates.EndedAccepted;
                     }

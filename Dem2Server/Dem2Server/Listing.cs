@@ -19,22 +19,21 @@ namespace Dem2UserCreated
 
         public List<string> list { 
             get{
-                IEnumerable<string> list = null;
+                IEnumerable<Dem2Server.ServerClientEntity> list = null;
                 try
                 {
                     if (JSONQuery.descending)
                     {
                         list = EntityRepository.entityNamesToSets[JSONQuery.ofTypeInStr]
                             .OrderByDescending(x => x.GetType().GetProperty(JSONQuery.sortByProp).GetValue(x, null))
-                            .Take(JSONQuery.pageSize)
-                            .Select(x => x.Id);     //listings only contain entity Ids
+                            .Take(JSONQuery.pageSize);     //listings only contain entity Ids
                     }
                     else
                     {
                         list = EntityRepository.entityNamesToSets[JSONQuery.ofTypeInStr]
                             .OrderBy(x => x.GetType().GetProperty(JSONQuery.sortByProp).GetValue(x, null))
-                            .Take(JSONQuery.pageSize)
-                            .Select(x => x.Id);     //listings only contain entity Ids
+                            .Take(JSONQuery.pageSize);
+                                 //listings only contain entity Ids
                     }
                     foreach (var item in JSONQuery.propertiesEqualValues)
                     {
@@ -47,7 +46,7 @@ namespace Dem2UserCreated
                     throw;
                 }
 
-                return list.ToList();
+                return list.Select(x => x.Id).ToList();
             } 
         }
 

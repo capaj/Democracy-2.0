@@ -33,9 +33,11 @@ namespace Dem2Server
 #endif
             Dem2Hub.Initialize(docDB);
             // temporary scraping hack 
-            //var q = new Query() { count = 10, descending = true, sortByProp = "votingEndDate", ofTypeInStr = "votings" };
+            //var q = new Query() { pageSize = 10, descending = true, sortByProp = "getResolveCount", ofTypeInStr = "comments", 
+            //    propertiesEqualValues = new Dictionary<string, string>() { {"parentId","votings/162"} } 
+            //};
             //var l = new Dem2UserCreated.Listing(q);
-            //foreach (var item in l.GetEntities())
+            //foreach (var item in l.list)
             //{
             //    Console.WriteLine("item " + item.ToString());
             //}
