@@ -83,11 +83,12 @@
     </div>
     <div id="FBResponse"></div>
     <div id="fb-root"></div>
-    <section id="static" class="container-fluid" data-bind="if:currentSectionIsStatic">   <!-- content gets loaded here programatically by ajax--> 
+
+    <section id="main" class="container-fluid">   <!-- content gets loaded here programatically by json through Websocket--> 
+        <div id="static" class="container-fluid" data-bind="if:currentSectionIsStatic">   <!-- content gets loaded here programatically by ajax--> 
        
-    </section>
-    <section id="main" class="container-fluid" data-bind="ifnot:currentSectionIsStatic">   <!-- content gets loaded here programatically by json through Websocket--> 
-        
+        </div>
+
         <div id="singleVoting" data-bind="if: currentSection() == '/votings'">
             <div id="voting" data-bind="template: { name: 'voting-template', data: currentVoting}"></div>
         </div>       

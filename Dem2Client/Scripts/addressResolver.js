@@ -2,7 +2,7 @@
     var loadStaticToMain = function (URL) {
         VM.currentSectionIsStatic(true);
         $.ajax({
-            url: "/static" + URL,
+            url: "/static" + URL + ".html",
         }).done(function (data) {
             document.getElementById("static").innerHTML = data;
         });

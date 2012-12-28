@@ -27,7 +27,7 @@ var updateObjectsObservables = function(toUpdate, newData) {
 }
 
 require(["Scripts/facebook", "Scripts/viewModel", "Scripts/addressResolver" ], function (FB, viewModel, addressResolver) {
-    if (navigator.sayswho[0] != "Chrome") { 
+    if (!(navigator.sayswho[0] === "Chrome" || navigator.sayswho[0] === "Safari")) {      //Phantom is used for fetching dynamic content for googlebot, he checks as 'safari'
         $('#notChromeWarning').modal('show')    //warning about non chrome environment
     }
 
