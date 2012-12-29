@@ -73,11 +73,10 @@
                     "Id": entityId,
                     "version": 0,
                 };
-                break;
             case "listings":
                 return {};
         }
-    };
+    }
 
     VM.createEntityFromEntOp = function (type, entityId, entOp) {
         VM[type][entityId] = VM.constructors[type](entOp.entity);
@@ -89,9 +88,9 @@
             } else {    //the votable item is not here on the client yet, so it is probably fucked
                 console.error("Vote on unknown subject wants to be created");
             }
-            
+
         }
-    }
+    };
     return VM;
 });
 

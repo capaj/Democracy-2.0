@@ -15,7 +15,7 @@ namespace Dem2Server
         public Dictionary<string,string> propertiesEqualValues { get; set; }
         public string ofTypeInStr { get; set; }   //used in looking up the right hashset
         public UInt16 pageSize { get; set; }      //how many entities should we return
-        public UInt32 pageNumber { get; set; }      //how many entities should we return
+        public int toSkip { get; set; }      //how many entities should we return
         [JsonIgnore]
         public Type ofType
         {

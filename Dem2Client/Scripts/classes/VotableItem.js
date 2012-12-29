@@ -139,12 +139,33 @@
                 "className": "Comment",
                 "msgType": "entity",
                 "operation": "c",
-                "entity": { "parentID": r.Id, "texts": {1: r.responseText() } }
+                "entity": { "parentId": r.Id, "texts": {1: r.responseText() } }
             };
             WSworker.postMessage(createCommentReq);
             r.responseText("");
             console.log("New comment on entity Id " + r.Id + ".");
         };
+
+        r.listingParams = {
+            pageSize: ko.observable(20),
+            ofTypeInStr: "comments",
+            toSkip: ko.observable(0),
+            descending: ko.observable(true), 
+            sortByProp : ko.observable("getResolveCount"),
+            propertiesEqualValues: {"parentId": r.Id}
+        };
+
+        r.createCommentsListing = function () {
+            var listingReq = {
+                "className": "Listing",
+                "msgType": "entity",
+                "operation": "c",
+                "entity": ko.mapping.toJS(r.listingParams) 
+            };
+            WSworker.postMessage(listingReq);
+        };
+
+
 
         return ko.observable(r);
     };

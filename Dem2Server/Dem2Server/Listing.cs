@@ -25,14 +25,12 @@ namespace Dem2UserCreated
                     if (JSONQuery.descending)
                     {
                         list = EntityRepository.entityNamesToSets[JSONQuery.ofTypeInStr]
-                            .OrderByDescending(x => x.GetType().GetProperty(JSONQuery.sortByProp).GetValue(x, null))
-                            .Take(JSONQuery.pageSize);     //listings only contain entity Ids
+                            .OrderByDescending(x => x.GetType().GetProperty(JSONQuery.sortByProp).GetValue(x, null));     //listings only contain entity Ids
                     }
                     else
                     {
                         list = EntityRepository.entityNamesToSets[JSONQuery.ofTypeInStr]
-                            .OrderBy(x => x.GetType().GetProperty(JSONQuery.sortByProp).GetValue(x, null))
-                            .Take(JSONQuery.pageSize);
+                            .OrderBy(x => x.GetType().GetProperty(JSONQuery.sortByProp).GetValue(x, null));
                                  //listings only contain entity Ids
                     }
                     foreach (var item in JSONQuery.propertiesEqualValues)
@@ -46,7 +44,7 @@ namespace Dem2UserCreated
                     throw;
                 }
 
-                return list.Select(x => x.Id).ToList();
+                return list.Select(x => x.Id).Skip(JSONQuery.toSkip).Take(JSONQuery.pageSize).ToList();
             } 
         }
 
