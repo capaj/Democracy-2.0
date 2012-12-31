@@ -54,21 +54,29 @@ namespace Dem2Server
 
                             //object instance = Activator.CreateInstance(type, (Array)receivedObj["ctorArguments"]); old way, TODO test and remove this line
                             var instance = JsonConvert.DeserializeObject(receivedObj["entity"].ToString(), type, new IsoDateTimeConverter());
+                            entity = instance as ServerClientEntity;
+                            entity.Subscribe(fromUser);
                             switch (className)
                             {
                                 case "Vote":
                                     var newVote = (Vote)instance;   //the serialized entity must be initialized
-                                    instance = Vote.Initialization(fromUser, newVote);    //the after initialization, we return the entity back
+                                    newVote.InitVote(fromUser);    //the after initialization, we return the entity back
+                                    Console.WriteLine("Created new vote with Id {0}", newVote.Id);
                                     break;
                                 case "Comment":
                                     var newComment = (Comment)instance;
                                     EntityRepository.Add(newComment);
-                                    Console.WriteLine("Added new comment with Id {0}",newComment.Id);
+                                    Console.WriteLine("Created new comment with Id {0}",newComment.Id);
+                                    break;
+                                case "Listing":
+                                    var newListing = (Listing)instance;
+                                    EntityRepository.Add(newListing);
+                                    Console.WriteLine("Created new listing with Id {0}", newListing.Id);
                                     break;
                                 default:
                                     break;
                             }
-                            entity = instance as ServerClientEntity;
+                            
                             //var op = new entityOperation() { operation = 'c', entity = instance as ServerClientEntity };
                             sendTo(socket);
                             Console.WriteLine("Object {0} created", instance.ToString());

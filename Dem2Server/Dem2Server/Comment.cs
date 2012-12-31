@@ -19,7 +19,7 @@ namespace Dem2UserCreated
         }     // comment is ALWAYS a response to some entity-whether it is a voting, other comment, anything else
         
         public string parentId { get; set; }
-
+        public DateTime createdWhen { get; set; }
         public Dictionary<uint, string> texts { get; set; }
         public bool deleted { get; set; } //if the comment is deleted, this is set to false
     }

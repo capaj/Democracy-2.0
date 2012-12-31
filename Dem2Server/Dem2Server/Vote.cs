@@ -39,16 +39,6 @@ namespace Dem2UserCreated
         //    Dem2Hub.StoreThis(this);
         //}
 
-        public static object Initialization(User user, Vote vote)
-        {
-            var succes = vote.InitVote(user); // stores the vote in a DB
-            if (succes)
-            {
-                vote.Subscribe(user);
-            }
-            return vote;
-        }
-
         public bool InitVote(User caster)
         {
             castedTime = DateTime.Now;

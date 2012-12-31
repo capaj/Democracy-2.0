@@ -27,12 +27,14 @@ namespace Dem2Server
 
         public Query()
         {
-
         }
 
-        public Query(string json)
+        public Query MakeQueryFromJson(string json)
         {
-            JsonConvert.DeserializeObject<Query>(sourceJSON);
+            var q = JsonConvert.DeserializeObject<Query>(sourceJSON);
+            q.sourceJSON = json;
+
+            return q;
         }
 
         public override string ToString()
@@ -51,14 +53,14 @@ namespace Dem2Server
         public override bool Equals(System.Object obj)
         {
             // If parameter is null return false.
-            if (obj == null)
+            if (obj == null || sourceJSON == null )
             {
                 return false;
             }
 
             // If parameter cannot be cast to Point return false.
             Query second = obj as Query;
-            if ((System.Object)second == null)
+            if ((System.Object)second == null || second.sourceJSON == null)
             {
                 return false;
             }
@@ -70,7 +72,7 @@ namespace Dem2Server
         public bool Equals(Query second)
         {
             // If parameter is null return false:
-            if ((object)second == null)
+            if ((object)second == null || sourceJSON == null || second.sourceJSON == null)
             {
                 return false;
             }

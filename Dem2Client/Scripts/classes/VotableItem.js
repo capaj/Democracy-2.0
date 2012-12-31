@@ -172,8 +172,6 @@
             WSworker.postMessage(listingReq);
         };
 
-
-
         return ko.observable(r);
     };
 });
