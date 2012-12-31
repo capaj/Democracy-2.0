@@ -15,7 +15,7 @@
                 1: "novela zákona",
                 2: "Mezinárodní smlouva",
                 3: "Výroční zpráva"
-            }
+            };
 
             var thisType = r.scrapedPrint().type;
             if (types.hasOwnProperty(thisType)) {

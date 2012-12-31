@@ -90,7 +90,7 @@
         };
         r.PositiveVotesCount = ko.observable(ent.PositiveVotesCount);
         r.NegativeVotesCount = ko.observable(ent.NegativeVotesCount);
-        r.GetCurrentResolve = ko.computed(function () {
+        r.getResolve = ko.computed(function () {
             if (isNaN(r.PositiveVotesCount()) || isNaN(r.NegativeVotesCount())) {
                 return false;
             } else {
@@ -102,6 +102,13 @@
                     return false;
                 }
             }
+        });
+
+        r.getResolveCount = ko.computed({
+            read: function () {
+                return r.PositiveVotesCount() -r.NegativeVotesCount();
+            },
+            deferEvaluation: true
         });
 
         r.showVotesListing = function () {
@@ -146,7 +153,7 @@
             console.log("New comment on entity Id " + r.Id + ".");
         };
 
-        r.listingParams = {
+        r.listingQuery = {
             pageSize: ko.observable(20),
             ofTypeInStr: "comments",
             toSkip: ko.observable(0),
@@ -155,12 +162,12 @@
             propertiesEqualValues: {"parentId": r.Id}
         };
 
-        r.createCommentsListing = function () {
+        r.createCommentsListing = function () {     // we are not gonna be sending 'u' requests from client, because it would be more problematic to update a listing than to only focus on creating new one
             var listingReq = {
                 "className": "Listing",
                 "msgType": "entity",
                 "operation": "c",
-                "entity": ko.mapping.toJS(r.listingParams) 
+                "entity": {"JSONQuery": ko.mapping.toJS(r.listingQuery)}
             };
             WSworker.postMessage(listingReq);
         };

@@ -11,7 +11,7 @@ var workerMessage = (function () {
     function workerMessage(type, message, _socket) {
         this.msgType = type;
         this.message = message;
-        this.readyState = 0
+        this.readyState = 0;
         if (_socket) {
             this.readyState = _socket.readyState;
         }
@@ -40,12 +40,12 @@ var connectToWSServer = function () {
                     case "d":
                         break;
                     case "c":
-                        
+
                         break;
                     default:
 
                 }
-                
+
             }
             self.postMessage(entOp);
         };
@@ -55,7 +55,7 @@ var connectToWSServer = function () {
     } catch (exception) {
         self.postMessage(new workerMessage("connectionInfo", "Error when connecting to " + host, socket));
     }
-}
+};
 
 //communication with server ends
 
@@ -72,9 +72,11 @@ self.onmessage = function (event) {
             break;
         case "WorkerCommand":
             switch (data.cmdType) {
-                case "connect": {
+                case "connect":
                     connectToWSServer();
-                }
+                    break;
+                default:
+                    console.error("Unknown worker command");
             }
             break;
         default:
@@ -114,7 +116,7 @@ function EntityOperationHandler(operation) {
         
     }
     send(JSON.stringify(operation));
-};
+}
 //comunication with client end
 
 
@@ -138,4 +140,4 @@ function send(msgToServer) {
     } catch (exception) {
         self.postMessage(new workerMessage("debug", "Error when sending to server the message: " + msgToServer));
     }
-};
+}

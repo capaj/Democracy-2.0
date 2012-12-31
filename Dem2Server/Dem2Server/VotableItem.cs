@@ -27,14 +27,14 @@ namespace Dem2Server
             return EntityRepository.Add(vote);
         }
 
-        [JsonIgnore]
+        [JsonIgnore]    //implemented on clientside in JS
         public bool getResolve
         {
             get { return PositiveVotesCount > NegativeVotesCount; }
 
         }
 
-        [JsonIgnore]
+        [JsonIgnore]    //implemented on clientside in JS
         public int getResolveCount
         {
             get { return PositiveVotesCount - NegativeVotesCount; }

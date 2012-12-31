@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Dem2Client", "Dem2Client", "{5D3004C3-359B-450A-BF20-8CFA04C88C23}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Dem2Client", "Dem2Client\", "{5D3004C3-359B-450A-BF20-8CFA04C88C23}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
 		Debug.AspNetCompiler.VirtualPath = "/Dem2Client"
@@ -20,6 +20,13 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Dem2Client", "Dem2Client", 
 		Release.AspNetCompiler.Debug = "False"
 		VWDPort = "42209"
 		VWDVirtualPath = "/"
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{58E3EE6B-F9C3-4E56-ADF7-87A9D132973C}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
 Global
