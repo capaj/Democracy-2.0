@@ -8,4 +8,5 @@ Scraper is hand tailored for the purpose of getting vital information from the d
 
 Clientside language is Czech, I don't plan on supporting any other languages just yet. All code and comments are written in english.
 
+There are a few client side mocks for this app available for viewing here: http://plnkr.co/users/capaj
 ©GNU General Public License
