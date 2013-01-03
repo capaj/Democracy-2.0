@@ -51,10 +51,11 @@ namespace Dem2Server
                         {
                             var className = (string)receivedObj["className"];
                             Type type = Type.GetType("Dem2UserCreated." + className);
+                            var sourceJSON = receivedObj["entity"].ToString();
 
-                            //object instance = Activator.CreateInstance(type, (Array)receivedObj["ctorArguments"]); old way, TODO test and remove this line
-                            var instance = JsonConvert.DeserializeObject(receivedObj["entity"].ToString(), type, new IsoDateTimeConverter());
+                            var instance = JsonConvert.DeserializeObject(sourceJSON, type, new IsoDateTimeConverter());
                             entity = instance as ServerClientEntity;
+                            entity.OwnerId = fromUser.Id;
                             entity.Subscribe(fromUser);
                             switch (className)
                             {
@@ -70,7 +71,15 @@ namespace Dem2Server
                                     break;
                                 case "Listing":
                                     var newListing = (Listing)instance;
-                                    EntityRepository.Add(newListing);
+                                    newListing.JSONQuery.sourceJSON = sourceJSON;
+                                    var added = EntityRepository.Add(newListing);
+                                    if (added == false)
+                                    {
+                                        entity = EntityRepository.allListings.Single(x => x.JSONQuery.sourceJSON == sourceJSON);
+                                        entity.Subscribe(fromUser);
+                                        sendTo(socket);
+                                    }
+
                                     Console.WriteLine("Created new listing with Id {0}", newListing.Id);
                                     break;
                                 default:
@@ -78,7 +87,7 @@ namespace Dem2Server
                             }
                             
                             //var op = new entityOperation() { operation = 'c', entity = instance as ServerClientEntity };
-                            sendTo(socket);
+                            //
                             Console.WriteLine("Object {0} created", instance.ToString());
                         }
                         catch (Exception)

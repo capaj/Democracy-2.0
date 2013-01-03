@@ -9,6 +9,7 @@ namespace Dem2Server
 {
     public class Query
     {
+        [JsonIgnore]
         public string sourceJSON { get; set; }
         public bool descending { get; set; }
         public string sortByProp { get; set; }      //

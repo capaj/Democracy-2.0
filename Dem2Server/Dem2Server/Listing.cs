@@ -48,6 +48,65 @@ namespace Dem2UserCreated
             } 
         }
 
+        public override bool Unsubscribe(Dem2Model.User theUser)
+        {
+            var ret = base.Unsubscribe(theUser);
+            if (subscribedUsers.Count == 0)
+            {
+                Delete();
+            }
+            return ret;
+        }
+
+        public override string ToString()
+        {
+            if (JSONQuery == null)
+            {
+                return this.ToString();
+            }
+            else
+            {
+                return JSONQuery.ToString();
+            }
+
+        }
+
+        public override bool Equals(System.Object obj)
+        {
+            // If parameter is null return false.
+            if (obj == null || JSONQuery == null)
+            {
+                return false;
+            }
+
+            // If parameter cannot be cast to Point return false.
+            Query second = obj as Query;
+            if ((System.Object)second == null || second.sourceJSON == null)
+            {
+                return false;
+            }
+
+            // Return true if the fields match:
+            return JSONQuery.sourceJSON.Equals(second);
+        }
+
+        public bool Equals(Listing second)
+        {
+            // If parameter is null return false:
+            if ((object)second == null || JSONQuery == null || second.JSONQuery == null)
+            {
+                return false;
+            }
+
+            // Return true if the fields match:
+            return JSONQuery.Equals(second.JSONQuery);
+        }
+
+        public override int GetHashCode()
+        {
+            return JSONQuery.GetHashCode();
+        }
+
     }
 
     

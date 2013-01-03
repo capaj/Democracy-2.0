@@ -84,13 +84,13 @@ namespace Dem2Server
             var succes = all.Add(entity);
             if (succes)
             {
-                entity.IncrementVersion();      //this should increment from 0 to 1
                 StoreToDB(entity);
+                entity.IncrementVersion();      //this should increment from 0 to 1
                 Console.WriteLine("Adding entity {0} ended with succes:{1}", entity.ToString(), succes);
             }
             else
             {
-                Console.WriteLine("Entity was nto added because the same entity is already in all hashset");
+                Console.WriteLine("Entity was not added because the same entity is already in hashset.");
             }
             return succes;
         }

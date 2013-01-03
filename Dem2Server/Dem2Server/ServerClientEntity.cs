@@ -57,7 +57,7 @@ namespace Dem2Server
             return false;
         }
 
-        public bool Unsubscribe(User theUser)
+        public virtual bool Unsubscribe(User theUser)
         {
             if (inDeletionPhase == false)
             {
@@ -79,7 +79,7 @@ namespace Dem2Server
 	    public string OwnerId       // usually the creator
 	    {
 		    get { return _OwnerId;}
-		    protected set { _OwnerId = value;}
+		    set { _OwnerId = value;}
 	    }
 
         #region contructors
