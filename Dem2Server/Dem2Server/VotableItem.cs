@@ -8,6 +8,8 @@ using Dem2UserCreated;
 using Raven.Imports.Newtonsoft.Json;
 using Raven.Imports.Newtonsoft.Json.Serialization;
 using Raven.Imports.Newtonsoft.Json.Converters;
+using ServiceStack.Text.Json;
+using ServiceStack.Text;
 
 namespace Dem2Server
 {
@@ -53,12 +55,12 @@ namespace Dem2Server
                     { "PositiveVotesCount", PositiveVotesCount }, 
                     { "NegativeVotesCount", NegativeVotesCount }
                 };
-                var entityJSON = JsonConvert.SerializeObject(votablePropsDict, new IsoDateTimeConverter());
-
-                var opDict = new Dictionary<string, dynamic>() { {"operation",'u'}, {"entity",entityJSON.Replace(@"\","")} };
+                var opDict = new Dictionary<string, object>() { { "operation", 'u' }, { "entity", votablePropsDict } };
 
                 var socket = subscriber.Value.connection;
-                socket.Send("{\"operation\":\"u\",\"entity\":" + entityJSON.Replace(@"\","") + "}");
+                var serialized = opDict.ToJson();
+                socket.Send(serialized);
+
             }
         }
     }

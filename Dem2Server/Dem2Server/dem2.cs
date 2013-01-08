@@ -18,7 +18,7 @@ namespace Dem2Server
         static int oneIPConnectionCap = 20;
         static void Main(string[] args)
         {
-            
+            ServiceStack.Text.JsConfig.DateHandler = ServiceStack.Text.JsonDateHandler.ISO8601;
             var allSockets = new List<IWebSocketConnection>();
             DocumentStore docDB = new DocumentStore { Url = "http://localhost:8080" };        //when on the same machine where Raven runs     
             //DocumentStore docDB = new DocumentStore { Url = "http://dem2.cz:9191" };            //when on any other

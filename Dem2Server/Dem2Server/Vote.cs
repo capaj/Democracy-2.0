@@ -61,11 +61,6 @@ namespace Dem2UserCreated
             return false;
         }
 
-        public void sendTo(IWebSocketConnection socket)
-        {
-            socket.Send(JsonConvert.SerializeObject(this, new IsoDateTimeConverter()));
-        }
-
         public bool updateFromJO(JObject updateSource)
         {
             //var existingVote = EntityRepository.allVotes.First<Vote>(x => x.OwnerId == OwnerId && x.subjectId == subjectId && x.Id == Id);

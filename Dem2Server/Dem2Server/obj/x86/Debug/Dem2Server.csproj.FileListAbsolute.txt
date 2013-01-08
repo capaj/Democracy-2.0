@@ -164,3 +164,5 @@ D:\Github\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\HtmlAgilityPack.pdb
 D:\Github\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\HtmlAgilityPack.xml
 D:\Github\Democracy-2.0\Dem2Server\Dem2Server\obj\x86\Debug\Dem2Server.exe
 D:\Github\Democracy-2.0\Dem2Server\Dem2Server\obj\x86\Debug\Dem2Server.pdb
+D:\Github\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\ServiceStack.Text.dll
+D:\Github\Democracy-2.0\Dem2Server\Dem2Server\bin\Debug\ServiceStack.Text.xml

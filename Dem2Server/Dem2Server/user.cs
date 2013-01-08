@@ -9,11 +9,11 @@ using Dem2UserCreated;
 
 namespace Dem2Model
 {
-    //[JsonConverter(typeof(UserConverter))]// very important here- we don't want anyone to be able to read other user's acces token simply by reading his entity
     public class User : ServerClientEntity, IVotingLeader
     {
         public string nick { get; set; }    // by default Nick will be created out of a user's name, user can change it whenever he likes as much as he likes, but it must be unique
-
+        
+        //[IgnoreDataMember]// very important here- we don't want anyone to be able to read other user's acces token simply by reading his entity
         public string accessToken { get; set; }
         
         public Name civicName { get; set; }
@@ -53,10 +53,6 @@ namespace Dem2Model
                 UnsubscribeFromEntity(subscription);
             }
             subscriptions.RemoveAll(x => true);
-        }
-
-        public void Send(dynamic package) { //shorter version than to having to type it every time
-            this.connection.Send(JsonConvert.SerializeObject(package));
         }
 
         public bool CastVoteFromLeader(IVotingLeader leader, Voting onWhat, Vote vote)
@@ -203,7 +199,7 @@ namespace Dem2Model
             this.connection.ConnectionInfo.Cookies["authentication"] = "authenticated";
             this.connection.ConnectionInfo.Cookies["user"] = this.Id;
             subscriptions = new List<Subscription>();
-            this.Send(this);
+            Dem2Hub.sendItTo(this, connection);
             Console.WriteLine("Login granted to user id {0}, sending the model", this.Id);
             
         }

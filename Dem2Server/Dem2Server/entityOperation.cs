@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Dem2UserCreated;
 using Dem2Model;
 using Raven.Imports.Newtonsoft.Json.Linq;
+using ServiceStack.Text;
 
 namespace Dem2Server
 {
@@ -22,7 +23,7 @@ namespace Dem2Server
 
 
         public void sendTo(IWebSocketConnection socket) {
-            socket.Send(JsonConvert.SerializeObject(this, new IsoDateTimeConverter()));
+            Dem2Hub.sendItTo(this, socket);
             if (operation == 'u' || operation == 'c')
             {
                 var subs = new Subscription() { onEntityId = entity.Id };  //we presume, that the entity will be displayed at the client, so we subscribe him

@@ -13,10 +13,5 @@ namespace Dem2Server
     {
         public string msgType { get; set; }
         public string body { get; set; }
-
-        public void Send(IWebSocketConnection connectionToRecipient)
-        {
-            connectionToRecipient.Send(JsonConvert.SerializeObject(this, new IsoDateTimeConverter()));
-        }
     }
 }
