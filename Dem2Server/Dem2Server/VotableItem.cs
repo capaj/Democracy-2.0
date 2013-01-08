@@ -5,8 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Dem2Model;
 using Dem2UserCreated;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+using Raven.Imports.Newtonsoft.Json;
+using Raven.Imports.Newtonsoft.Json.Serialization;
+using Raven.Imports.Newtonsoft.Json.Converters;
 
 namespace Dem2Server
 {
@@ -44,40 +45,22 @@ namespace Dem2Server
 
         internal void IncrementVotableVersion()
         {
+
             foreach (var subscriber in subscribedUsers)
             {
-                var op = new entityOperation() { operation = 'u', entity = this as VotableItem };
+                var votablePropsDict = new Dictionary<string, dynamic>() { 
+                    { "Id", Id }, 
+                    { "PositiveVotesCount", PositiveVotesCount }, 
+                    { "NegativeVotesCount", NegativeVotesCount }
+                };
+                var entityJSON = JsonConvert.SerializeObject(votablePropsDict, new IsoDateTimeConverter());
 
-                Dem2Hub.sendItTo(op, subscriber.Value.connection);
+                var opDict = new Dictionary<string, dynamic>() { {"operation",'u'}, {"entity",entityJSON.Replace(@"\","")} };
+
+                var socket = subscriber.Value.connection;
+                socket.Send("{\"operation\":\"u\",\"entity\":" + entityJSON.Replace(@"\","") + "}");
             }
         }
     }
 
-    /// <summary>
-    /// json.net serializes ALL properties of a class by default
-    /// this class will tell json.net to only serialize properties if
-    /// they MATCH the list of valid columns passed through the querystring to criteria object
-    /// </summary>
-    //public class CriteriaContractResolver<T> : DefaultContractResolver
-    //{
-    //    List<string> _properties;
-
-    //    public CriteriaContractResolver(List<string> properties)
-    //    {
-    //        _properties = properties;
-    //    }
-
-    //    protected override IList<JsonProperty> CreateProperties(JsonObjectContract contract)
-    //    {
-    //        IList<JsonProperty> filtered = new List<JsonProperty>();
-
-    //        foreach (JsonProperty p in base.CreateProperties(T, contract))    //fix this problem
-    //        {
-    //            if (_properties.Contains(p.PropertyName))
-    //                filtered.Add(p);
-
-    //            return filtered;
-    //        }
-    //    }
-    //}
 }

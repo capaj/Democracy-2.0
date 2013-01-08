@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Dem2Model;
 using Dem2Server;
-using Newtonsoft.Json;
+using Raven.Imports.Newtonsoft.Json;
 
 namespace Dem2UserCreated
 {

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using HtmlAgilityPack;
-using Newtonsoft.Json;
+using Raven.Imports.Newtonsoft.Json;
 
 
 namespace pspScraper

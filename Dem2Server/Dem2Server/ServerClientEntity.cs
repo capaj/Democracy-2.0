@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using Dem2Model;
-using Newtonsoft.Json;
+using Raven.Imports.Newtonsoft.Json;
 using System.Collections.Concurrent;
 using System.Runtime.CompilerServices;
 using Raven.Abstractions.Commands;

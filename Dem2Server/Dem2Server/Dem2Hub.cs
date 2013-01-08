@@ -4,14 +4,15 @@ using System.Collections.Concurrent;
 using System.Linq;
 using System.Text;
 using Dem2Model;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using Raven.Imports.Newtonsoft.Json;
+using Raven.Imports.Newtonsoft.Json.Linq;
 using Fleck;
 using Raven.Client.Document;
 using Raven.Client;
 using System.Net;
 using Dem2UserCreated;
-using Newtonsoft.Json.Converters;
+using Raven.Imports.Newtonsoft.Json.Converters;
+using Raven.Imports.Newtonsoft.Json.Serialization;
 
 namespace Dem2Server
 {
@@ -33,6 +34,7 @@ namespace Dem2Server
         public static void Initialize(DocumentStore documentDB)     //someone provided us with the DB to load data from
         {
             docDB = documentDB;
+            docDB.DefaultDatabase = "Dem2";
             docDB.Initialize();
             EntityRepository.Initialize();
             pspScraper.Scraper.docDB = docDB;
@@ -143,5 +145,8 @@ namespace Dem2Server
         {
             socket.Send(JsonConvert.SerializeObject(that, new IsoDateTimeConverter()));
         }
+
+        
     }
+
 }

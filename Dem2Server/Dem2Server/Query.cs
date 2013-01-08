@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using Raven.Imports.Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,6 @@ namespace Dem2Server
 {
     public class Query
     {
-        [JsonIgnore]
         public string sourceJSON { get; set; }
         public bool descending { get; set; }
         public string sortByProp { get; set; }      //

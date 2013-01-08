@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Dem2Server;
 using Fleck;
-using Newtonsoft.Json;
+using Raven.Imports.Newtonsoft.Json;
 using Dem2UserCreated;
 
 namespace Dem2Model

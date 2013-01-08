@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Dem2Model;
-using Newtonsoft.Json;
+using Raven.Imports.Newtonsoft.Json;
 using Dem2UserCreated;
 
 namespace Dem2Server

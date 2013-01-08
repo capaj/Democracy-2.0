@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using pspScraper;
-using Newtonsoft.Json;
+using Raven.Imports.Newtonsoft.Json;
 
 
 namespace pspScraper

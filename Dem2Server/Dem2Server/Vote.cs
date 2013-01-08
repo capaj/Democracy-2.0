@@ -5,9 +5,9 @@ using System.Text;
 using Dem2Server;
 using Dem2Model;
 using Fleck;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Linq;
+using Raven.Imports.Newtonsoft.Json;
+using Raven.Imports.Newtonsoft.Json.Converters;
+using Raven.Imports.Newtonsoft.Json.Linq;
 
 namespace Dem2UserCreated
 {

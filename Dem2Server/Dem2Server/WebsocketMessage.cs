@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Fleck;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+using Raven.Imports.Newtonsoft.Json;
+using Raven.Imports.Newtonsoft.Json.Converters;
 
 namespace Dem2Server
 {

@@ -1,6 +1,6 @@
 ﻿using Fleck;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+using Raven.Imports.Newtonsoft.Json;
+using Raven.Imports.Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Dem2UserCreated;
 using Dem2Model;
-using Newtonsoft.Json.Linq;
+using Raven.Imports.Newtonsoft.Json.Linq;
 
 namespace Dem2Server
 {
@@ -52,9 +52,9 @@ namespace Dem2Server
                             var className = (string)receivedObj["className"];
                             Type type = Type.GetType("Dem2UserCreated." + className);
                             var sourceJSON = receivedObj["entity"].ToString();
-
+                            
                             var instance = JsonConvert.DeserializeObject(sourceJSON, type, new IsoDateTimeConverter());
-                            entity = instance as ServerClientEntity;
+                            entity = (ServerClientEntity)instance;
                             entity.OwnerId = fromUser.Id;
                             entity.Subscribe(fromUser);
                             switch (className)
@@ -71,7 +71,7 @@ namespace Dem2Server
                                     break;
                                 case "Listing":
                                     var newListing = (Listing)instance;
-                                    newListing.JSONQuery.sourceJSON = sourceJSON;
+                                    newListing.JSONQuery.sourceJSON = receivedObj["entity"]["JSONQuery"].ToString();;
                                     var added = EntityRepository.Add(newListing);
                                     if (added == false)
                                     {
@@ -235,7 +235,7 @@ namespace Dem2Server
                 if (toUpdate is Vote)
                 {   // update the subject
                     Vote updatedVote = (Vote)toUpdate;
-                    var success = updatedVote.updateFromJO(obj);
+                    var success = true;
                     if (success)
                     {
                         var subject = EntityRepository.GetEntityFromSetsByID(updatedVote.subjectId);
