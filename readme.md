@@ -1,3 +1,5 @@
+##Project discontinued because since 2013 I have discovered Node.js and decided, that I will develop this project on it. I believe Node.js is much better suited for development of single page web aps than .Net.
+
 Single page web application powered by Javascript(KnockoutJS, Twitter bootstrap), .NET(Fleck and RavenDB) on server.
 Server-client communication is done only via webscokets.
 Contains 3 VS2012 projects - Scraper, Websocket server and javascript fat client.
